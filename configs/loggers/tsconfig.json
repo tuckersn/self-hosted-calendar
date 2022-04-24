@@ -1,0 +1,7 @@
+{
+	"extends": "@internal/ts-config",
+	"compilerOptions": {
+		"rootDir": "./src",
+		"outDir": "./dist"
+	}
+}

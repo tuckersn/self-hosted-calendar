@@ -1,0 +1,15 @@
+{
+	"name": "@internal/loggers",
+	"version": "1.0.0",
+	"main": "index.js",
+	"author": "Tucker Sneed",
+	"license": "MIT",
+	"private": true,
+	"dependencies": {
+		"@internal/prettier-config": "^1.0.0",
+		"@internal/ts-config": "^1.0.0"
+	},
+	"scripts": {
+		"test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.test.ts"
+	}
+}

@@ -1,0 +1,14 @@
+# yarn and lerna
+node_modules
+lerna-debug.log
+yarn-error.log
+
+
+# build & sensitive
+dist
+temp
+.env
+
+# turborepo
+.turbo
+graph-*

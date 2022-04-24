@@ -1,0 +1,9 @@
+{
+	"extends": "@internal/ts-config",
+	"compilerOptions": {
+		"outDir": "./dist"
+	},
+	"exclude": [
+		"test/**"
+	]
+}
