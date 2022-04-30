@@ -1,0 +1,16 @@
+{
+	"name": "@internal/server",
+	"version": "0.0.0",
+	"main": "index.js",
+	"author": "Tucker Sneed",
+	"license": "MIT",
+	"private": true,
+	"dependencies": {
+		"@internal/ts-config": "^1.0.0",
+		"dotenv": "^16.0.0",
+		"express": "^4.17.3"
+	},
+	"scripts": {
+		"build": "tsc"
+	}
+}

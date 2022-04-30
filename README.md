@@ -33,10 +33,10 @@ yarn graph
 ## Debugging
 ### **Web**
 ```
-cd ./apps/web
+cd ./packages/web
 yarn start
 ```
 ### **Server**
 ```
-node ./apps/dist/main.js
+node ./packages/dist/main.js
 ```

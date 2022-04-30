@@ -1,0 +1,6 @@
+{
+	"extends": "@internal/ts-config",
+	"compilerOptions": {
+		"outDir": "./dist"
+	}
+}

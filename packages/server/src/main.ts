@@ -2,6 +2,12 @@ import express from "express";
 import dotenv from "dotenv";
 import { eventRouter } from "./routers/event";
 
+dotenv.config();
+
+if(process.env.PORT === undefined) {
+	throw new Error("PORT env is not defined");
+}
+
 
 const app = express();
 
