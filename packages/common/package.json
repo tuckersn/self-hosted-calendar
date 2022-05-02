@@ -1,15 +1,16 @@
 {
-	"name": "@internal/notifications",
+	"name": "@internal/common",
 	"version": "1.0.0",
 	"main": "index.js",
+	"author": "Tucker Sneed",
 	"license": "MIT",
+	"private": true,
 	"scripts": {
 		"build": "tsc",
 		"format": "prettier --write \"src/**/*.ts",
 		"test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.test.ts"
 	},
 	"dependencies": {
-		"@internal/prettier-config": "^1.0.0",
-		"@internal/ts-config": "^1.0.0"
+		"nanoid": "^3.3.3"
 	}
 }
