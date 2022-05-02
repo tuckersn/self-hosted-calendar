@@ -4,10 +4,62 @@ export enum TodoItemType {
 	StickyNote = 2
 }
 
+export function TodoItemTypeToString(type: TodoItemType): string {
+	switch (type) {
+		case TodoItemType.ShortTerm:
+			return "Short Term";
+		case TodoItemType.LongTerm:
+			return "Long Term";
+		case TodoItemType.StickyNote:
+			return "Sticky Note";
+		default:
+			throw new Error("Invalid TodoItemType");
+	}
+}
+
+export function TodoItemTypeFromString(type: string): TodoItemType {
+	switch (type) {
+		case "Short Term":
+			return TodoItemType.ShortTerm;
+		case "Long Term":
+			return TodoItemType.LongTerm;
+		case "Sticky Note":
+			return TodoItemType.StickyNote;
+		default:
+			throw new Error("Invalid TodoItemType");
+	}
+}
+
 export enum TodoItemStatus {
 	Active = 0,
 	Completed = 1,
 	Inactive = 2
+}
+
+export function TodoItemStatusToString(status: TodoItemStatus): string {
+	switch (status) {
+		case TodoItemStatus.Active:
+			return "Active";
+		case TodoItemStatus.Completed:
+			return "Completed";
+		case TodoItemStatus.Inactive:
+			return "Inactive";
+		default:
+			throw new Error("Invalid TodoItemStatus");
+	}
+}
+
+export function TodoItemStatusFromString(status: string): TodoItemStatus {
+	switch (status) {
+		case "Active":
+			return TodoItemStatus.Active;
+		case "Completed":
+			return TodoItemStatus.Completed;
+		case "Inactive":
+			return TodoItemStatus.Inactive;
+		default:
+			throw new Error("Invalid TodoItemStatus");
+	}
 }
 
 export interface TodoItemRecord {
@@ -42,10 +94,28 @@ export interface TodoItemRecord {
 }
 
 export type TodoItemRecordInsertRequiredFields = Pick<TodoItemRecord, 'title'>;
+export type TodoItemRecordInsertOptionalFields = Pick<TodoItemRecord, 'itemType' | 'dueDate' | 'updated' | 'completed' | 'status'>;
+export type TodoItemRecordInsertFields = TodoItemRecordInsertOptionalFields & Partial<TodoItemRecordInsertRequiredFields>;
 
-export const DEFAULT_TODO_ITEM_RECORD_FIELDS: Pick<TodoItemRecord, 'itemType' | 'status' | 'dueDate' | 'updated'> = {
+export const DEFAULT_TODO_ITEM_RECORD_FIELDS: TodoItemRecordInsertOptionalFields = {
 	itemType: TodoItemType.ShortTerm,
 	status: TodoItemStatus.Active,
 	dueDate: null,
-	updated: null
+	updated: null,
+	completed: null
 };
+
+export module TodoItemQueryFunctions {
+	// Standard queries
+	export type GetById = (id: number) => Promise<TodoItemRecord | null>;
+	export type GetByUUID = (uuid: string) => Promise<TodoItemRecord | null>;
+	export type Insert = (record: TodoItemRecordInsertFields) => Promise<TodoItemRecord>;
+	export type Update = (record: TodoItemRecord) => Promise<TodoItemRecord>;
+	export type DeleteById = (id: number) => Promise<void>;
+	export type DeleteByUUID = (uuid: string) => Promise<void>;
+	
+	// Specialized queries
+	export type GetUpcoming = () => Promise<TodoItemRecord[]>;
+	export type GetRecentCompleted = () => Promise<TodoItemRecord[]>;
+	export type GetRecentInactive = () => Promise<TodoItemRecord[]>;	
+}

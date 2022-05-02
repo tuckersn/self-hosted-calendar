@@ -1,5 +1,5 @@
 {
-	"name": "@internal/database-node",
+	"name": "@internal/database-server",
 	"version": "1.0.0",
 	"main": "index.js",
 	"license": "MIT",
@@ -10,6 +10,7 @@
 	},
 	"dependencies": {
 		"@internal/prettier-config": "^1.0.0",
-		"@internal/ts-config": "^1.0.0"
+		"@internal/ts-config": "^1.0.0",
+		"sequelize": "^6.19.0"
 	}
 }

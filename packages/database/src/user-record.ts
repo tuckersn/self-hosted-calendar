@@ -8,13 +8,22 @@ export interface UserRecord {
 }
 
 
-export interface UserRecordInsertRequiredFields {
-	username: string;
-	email: string;
-	passwordHash: string;
+export type UserRecordInsertRequiredFields = Pick<UserRecord, 'username' | 'email'>;
+export type UserRecordInsertOptionalFields = Pick<UserRecord, 'name' | 'passwordHash'>;
+export type UserRecordInsertFields = UserRecordInsertOptionalFields & Partial<UserRecordInsertRequiredFields>;
+
+export const DEFAULT_USER_RECORD_FIELDS: UserRecordInsertOptionalFields = {
+	name: null,
+	passwordHash: null
 }
 
-export const DEFAULT_USER_RECORD_FIELDS: Pick<UserRecord, 'username' | 'name'> = {
-	name: "User",
-	username: "username"
+export module UserQueryFunctions {
+	// Standard Queries
+	export type GetById = (id: number) => Promise<UserRecord | null>;
+	export type GetByUsername = (username: string) => Promise<UserRecord | null>;
+	export type GetByEmail = (email: string) => Promise<UserRecord | null>;
+
+	export type Insert = (userRecord: UserRecordInsertRequiredFields) => Promise<UserRecord>;
+	export type Update = (userRecord: UserRecord) => Promise<UserRecord>;
+	export type Delete = (id: number) => Promise<void>;
 }
