@@ -2,12 +2,9 @@
 	"name": "root",
 	"private": true,
 	"license": "MIT",
-	"workspaces": [
-		"apps/*",
-		"packages/*",
-		"configs/*"
-	],
-	"dependencies": {},
+	"dependencies": {
+		"@types/node": "^17.0.31"
+	},
 	"devDependencies": {
 		"@types/chai": "^4.3.1",
 		"@types/mocha": "^9.1.1",

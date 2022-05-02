@@ -1,9 +1,6 @@
-# yarn and lerna
-.yarn
+# PNPM
+.pnpm-debug.log
 node_modules
-lerna-debug.log
-yarn-error.log
-
 
 # build & sensitive
 dist
@@ -13,3 +10,4 @@ temp
 # turborepo
 .turbo
 graph-*
+
