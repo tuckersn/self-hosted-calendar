@@ -7,9 +7,11 @@
 	"private": true,
 	"dependencies": {
 		"@internal/prettier-config": "workspace:1.0.0",
-		"@internal/ts-config": "workspace:1.0.0"
+		"@internal/ts-config": "workspace:1.0.0",
+		"winston": "^3.7.2"
 	},
 	"scripts": {
-		"test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.test.ts"
+		"test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.test.ts",
+		"build": "tsc"
 	}
 }

@@ -2,7 +2,12 @@ import express from "express";
 import { graphqlHTTP } from "express-graphql";
 import { buildSchema } from "graphql";
 import dotenv from "dotenv";
+import expressWinston from "express-winston";
+
+import { networkLoggerOptions, networkTransports } from "@internal/loggers/dist";
+
 import { eventRouter } from "./routers/event";
+import winston from "winston";
 
 dotenv.config();
 
@@ -13,18 +18,23 @@ if(process.env.PORT === undefined) {
 
 // Initialize a GraphQL schema
 var schema = buildSchema(`
-  type Query {
-    hello: String
-  }
+	type Query {
+		hello: String
+	}
 `);
 
 // Root resolver
 var root = { 
-  hello: () => 'Hello world!'
+	hello: () => 'Hello world!'
 };
 
 
 const app = express();
+
+app.use(expressWinston.logger({
+	format: winston.format.json(),
+	transports: networkTransports
+}));
 
 app.get("/", (req,res) => {
 	res.status(200).send("pong");
