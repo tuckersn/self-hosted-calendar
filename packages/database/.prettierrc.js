@@ -1,3 +1,3 @@
 module.exports = {
-...require("@internal/prettier-config")
+...require("workspace:@internal/prettier-config")
 }

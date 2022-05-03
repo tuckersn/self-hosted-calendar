@@ -1,3 +1,5 @@
+import { RestEndpoint } from "./wrappers/rest-endpoint";
+
 export enum TodoItemType {
 	ShortTerm = 0,
 	LongTerm = 1,
@@ -118,4 +120,55 @@ export module TodoItemQueryFunctions {
 	export type GetUpcoming = () => Promise<TodoItemRecord[]>;
 	export type GetRecentCompleted = () => Promise<TodoItemRecord[]>;
 	export type GetRecentInactive = () => Promise<TodoItemRecord[]>;	
+}
+
+
+export module TodoRestApi {
+
+	export type TodoItemFilterParams = {
+		id: string;
+		uuid: string;
+		status: string;
+		itemType: string;
+		completedBefore: string;
+		completeAfter: string;
+		createdBefore: string;
+		createdAfter: string;
+		updatedBefore: string;
+		updatedAfter: string;
+		dueBefore: string;
+		dueAfter: string;
+		orderBy: string;
+	}
+
+	/**
+	 * [GET] /todo
+	 */
+	export type GetTodoItem = RestEndpoint<TodoItemFilterParams, undefined, TodoItemRecord[]>;
+
+	/**
+	 * [POST] /todo
+	 */
+	export type CreateTodoItem = RestEndpoint<{}, {
+		title: string;
+		itemType: string;
+		dueDate: string;
+		status: string;
+	}, TodoItemRecord>;
+
+	/**
+	 * [PUT] /todo/:id
+	 */
+	export type UpdateTodoItem = RestEndpoint<TodoItemFilterParams, {
+		title?: string;
+		itemType?: string;
+		dueDate?: string;
+		status?: string;
+	}, TodoItemRecord>;
+	
+	/**
+	 * [DELETE] /todo/:id
+	 */
+	export type DeleteTodoItem = RestEndpoint<TodoItemFilterParams, undefined, TodoItemRecord>;
+
 }

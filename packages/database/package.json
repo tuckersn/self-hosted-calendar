@@ -9,7 +9,11 @@
 		"test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.test.ts"
 	},
 	"dependencies": {
-		"@internal/prettier-config": "^1.0.0",
-		"@internal/ts-config": "^1.0.0"
+		"@internal/common": "workspace:^1.0.0",
+		"@internal/loggers": "workspace:^1.0.0",
+		"@internal/prettier-config": "workspace:1.0.0",
+		"@internal/schema": "workspace:^1.0.0",
+		"@internal/ts-config": "workspace:1.0.0",
+		"sequelize": "^6.19.0"
 	}
 }

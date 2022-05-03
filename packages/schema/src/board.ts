@@ -21,3 +21,4 @@ export module BoardQueryFunctions {
 	export type Update = (boardRecord: BoardRecord) => Promise<BoardRecord>;
 	export type Delete = (id: number) => Promise<void>;
 }
+

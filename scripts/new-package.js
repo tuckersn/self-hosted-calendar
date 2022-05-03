@@ -92,7 +92,7 @@ rl.on("close", () => {
 	execSync('lerna add @internal/prettier-config --scope=@internal/' + PACKAGE_NAME);
 	console.log("Creating:", path.join(PACKAGE_DIR, ".prettierrc.js"));
 	fs.writeFileSync(path.join(PACKAGE_DIR, ".prettierrc.js"), `module.exports = {
-		...require("@internal/prettier-config")
+		...require("workspace:@internal/prettier-config")
 	}`.split("\n").map((s) => s.trim()).join("\n"));
 
 	console.log("Creating:", path.join(PACKAGE_DIR, ".gitignore"));

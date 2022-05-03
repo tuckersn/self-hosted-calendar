@@ -6,9 +6,16 @@
 	"license": "MIT",
 	"private": true,
 	"dependencies": {
-		"@internal/ts-config": "^1.0.0",
+		"@internal/common": "workspace:^1.0.0",
+		"@internal/database": "workspace:^1.0.0",
+		"@internal/loggers": "workspace:^1.0.0",
+		"@internal/prettier-config": "workspace:^1.0.0",
+		"@internal/schema": "workspace:^1.0.0",
+		"@internal/ts-config": "workspace:1.0.0",
 		"dotenv": "^16.0.0",
-		"express": "^4.17.3"
+		"express": "^4.17.3",
+		"express-graphql": "^0.12.0",
+		"graphql": "^16.4.0"
 	},
 	"scripts": {
 		"build": "tsc"

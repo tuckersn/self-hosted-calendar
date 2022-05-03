@@ -6,8 +6,8 @@
 	"license": "MIT",
 	"private": true,
 	"dependencies": {
-		"@internal/prettier-config": "^1.0.0",
-		"@internal/ts-config": "^1.0.0"
+		"@internal/prettier-config": "workspace:1.0.0",
+		"@internal/ts-config": "workspace:1.0.0"
 	},
 	"scripts": {
 		"test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.test.ts"
