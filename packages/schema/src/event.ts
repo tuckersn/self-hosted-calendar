@@ -17,11 +17,11 @@ export const DEFAULT_EVENT_RECORD_FIELDS: EventRecordInsertOptionalFields = {
 	description: ""
 }
 
-export module EventQueryFunctions {
+export interface EventQueryFunctions {
 	// Standard Queries
-	export type GetById = (id: number) => Promise<EventRecord | null>;
+	getById: (id: number) => Promise<EventRecord | null>;
 
-	export type Insert = (eventRecord: EventRecordInsertRequiredFields) => Promise<EventRecord>;
-	export type Update = (eventRecord: EventRecord) => Promise<EventRecord>;
-	export type Delete = (id: number) => Promise<void>;
+	insert: (eventRecord: EventRecordInsertRequiredFields) => Promise<EventRecord>;
+	update: (eventRecord: EventRecord) => Promise<EventRecord>;
+	delete: (id: number) => Promise<void>;
 }

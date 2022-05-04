@@ -35,18 +35,18 @@ export const DEFAULT_USER_LOGIN_RECORD_FIELDS: UserLoginRecordInsertOptionalFiel
 	method: UserLoginMethod.UNKNOWN
 }
 
-export module UserLoginQueryFunctions {
+export interface UserLoginQueryFunctions {
 	// Standard Queries
-	export type GetById = (id: number) => Promise<UserLoginRecord | null>;
-	export type GetByIp = (ip: string) => Promise<UserLoginRecord[]>;
-	export type GetByUserId = (userId: number) => Promise<UserLoginRecord[]>;
-	export type Insert = (UserLoginRecord: UserLoginRecordInsertRequiredFields) => Promise<UserLoginRecord>;
-	export type Update = (UserLoginRecord: UserLoginRecord) => Promise<UserLoginRecord>;
-	export type Delete = (id: number) => Promise<void>;
+	getById: (id: number) => Promise<UserLoginRecord | null>;
+	getByIp: (ip: string) => Promise<UserLoginRecord[]>;
+	getByUserId: (userId: number) => Promise<UserLoginRecord[]>;
+	insert: (UserLoginRecord: UserLoginRecordInsertRequiredFields) => Promise<UserLoginRecord>;
+	update: (UserLoginRecord: UserLoginRecord) => Promise<UserLoginRecord>;
+	delete: (id: number) => Promise<void>;
 
 	// Specialized Queries
-	export type GetByUsername = (username: string) => Promise<UserLoginRecord | null>;
-	export type GetByEmail = (email: string) => Promise<UserLoginRecord | null>;
+	getByUsername: (username: string) => Promise<UserLoginRecord | null>;
+	getByEmail: (email: string) => Promise<UserLoginRecord | null>;
 }
 
 export module LoginREST {

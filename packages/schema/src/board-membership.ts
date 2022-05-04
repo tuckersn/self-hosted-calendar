@@ -14,16 +14,16 @@ export const DEFAULT_BOARD_MEMBERSHIP_RECORD_FIELDS: BoardMembershipRecordInsert
 	isAdmin: false
 }
 
-export module BoardMembershipQueryFunctions {
+export interface BoardMembershipQueryFunctions {
 	// Standard Queries
-	export type GetById = (id: number) => Promise<BoardMembershipRecord | null>;
-	export type GetByBoardId = (boardId: number) => Promise<BoardMembershipRecord[]>;
-	export type GetByUserId = (userId: number) => Promise<BoardMembershipRecord[]>;
-	export type GetByUserIdAndBoardId = (userId: number, boardId: number) => Promise<BoardMembershipRecord | null>;
-	export type Insert = (BoardMembershipRecord: BoardMembershipRecordInsertRequiredFields) => Promise<BoardMembershipRecord>;
-	export type Delete = (id: number) => Promise<void>;
+	getById: (id: number) => Promise<BoardMembershipRecord | null>;
+	getByBoardId: (boardId: number) => Promise<BoardMembershipRecord[]>;
+	getByUserId: (userId: number) => Promise<BoardMembershipRecord[]>;
+	getByUserIdAndBoardId: (userId: number, boardId: number) => Promise<BoardMembershipRecord | null>;
+	insert: (BoardMembershipRecord: BoardMembershipRecordInsertRequiredFields) => Promise<BoardMembershipRecord>;
+	delete: (id: number) => Promise<void>;
 
 	// Specialized Queries
-	export type GetMembersOrderedByJoined = (boardId: number) => Promise<BoardMembershipRecord[]>;
-	export type GetAdmins = (boardId: number) => Promise<BoardMembershipRecord[]>;
+	getMembersOrderedByJoined: (boardId: number) => Promise<BoardMembershipRecord[]>;
+	getAdmins: (boardId: number) => Promise<BoardMembershipRecord[]>;
 }

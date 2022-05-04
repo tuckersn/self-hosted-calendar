@@ -107,19 +107,19 @@ export const DEFAULT_TODO_ITEM_RECORD_FIELDS: TodoItemRecordInsertOptionalFields
 	completed: null
 };
 
-export module TodoItemQueryFunctions {
+export interface TodoItemQueryFunctions {
 	// Standard queries
-	export type GetById = (id: number) => Promise<TodoItemRecord | null>;
-	export type GetByUUID = (uuid: string) => Promise<TodoItemRecord | null>;
-	export type Insert = (record: TodoItemRecordInsertFields) => Promise<TodoItemRecord>;
-	export type Update = (record: TodoItemRecord) => Promise<TodoItemRecord>;
-	export type DeleteById = (id: number) => Promise<void>;
-	export type DeleteByUUID = (uuid: string) => Promise<void>;
+	getById: (id: number) => Promise<TodoItemRecord | null>;
+	getByUUID: (uuid: string) => Promise<TodoItemRecord | null>;
+	insert: (record: TodoItemRecordInsertFields) => Promise<TodoItemRecord>;
+	update: (record: TodoItemRecord) => Promise<TodoItemRecord>;
+	deleteById: (id: number) => Promise<void>;
+	deleteByUUID: (uuid: string) => Promise<void>;
 	
 	// Specialized queries
-	export type GetUpcoming = () => Promise<TodoItemRecord[]>;
-	export type GetRecentCompleted = () => Promise<TodoItemRecord[]>;
-	export type GetRecentInactive = () => Promise<TodoItemRecord[]>;	
+	getUpcoming: () => Promise<TodoItemRecord[]>;
+	getRecentCompleted: () => Promise<TodoItemRecord[]>;
+	getRecentInactive: () => Promise<TodoItemRecord[]>;	
 }
 
 

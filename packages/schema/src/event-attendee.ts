@@ -64,14 +64,14 @@ export const DEFAULT_EVENT_ATTENDEE_RECORD_FIELDS: EventAttendeeRecordInsertOpti
 	isHost: false
 }
 
-export module EventAttendeeQueryFunctions {
+export interface EventAttendeeQueryFunctions {
 	// Standard Queries
-	export type GetById = (id: number) => Promise<EventAttendeeRecord | null>;
-	export type GetByEventId = (eventId: number) => Promise<EventAttendeeRecord[]>;
-	export type GetByUserId = (userId: number) => Promise<EventAttendeeRecord[]>;
-	export type GetByUserIdAndEventId = (userId: number, eventId: number) => Promise<EventAttendeeRecord | null>;
+	getById: (id: number) => Promise<EventAttendeeRecord | null>;
+	getByEventId: (eventId: number) => Promise<EventAttendeeRecord[]>;
+	getByUserId: (userId: number) => Promise<EventAttendeeRecord[]>;
+	getByUserIdAndEventId: (userId: number, eventId: number) => Promise<EventAttendeeRecord | null>;
 
-	export type Insert = (EventAttendeeRecord: EventAttendeeRecord) => Promise<EventAttendeeRecord>;
-	export type Delete = (EventAttendeeRecord: EventAttendeeRecord) => Promise<void>;
-	export type Update = (EventAttendeeRecord: EventAttendeeRecord) => Promise<EventAttendeeRecord>;
+	insert: (EventAttendeeRecord: EventAttendeeRecord) => Promise<EventAttendeeRecord>;
+	delete: (EventAttendeeRecord: EventAttendeeRecord) => Promise<void>;
+	update: (EventAttendeeRecord: EventAttendeeRecord) => Promise<EventAttendeeRecord>;
 }

@@ -1,3 +1,6 @@
+import gql from 'graphql-tag';
+import { DocumentNode } from "graphql";
+
 import { RestEndpoint } from "./wrappers/rest-endpoint";
 
 
@@ -27,16 +30,23 @@ export const DEFAULT_USER_RECORD_FIELDS: UserRecordInsertOptionalFields = {
 	passwordHash: null
 }
 
-export module UserQueryFunctions {
+export interface UserQueryFunctions {
 	// Standard Queries
-	export type GetById = (id: number) => Promise<UserRecord | null>;
-	export type GetByUsername = (username: string) => Promise<UserRecord | null>;
-	export type GetByEmail = (email: string) => Promise<UserRecord | null>;
+	getById: (id: number) => Promise<UserRecord | null>;
+	getByUsername: (username: string) => Promise<UserRecord | null>;
+	getByEmail: (email: string) => Promise<UserRecord | null>;
 
-	export type Insert = (userRecord: UserRecordInsertRequiredFields) => Promise<UserRecord>;
-	export type Update = (userRecord: UserRecord) => Promise<UserRecord>;
-	export type Delete = (id: number) => Promise<void>;
+	insert: (userRecord: UserRecordInsertRequiredFields) => Promise<UserRecord>;
+	update: (userRecord: UserRecord) => Promise<UserRecord>;
+	delete: (id: number) => Promise<void>;
 }
+
+
+
+export const UserGQL: DocumentNode = gql`
+`;
+
+
 
 export module UserRestApi {
 	/**
