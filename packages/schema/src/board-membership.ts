@@ -24,6 +24,6 @@ export interface BoardMembershipQueryFunctions {
 	delete: (id: number) => Promise<void>;
 
 	// Specialized Queries
-	getMembersOrderedByJoined: (boardId: number) => Promise<BoardMembershipRecord[]>;
+	getMembersOrderedByJoinedDate: (boardId: number) => Promise<BoardMembershipRecord[]>;
 	getAdmins: (boardId: number) => Promise<BoardMembershipRecord[]>;
 }

@@ -118,6 +118,7 @@ export interface TodoItemQueryFunctions {
 	
 	// Specialized queries
 	getUpcoming: () => Promise<TodoItemRecord[]>;
+	getRecentCreated: () => Promise<TodoItemRecord[]>;
 	getRecentCompleted: () => Promise<TodoItemRecord[]>;
 	getRecentInactive: () => Promise<TodoItemRecord[]>;	
 }

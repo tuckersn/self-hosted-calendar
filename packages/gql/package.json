@@ -1,0 +1,22 @@
+{
+	"name": "@internal/schema",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "MIT",
+	"scripts": {
+		"build": "tsc",
+		"format": "prettier --write \"src/**/*.ts",
+		"test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.test.ts"
+	},
+	"dependencies": {
+		"@internal/common": "workspace:^1.0.0",
+		"@internal/prettier-config": "workspace:1.0.0",
+		"@internal/schema": "workspace:^1.0.0",
+		"@internal/ts-config": "workspace:1.0.0",
+		"graphql": "15",
+		"graphql-tag": "^2.12.6"
+	},
+	"devDependencies": {
+		"@types/express": "^4.17.13"
+	}
+}

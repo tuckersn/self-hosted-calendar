@@ -8,9 +8,9 @@ const DATABASE_SETTING: 'sqlite' | 'postgres'  = (process.env.DIALECT as any) ||
 let _Database: DatabaseAbstractClass;
 switch(DATABASE_SETTING) {
 	case 'sqlite':
-		_Database = new SqliteDatabase();
+		_Database = SqliteDatabase;
 	case 'postgres':
-		_Database = new PostgresDatabase();
+		_Database =  PostgresDatabase;
 	default:
 		throw new Error("Invalid env for DATABASE_SETTING");
 }

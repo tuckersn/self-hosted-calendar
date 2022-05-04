@@ -72,6 +72,6 @@ export interface EventAttendeeQueryFunctions {
 	getByUserIdAndEventId: (userId: number, eventId: number) => Promise<EventAttendeeRecord | null>;
 
 	insert: (EventAttendeeRecord: EventAttendeeRecord) => Promise<EventAttendeeRecord>;
-	delete: (EventAttendeeRecord: EventAttendeeRecord) => Promise<void>;
+	delete: (id: number) => Promise<void>;
 	update: (EventAttendeeRecord: EventAttendeeRecord) => Promise<EventAttendeeRecord>;
 }

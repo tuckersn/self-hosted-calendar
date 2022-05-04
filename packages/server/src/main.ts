@@ -3,11 +3,14 @@ import { graphqlHTTP } from "express-graphql";
 import { buildSchema } from "graphql";
 import dotenv from "dotenv";
 import expressWinston from "express-winston";
+import gql from 'graphql-tag';
+import { print } from "graphql/language/printer";
+import winston from "winston";
+
 
 import { networkLoggerOptions, networkTransports } from "@internal/loggers/dist";
 
 import { eventRouter } from "./routers/event";
-import winston from "winston";
 
 dotenv.config();
 
@@ -15,9 +18,7 @@ if(process.env.PORT === undefined) {
 	throw new Error("PORT env is not defined");
 }
 
-
-// Initialize a GraphQL schema
-var schema = buildSchema(`
+const schemaStr = print(gql`
 	type Query {
 		hello: String
 		test: String
@@ -31,8 +32,12 @@ var schema = buildSchema(`
 		uuid: ID
 		name: String
 		logins: [UserLogin]
+		trustees: [User]
 	}
 `);
+
+// Initialize a GraphQL schema
+var schema = buildSchema(schemaStr);
 
 // Root resolver
 var root = { 
@@ -60,7 +65,7 @@ app.get("/", (req,res) => {
 app.use("/event", eventRouter);
 
 app.use('/graphql', graphqlHTTP({
-	schema: schema,  // Must be provided
+	schema,  // Must be provided
 	rootValue: root,
 	graphiql: true,  // Enable GraphiQL when server endpoint is accessed in browser
 }));
