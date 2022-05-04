@@ -11,3 +11,8 @@ temp
 .turbo
 graph-*
 
+
+# runtime
+logs/
+data/
+temp/

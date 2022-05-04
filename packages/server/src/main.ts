@@ -20,12 +20,29 @@ if(process.env.PORT === undefined) {
 var schema = buildSchema(`
 	type Query {
 		hello: String
+		test: String
+		user: User
+	}
+	type UserLogin {
+		date: String!
+		ip: String!
+	}
+	type User {
+		uuid: ID
+		name: String
+		logins: [UserLogin]
 	}
 `);
 
 // Root resolver
 var root = { 
-	hello: () => 'Hello world!'
+	hello: () => 'Hello world!',
+	test: () => "Testing!",
+	user: () => { return {
+		uuid: "UUID",
+		name: "Name",
+		logins: []
+	}}
 };
 
 

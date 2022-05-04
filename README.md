@@ -1,5 +1,13 @@
 # Calendar Application
-Experimental task management app developed as a TypeScript mono repo.
+Experimental task management & calendar app developed as a TypeScript mono repo.
+
+Following technologies used in this project:
+- TypeScript
+- NodeJS
+- React
+- GraphQL
+- PNPM & PNPM workspaces
+
 
 # Commands
 
@@ -8,7 +16,7 @@ Experimental task management app developed as a TypeScript mono repo.
 pnpm turbo run build
 ```
 
-## Creating a new package
+## Creating a new package (/scripts/new-package.js)
 ```bash
 pnpm new
 ```
@@ -17,9 +25,10 @@ then when prompted enter your package name
 New package name (excluding @internal prefix): my-package-name
 ```
 
-## Installing a package into another
+## Installing a workspace package into another workspace package
 ```
-lerna add <source_package> --scope=<target_package>
+cd ./<instalee_package_dir>
+pnpm add --workspace <target_package>
 ```
 
 ## Generate dependency graph
