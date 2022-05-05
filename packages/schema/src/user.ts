@@ -2,7 +2,40 @@ import gql from 'graphql-tag';
 import { DocumentNode } from "graphql";
 
 import { RestEndpoint } from "./wrappers/rest-endpoint";
+import { ReadonlyDeep } from 'type-fest';
+import { QueryContext } from './wrappers/database';
 
+export enum UserType {
+	USER = 0,
+	ADMIN = 1,
+	SERVICE = 2
+}
+
+export function userTypeToString(userType: UserType): string {
+	switch (userType) {
+		case UserType.USER:
+			return "USER";
+		case UserType.ADMIN:
+			return "ADMIN";
+		case UserType.SERVICE:
+			return "SERVICE";
+		default:
+			throw new Error("Invalid user type");
+	}
+}
+
+export function userTypeFromString(userType: string): UserType {
+	switch (userType) {
+		case "USER":
+			return UserType.USER;
+		case "ADMIN":
+			return UserType.ADMIN;
+		case "SERVICE":
+			return UserType.SERVICE;
+		default:
+			throw new Error("Invalid user type");
+	}
+}
 
 export interface UserRecord {
 	id: number;
@@ -32,13 +65,13 @@ export const DEFAULT_USER_RECORD_FIELDS: UserRecordInsertOptionalFields = {
 
 export interface UserQueryFunctions {
 	// Standard Queries
-	getById: (id: number) => Promise<UserRecord | null>;
-	getByUsername: (username: string) => Promise<UserRecord | null>;
-	getByEmail: (email: string) => Promise<UserRecord | null>;
+	getById: (context: ReadonlyDeep<QueryContext>, id: number) => Promise<UserRecord | null>;
+	getByUsername: (context: ReadonlyDeep<QueryContext>, username: string) => Promise<UserRecord | null>;
+	getByEmail: (context: ReadonlyDeep<QueryContext>, email: string) => Promise<UserRecord | null>;
 
-	insert: (userRecord: UserRecordInsertRequiredFields) => Promise<UserRecord>;
-	update: (userRecord: UserRecord) => Promise<UserRecord>;
-	delete: (id: number) => Promise<void>;
+	insert: (context: ReadonlyDeep<QueryContext>, userRecord: UserRecordInsertRequiredFields) => Promise<UserRecord>;
+	update: (context: ReadonlyDeep<QueryContext>, userRecord: UserRecord) => Promise<UserRecord>;
+	delete: (context: ReadonlyDeep<QueryContext>, id: number) => Promise<void>;
 }
 
 

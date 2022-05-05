@@ -1,3 +1,6 @@
+import { ReadonlyDeep } from "type-fest";
+import { QueryContext } from "./wrappers/database";
+
 export enum EventAttendeeStatus {
 	NoResponse = 0,
 	Attending = 1,
@@ -5,7 +8,7 @@ export enum EventAttendeeStatus {
 	NotAttending = 3
 }
 
-export function EventAttendeeStatusToString(status: EventAttendeeStatus): string {
+export function eventAttendeeStatusToString(status: EventAttendeeStatus): string {
 	switch (status) {
 		case EventAttendeeStatus.NoResponse:
 			return "No Response";
@@ -20,7 +23,7 @@ export function EventAttendeeStatusToString(status: EventAttendeeStatus): string
 	}
 }
 
-export function EventAttendeeStatusFromString(status: string): EventAttendeeStatus {
+export function eventAttendeeStatusFromString(status: string): EventAttendeeStatus {
 	switch (status) {
 		case "No Response":
 			return EventAttendeeStatus.NoResponse;
@@ -66,12 +69,12 @@ export const DEFAULT_EVENT_ATTENDEE_RECORD_FIELDS: EventAttendeeRecordInsertOpti
 
 export interface EventAttendeeQueryFunctions {
 	// Standard Queries
-	getById: (id: number) => Promise<EventAttendeeRecord | null>;
-	getByEventId: (eventId: number) => Promise<EventAttendeeRecord[]>;
-	getByUserId: (userId: number) => Promise<EventAttendeeRecord[]>;
-	getByUserIdAndEventId: (userId: number, eventId: number) => Promise<EventAttendeeRecord | null>;
+	getById: (context: ReadonlyDeep<QueryContext>, id: number) => Promise<EventAttendeeRecord | null>;
+	getByEventId: (context: ReadonlyDeep<QueryContext>, eventId: number) => Promise<EventAttendeeRecord[]>;
+	getByUserId: (context: ReadonlyDeep<QueryContext>, userId: number) => Promise<EventAttendeeRecord[]>;
+	getByUserIdAndEventId: (context: ReadonlyDeep<QueryContext>, userId: number, eventId: number) => Promise<EventAttendeeRecord | null>;
 
-	insert: (EventAttendeeRecord: EventAttendeeRecord) => Promise<EventAttendeeRecord>;
-	delete: (id: number) => Promise<void>;
-	update: (EventAttendeeRecord: EventAttendeeRecord) => Promise<EventAttendeeRecord>;
+	insert: (context: ReadonlyDeep<QueryContext>, EventAttendeeRecord: EventAttendeeRecord) => Promise<EventAttendeeRecord>;
+	delete: (context: ReadonlyDeep<QueryContext>, id: number) => Promise<void>;
+	update: (context: ReadonlyDeep<QueryContext>, EventAttendeeRecord: EventAttendeeRecord) => Promise<EventAttendeeRecord>;
 }

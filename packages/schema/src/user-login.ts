@@ -1,3 +1,5 @@
+import { ReadonlyDeep } from "type-fest";
+import { QueryContext } from "./wrappers/database";
 import { RestEndpoint } from "./wrappers/rest-endpoint";
 
 export enum UserLoginMethod {
@@ -5,12 +7,23 @@ export enum UserLoginMethod {
 	PASSWORD = 1
 }
 
-export function UserLoginMethodToString(method: UserLoginMethod): string {
+export function userLoginMethodToString(method: UserLoginMethod): string {
 	switch (method) {
 		case UserLoginMethod.UNKNOWN:
 			return "Unknown";
 		case UserLoginMethod.PASSWORD:
 			return "Password";
+		default:
+			throw new Error("Invalid UserLoginMethod");
+	}
+}
+
+export function userLoginMethodFromString(method: string): UserLoginMethod {
+	switch (method) {
+		case "Unknown":
+			return UserLoginMethod.UNKNOWN;
+		case "Password":
+			return UserLoginMethod.PASSWORD;
 		default:
 			throw new Error("Invalid UserLoginMethod");
 	}
@@ -37,15 +50,15 @@ export const DEFAULT_USER_LOGIN_RECORD_FIELDS: UserLoginRecordInsertOptionalFiel
 
 export interface UserLoginQueryFunctions {
 	// Standard Queries
-	getById: (id: number) => Promise<UserLoginRecord | null>;
-	getByIp: (ip: string) => Promise<UserLoginRecord[]>;
-	getByUserId: (userId: number) => Promise<UserLoginRecord[]>;
-	insert: (UserLoginRecord: UserLoginRecordInsertRequiredFields) => Promise<UserLoginRecord>;
-	delete: (id: number) => Promise<void>;
+	getById: (context: ReadonlyDeep<QueryContext>, id: number) => Promise<UserLoginRecord | null>;
+	getByIp: (context: ReadonlyDeep<QueryContext>, ip: string) => Promise<UserLoginRecord[]>;
+	getByUserId: (context: ReadonlyDeep<QueryContext>, userId: number) => Promise<UserLoginRecord[]>;
+	insert: (context: ReadonlyDeep<QueryContext>, UserLoginRecord: UserLoginRecordInsertRequiredFields) => Promise<UserLoginRecord>;
+	delete: (context: ReadonlyDeep<QueryContext>, id: number) => Promise<void>;
 
 	// Specialized Queries
-	getByUsername: (username: string) => Promise<UserLoginRecord | null>;
-	getByEmail: (email: string) => Promise<UserLoginRecord | null>;
+	getByUsername: (context: ReadonlyDeep<QueryContext>, username: string) => Promise<UserLoginRecord | null>;
+	getByEmail: (context: ReadonlyDeep<QueryContext>, email: string) => Promise<UserLoginRecord | null>;
 }
 
 export module LoginREST {

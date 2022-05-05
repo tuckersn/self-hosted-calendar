@@ -1,3 +1,6 @@
+import { ReadonlyDeep } from "type-fest";
+import { QueryContext } from "./wrappers/database";
+
 export interface EventRecord {
 	id: number;
 	name: string;
@@ -19,9 +22,8 @@ export const DEFAULT_EVENT_RECORD_FIELDS: EventRecordInsertOptionalFields = {
 
 export interface EventQueryFunctions {
 	// Standard Queries
-	getById: (id: number) => Promise<EventRecord | null>;
-
-	insert: (eventRecord: EventRecordInsertRequiredFields) => Promise<EventRecord>;
-	update: (eventRecord: EventRecord) => Promise<EventRecord>;
-	delete: (id: number) => Promise<void>;
+	getById: (context: ReadonlyDeep<QueryContext>, id: number) => Promise<EventRecord | null>;
+	insert: (context: ReadonlyDeep<QueryContext>, eventRecord: EventRecordInsertRequiredFields) => Promise<EventRecord>;
+	update: (context: ReadonlyDeep<QueryContext>, eventRecord: EventRecord) => Promise<EventRecord>;
+	delete: (context: ReadonlyDeep<QueryContext>, id: number) => Promise<void>;
 }

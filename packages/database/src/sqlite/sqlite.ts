@@ -1,161 +1,169 @@
 import { UserQueryFunctions, UserLoginQueryFunctions, BoardQueryFunctions, BoardMembershipQueryFunctions, EventQueryFunctions, EventAttendeeQueryFunctions, TodoItemQueryFunctions, UserRecordInsertRequiredFields, UserRecord, UserLoginRecordInsertRequiredFields, BoardRecord, BoardRecordInsertRequiredFields, EventRecordInsertRequiredFields, EventRecord, BoardMembershipRecordInsertRequiredFields, EventAttendeeRecordInsertRequiredFields, TodoItemRecordInsertRequiredFields, TodoItemRecord, TodoItemRecordInsertFields } from "@internal/schema/dist";
-import { Promisable } from "type-fest";
+import { QueryContext } from "@internal/schema/dist/wrappers/database";
+import { Promisable, ReadonlyDeep } from "type-fest";
 import { Database } from "../database";
 
+//--------------------------------------------------------//
+//
+// It's a lot of overheard to support multiple databases,
+// but I would like to keep the door open to it. This is
+// a placeholder for the actual database implementation.
+//
+//--------------------------------------------------------//
 export const SqliteDatabase: Database = {
-	name: "postgres",
+	name: "sqlite",
 	start: async () => {
 		return;
 	},
 	user: {
-		getById: async (id: number) => {
+		getById: async (context: ReadonlyDeep<QueryContext>, id: number) => {
 			throw new Error("Method not implemented.");
 		},
-		getByEmail: async (email: string) => {
+		getByEmail: async (context: ReadonlyDeep<QueryContext>, email: string) => {
 			throw new Error("Method not implemented.");
 		},
-		getByUsername: async (username: string) => {
+		getByUsername: async (context: ReadonlyDeep<QueryContext>, username: string) => {
 			throw new Error("Method not implemented.");
 		},
-		insert: async (userRecord: UserRecordInsertRequiredFields) => {
+		insert: async (context: ReadonlyDeep<QueryContext>, userRecord: UserRecordInsertRequiredFields) => {
 			throw new Error("Method not implemented.");
 		},
-		update: async (userRecord: UserRecord) => {
+		update: async (context: ReadonlyDeep<QueryContext>, userRecord: UserRecord) => {
 			throw new Error("Method not implemented.");
 		},
-		delete: async (id: number) => {
+		delete: async (context: ReadonlyDeep<QueryContext>, id: number) => {
 			throw new Error("Method not implemented.");
 		}
 	},
 	userLogins: {
-		getById: async (id: number) => {
+		getById: async (context: ReadonlyDeep<QueryContext>, id: number) => {
 			throw new Error("Method not implemented.");
 		},
-		getByUsername: async (username: string) => {
+		getByUsername: async (context: ReadonlyDeep<QueryContext>, username: string) => {
 			throw new Error("Method not implemented.");
 		},
-		getByEmail: async (email: string) => {
+		getByEmail: async (context: ReadonlyDeep<QueryContext>, email: string) => {
 			throw new Error("Method not implemented.");
 		},
-		getByIp: async (ip: string) => {
+		getByIp: async (context: ReadonlyDeep<QueryContext>, ip: string) => {
 			throw new Error("Method not implemented.");
 		},
 		getByUserId(userId) {
 			throw new Error("Method not implemented.");
 		},
-		insert: async (userLoginRecord: UserLoginRecordInsertRequiredFields) => {
+		insert: async (context: ReadonlyDeep<QueryContext>, userLoginRecord: UserLoginRecordInsertRequiredFields) => {
 			throw new Error("Method not implemented.");
 		},
-		delete: async (id: number) => {
+		delete: async (context: ReadonlyDeep<QueryContext>, id: number) => {
 			throw new Error("Method not implemented.");
 		}
 	},
 	board: {
-		getById: async (id: number) => {
+		getById: async (context: ReadonlyDeep<QueryContext>, id: number) => {
 			throw new Error("Method not implemented.");
 		},
-		insert: async (boardRecord: BoardRecordInsertRequiredFields) => {
+		insert: async (context: ReadonlyDeep<QueryContext>, boardRecord: BoardRecordInsertRequiredFields) => {
 			throw new Error("Method not implemented.");
 		},
-		update: async (boardRecord: BoardRecord) => {
+		update: async (context: ReadonlyDeep<QueryContext>, boardRecord: BoardRecord) => {
 			throw new Error("Method not implemented.");
 		},
-		delete: async (id: number) => {
+		delete: async (context: ReadonlyDeep<QueryContext>, id: number) => {
 			throw new Error("Method not implemented.");
 		},
 	},
 	boardMember: {
-		getById: async (id: number) => {
+		getById: async (context: ReadonlyDeep<QueryContext>, id: number) => {
 			throw new Error("Method not implemented.");
 		},
-		getAdmins: async (boardId: number) => {
+		getAdmins: async (context: ReadonlyDeep<QueryContext>, boardId: number) => {
 			throw new Error("Method not implemented.");
 		},
-		getByUserIdAndBoardId: async (userId: number, boardId: number) => {
+		getByUserIdAndBoardId: async (context: ReadonlyDeep<QueryContext>, userId: number, boardId: number) => {
 			throw new Error("Method not implemented.");
 		},
-		getByUserId: async (userId: number) => {
+		getByUserId: async (context: ReadonlyDeep<QueryContext>, userId: number) => {
 			throw new Error("Method not implemented.");
 		},
-		getByBoardId: async (boardId: number) => {
+		getByBoardId: async (context: ReadonlyDeep<QueryContext>, boardId: number) => {
 			throw new Error("Method not implemented.");
 		},
-		delete: async (boardId: number) => {
+		delete: async (context: ReadonlyDeep<QueryContext>, boardId: number) => {
 			throw new Error("Method not implemented.");
 		},
-		insert: async (boardMembershipRecord: BoardMembershipRecordInsertRequiredFields) => {
+		insert: async (context: ReadonlyDeep<QueryContext>, boardMembershipRecord: BoardMembershipRecordInsertRequiredFields) => {
 			throw new Error("Method not implemented.");
 		},
-		getMembersOrderedByJoinedDate: async (boardId: number) => {
+		getMembersOrderedByJoinedDate: async (context: ReadonlyDeep<QueryContext>, boardId: number) => {
 			throw new Error("Method not implemented.");
 		}
 	},
 	event: {
-		getById: async (id: number) => {
+		getById: async (context: ReadonlyDeep<QueryContext>, id: number) => {
 			throw new Error("Method not implemented.");
 		},
-		insert: async (eventRecord: EventRecordInsertRequiredFields) => {
+		insert: async (context: ReadonlyDeep<QueryContext>, eventRecord: EventRecordInsertRequiredFields) => {
 			throw new Error("Method not implemented.");
 		},
-		update: async (eventRecord: EventRecord) => {
+		update: async (context: ReadonlyDeep<QueryContext>, eventRecord: EventRecord) => {
 			throw new Error("Method not implemented.");
 		},
-		delete: async (id: number) => {
+		delete: async (context: ReadonlyDeep<QueryContext>, id: number) => {
 			throw new Error("Method not implemented.");
 		}
 	},
 	eventAttendee: {
-		getById: async (id: number) => {
+		getById: async (context: ReadonlyDeep<QueryContext>, id: number) => {
 			throw new Error("Method not implemented.");
 		},
-		getByEventId: async (eventId: number) => {
+		getByEventId: async (context: ReadonlyDeep<QueryContext>, eventId: number) => {
 			throw new Error("Method not implemented.");
 		},
-		getByUserId: async (userId: number) => {
+		getByUserId: async (context: ReadonlyDeep<QueryContext>, userId: number) => {
 			throw new Error("Method not implemented.");
 		},
-		getByUserIdAndEventId: async (userId: number, eventId: number) => {
+		getByUserIdAndEventId: async (context: ReadonlyDeep<QueryContext>, userId: number, eventId: number) => {
 			throw new Error("Method not implemented.");
 		},
-		update: async (eventAttendeeRecord: EventAttendeeRecordInsertRequiredFields) => {
+		update: async (context: ReadonlyDeep<QueryContext>, eventAttendeeRecord: EventAttendeeRecordInsertRequiredFields) => {
 			throw new Error("Method not implemented.");
 		},
-		insert: async (eventAttendeeRecord: EventAttendeeRecordInsertRequiredFields) => {
+		insert: async (context: ReadonlyDeep<QueryContext>, eventAttendeeRecord: EventAttendeeRecordInsertRequiredFields) => {
 			throw new Error("Method not implemented.");
 		},
-		delete: async (id: number) => {
+		delete: async (context: ReadonlyDeep<QueryContext>, id: number) => {
 			throw new Error("Method not implemented.");
 		},
 	},
 	todoItem: {
-		getById: async (id: number) => {
+		getById: async (context: ReadonlyDeep<QueryContext>, id: number) => {
 			throw new Error("Method not implemented.");
 		},
-		getByUUID: async (uuid: string) => {
+		getByUUID: async (context: ReadonlyDeep<QueryContext>, uuid: string) => {
 			throw new Error("Method not implemented.");
 		},
-		insert: async (todoItemRecord: TodoItemRecordInsertFields) => {
+		insert: async (context: ReadonlyDeep<QueryContext>, todoItemRecord: TodoItemRecordInsertFields) => {
 			throw new Error("Method not implemented.");
 		},
-		update: async (todoItemRecord: TodoItemRecord) => {
+		update: async (context: ReadonlyDeep<QueryContext>, todoItemRecord: TodoItemRecord) => {
 			throw new Error("Method not implemented.");
 		},
-		deleteById: async (id: number) => {
+		deleteById: async (context: ReadonlyDeep<QueryContext>, id: number) => {
 			throw new Error("Method not implemented.");
 		},
-		deleteByUUID: async (uuid: string) => {
+		deleteByUUID: async (context: ReadonlyDeep<QueryContext>, uuid: string) => {
 			throw new Error("Method not implemented.");
 		},
-		getRecentCompleted: async () => {
+		getRecentCompleted: async (context: ReadonlyDeep<QueryContext>) => {
 			throw new Error("Method not implemented.");
 		},
-		getRecentCreated: async () => {
+		getRecentCreated: async (context: ReadonlyDeep<QueryContext>) => {
 			throw new Error("Method not implemented.");
 		},
-		getRecentInactive: async () => {
+		getRecentInactive: async (context: ReadonlyDeep<QueryContext>) => {
 			throw new Error("Method not implemented.");
 		},
-		getUpcoming: async () => {
+		getUpcoming: async (context: ReadonlyDeep<QueryContext>) => {
 			throw new Error("Method not implemented.");
 		},
 

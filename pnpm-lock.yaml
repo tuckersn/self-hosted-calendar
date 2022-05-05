@@ -56,6 +56,19 @@ importers:
       '@internal/prettier-config': link:../../configs/prettier-config
       '@internal/ts-config': link:../../configs/ts-config
 
+  packages/common-node:
+    specifiers:
+      '@internal/common': workspace:^1.0.0
+      '@internal/prettier-config': workspace:^1.0.0
+      '@internal/ts-config': workspace:^1.0.0
+      nanoid: ^3.3.3
+    dependencies:
+      '@internal/common': link:../common
+      nanoid: 3.3.3
+    devDependencies:
+      '@internal/prettier-config': link:../../configs/prettier-config
+      '@internal/ts-config': link:../../configs/ts-config
+
   packages/database:
     specifiers:
       '@internal/common': workspace:^1.0.0

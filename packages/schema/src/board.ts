@@ -1,3 +1,6 @@
+import { ReadonlyDeep } from "type-fest";
+import { QueryContext } from "./wrappers/database";
+
 export interface BoardRecord {
 	id: number;
 	name: string;
@@ -15,10 +18,10 @@ export const DEFAULT_BOARD_RECORD_FIELDS: BoardRecordInsertOptionalFields = {
 
 export interface BoardQueryFunctions {
 	// Standard Queries
-	getById: (id: number) => Promise<BoardRecord | null>;
+	getById: (context: ReadonlyDeep<QueryContext>, id: number) => Promise<BoardRecord | null>;
 
-	insert: (boardRecord: BoardRecordInsertRequiredFields) => Promise<BoardRecord>;
-	update: (boardRecord: BoardRecord) => Promise<BoardRecord>;
-	delete: (id: number) => Promise<void>;
+	insert: (context: ReadonlyDeep<QueryContext>, boardRecord: BoardRecordInsertRequiredFields) => Promise<BoardRecord>;
+	update: (context: ReadonlyDeep<QueryContext>, boardRecord: BoardRecord) => Promise<BoardRecord>;
+	delete: (context: ReadonlyDeep<QueryContext>, id: number) => Promise<void>;
 }
 

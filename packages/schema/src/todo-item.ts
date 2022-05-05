@@ -1,3 +1,5 @@
+import { ReadonlyDeep } from "type-fest";
+import { QueryContext } from "./wrappers/database";
 import { RestEndpoint } from "./wrappers/rest-endpoint";
 
 export enum TodoItemType {
@@ -6,7 +8,7 @@ export enum TodoItemType {
 	StickyNote = 2
 }
 
-export function TodoItemTypeToString(type: TodoItemType): string {
+export function todoItemTypeToString(type: TodoItemType): string {
 	switch (type) {
 		case TodoItemType.ShortTerm:
 			return "Short Term";
@@ -19,7 +21,7 @@ export function TodoItemTypeToString(type: TodoItemType): string {
 	}
 }
 
-export function TodoItemTypeFromString(type: string): TodoItemType {
+export function todoItemTypeFromString(type: string): TodoItemType {
 	switch (type) {
 		case "Short Term":
 			return TodoItemType.ShortTerm;
@@ -109,18 +111,18 @@ export const DEFAULT_TODO_ITEM_RECORD_FIELDS: TodoItemRecordInsertOptionalFields
 
 export interface TodoItemQueryFunctions {
 	// Standard queries
-	getById: (id: number) => Promise<TodoItemRecord | null>;
-	getByUUID: (uuid: string) => Promise<TodoItemRecord | null>;
-	insert: (record: TodoItemRecordInsertFields) => Promise<TodoItemRecord>;
-	update: (record: TodoItemRecord) => Promise<TodoItemRecord>;
-	deleteById: (id: number) => Promise<void>;
-	deleteByUUID: (uuid: string) => Promise<void>;
+	getById: (context: ReadonlyDeep<QueryContext>, id: number) => Promise<TodoItemRecord | null>;
+	getByUUID: (context: ReadonlyDeep<QueryContext>, uuid: string) => Promise<TodoItemRecord | null>;
+	insert: (context: ReadonlyDeep<QueryContext>, record: TodoItemRecordInsertFields) => Promise<TodoItemRecord>;
+	update: (context: ReadonlyDeep<QueryContext>, record: TodoItemRecord) => Promise<TodoItemRecord>;
+	deleteById: (context: ReadonlyDeep<QueryContext>, id: number) => Promise<void>;
+	deleteByUUID: (context: ReadonlyDeep<QueryContext>, uuid: string) => Promise<void>;
 	
 	// Specialized queries
-	getUpcoming: () => Promise<TodoItemRecord[]>;
-	getRecentCreated: () => Promise<TodoItemRecord[]>;
-	getRecentCompleted: () => Promise<TodoItemRecord[]>;
-	getRecentInactive: () => Promise<TodoItemRecord[]>;	
+	getUpcoming: (context: ReadonlyDeep<QueryContext>) => Promise<TodoItemRecord[]>;
+	getRecentCreated: (context: ReadonlyDeep<QueryContext>) => Promise<TodoItemRecord[]>;
+	getRecentCompleted: (context: ReadonlyDeep<QueryContext>) => Promise<TodoItemRecord[]>;
+	getRecentInactive: (context: ReadonlyDeep<QueryContext>) => Promise<TodoItemRecord[]>;	
 }
 
 
