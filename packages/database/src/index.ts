@@ -1,3 +1,4 @@
+import { Sequelize } from "sequelize/types";
 import { Database as DatabaseInterface } from "./database";
 import { PostgresDatabase } from "./postgres/postgres";
 import { SqliteDatabase } from "./sqlite/sqlite";
@@ -5,14 +6,20 @@ import { SqliteDatabase } from "./sqlite/sqlite";
 
 const DATABASE_SETTING: 'sqlite' | 'postgres'  = (process.env.DIALECT as any) || 'sqlite';
 
-let _Database: DatabaseInterface;
+export let Database: DatabaseInterface;
+
+let promise: Promise<DatabaseInterface>;
 switch(DATABASE_SETTING) {
 	case 'sqlite':
-		_Database = SqliteDatabase;
+		promise = SqliteDatabase();
+		break;
 	case 'postgres':
-		_Database =  PostgresDatabase;
+		promise = PostgresDatabase();
+		break;
 	default:
 		throw new Error("Invalid env for DATABASE_SETTING");
 }
 
-export const Database = _Database;
+promise.then(database => {
+	Database = database;
+});

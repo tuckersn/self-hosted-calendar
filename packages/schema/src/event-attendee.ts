@@ -1,5 +1,5 @@
 import { ReadonlyDeep } from "type-fest";
-import { QueryContext } from "./wrappers/database";
+
 
 export enum EventAttendeeStatus {
 	NoResponse = 0,
@@ -69,12 +69,12 @@ export const DEFAULT_EVENT_ATTENDEE_RECORD_FIELDS: EventAttendeeRecordInsertOpti
 
 export interface EventAttendeeQueryFunctions {
 	// Standard Queries
-	getById: (context: ReadonlyDeep<QueryContext>, id: number) => Promise<EventAttendeeRecord | null>;
-	getByEventId: (context: ReadonlyDeep<QueryContext>, eventId: number) => Promise<EventAttendeeRecord[]>;
-	getByUserId: (context: ReadonlyDeep<QueryContext>, userId: number) => Promise<EventAttendeeRecord[]>;
-	getByUserIdAndEventId: (context: ReadonlyDeep<QueryContext>, userId: number, eventId: number) => Promise<EventAttendeeRecord | null>;
+	getById: (id: number) => Promise<EventAttendeeRecord | null>;
+	getByEventId: (eventId: number) => Promise<EventAttendeeRecord[]>;
+	getByUserId: (userId: number) => Promise<EventAttendeeRecord[]>;
+	getByUserIdAndEventId: (userId: number, eventId: number) => Promise<EventAttendeeRecord | null>;
 
-	insert: (context: ReadonlyDeep<QueryContext>, EventAttendeeRecord: EventAttendeeRecord) => Promise<EventAttendeeRecord>;
-	delete: (context: ReadonlyDeep<QueryContext>, id: number) => Promise<void>;
-	update: (context: ReadonlyDeep<QueryContext>, EventAttendeeRecord: EventAttendeeRecord) => Promise<EventAttendeeRecord>;
+	insert: (EventAttendeeRecord: EventAttendeeRecord) => Promise<EventAttendeeRecord>;
+	delete: (id: number) => Promise<void>;
+	update: (EventAttendeeRecord: EventAttendeeRecord) => Promise<EventAttendeeRecord>;
 }

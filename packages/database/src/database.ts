@@ -1,16 +1,11 @@
 import { Promisable } from "type-fest";
 
-import { BoardMembershipQueryFunctions, BoardQueryFunctions, EventAttendeeQueryFunctions, EventQueryFunctions, TodoItemQueryFunctions, UserLoginQueryFunctions, UserQueryFunctions } from "@internal/schema/dist";
+import { BoardMembershipQueryFunctions, BoardQueryFunctions, EventAttendeeQueryFunctions, EventQueryFunctions, TodoItemQueryFunctions, UserLoginQueryFunctions, UserQueryFunctions } from "@internal/schema/dist/index";
 export interface Database {
 	/**
 	 * The name of the database.
 	 */
 	readonly name: string;
-
-	/**
-	 * Initialization function
-	 */
-	start: () => Promisable<void>;
 
 	user: UserQueryFunctions;
 	userLogins: UserLoginQueryFunctions;

@@ -3,12 +3,34 @@ import { DocumentNode } from "graphql";
 
 import { RestEndpoint } from "./wrappers/rest-endpoint";
 import { ReadonlyDeep } from 'type-fest';
-import { QueryContext } from './wrappers/database';
+
 
 export enum UserType {
+	/**
+	 * Default user type.
+	 */
 	USER = 0,
+	/**
+	 * Users who can use elevated privileges.
+	 * 
+	 * ***WARNING: Can impersonate other users.***
+	 */
 	ADMIN = 1,
-	SERVICE = 2
+	/**
+	 * Service accounts.
+	 */
+	SERVICE = 2,
+	/**
+	 * Service accounts with elevated privileges.
+	 * 
+	 * ***WARNING: Can impersonate other users.***
+	 */
+	ADMIN_SERVICE = 3,
+	/**
+	 * Admin service accounts that are read-only.
+	 * @unimplemented
+	 */
+	READ_ONLY_ADMIN_SERVICE = 4
 }
 
 export function userTypeToString(userType: UserType): string {
@@ -19,6 +41,10 @@ export function userTypeToString(userType: UserType): string {
 			return "ADMIN";
 		case UserType.SERVICE:
 			return "SERVICE";
+		case UserType.ADMIN_SERVICE:
+			return "ADMIN_SERVICE";
+		case UserType.READ_ONLY_ADMIN_SERVICE:
+			return "READ_ONLY_ADMIN_SERVICE";
 		default:
 			throw new Error("Invalid user type");
 	}
@@ -32,6 +58,10 @@ export function userTypeFromString(userType: string): UserType {
 			return UserType.ADMIN;
 		case "SERVICE":
 			return UserType.SERVICE;
+		case "ADMIN_SERVICE":
+			return UserType.ADMIN_SERVICE;
+		case "READ_ONLY_ADMIN_SERVICE":
+			return UserType.READ_ONLY_ADMIN_SERVICE;
 		default:
 			throw new Error("Invalid user type");
 	}
@@ -41,7 +71,7 @@ export interface UserRecord {
 	id: number;
 	uuid: string;
 	username: string;
-	name: string | null;
+	displayName: string | null;
 	email: string;
 	passwordHash: string | null;
 	created: Date;
@@ -52,26 +82,26 @@ export interface UserRecord {
  * 
  * ***Example:*** passwordHash should not be sent to any client ever.
  */
-export type ClientUserRecord = Pick<UserRecord, 'username' | 'name' | 'email' | 'created'>;
+export type ClientUserRecord = Pick<UserRecord, 'username' | 'displayName' | 'email' | 'created'>;
 
 export type UserRecordInsertRequiredFields = Pick<UserRecord, 'username' | 'email'>;
-export type UserRecordInsertOptionalFields = Pick<UserRecord, 'name' | 'passwordHash'>;
+export type UserRecordInsertOptionalFields = Pick<UserRecord, 'displayName' | 'passwordHash'>;
 export type UserRecordInsertFields = UserRecordInsertOptionalFields & Partial<UserRecordInsertRequiredFields>;
 
 export const DEFAULT_USER_RECORD_FIELDS: UserRecordInsertOptionalFields = {
-	name: null,
+	displayName: null,
 	passwordHash: null
 }
 
 export interface UserQueryFunctions {
 	// Standard Queries
-	getById: (context: ReadonlyDeep<QueryContext>, id: number) => Promise<UserRecord | null>;
-	getByUsername: (context: ReadonlyDeep<QueryContext>, username: string) => Promise<UserRecord | null>;
-	getByEmail: (context: ReadonlyDeep<QueryContext>, email: string) => Promise<UserRecord | null>;
+	getById: (id: number) => Promise<UserRecord | null>;
+	getByUsername: (username: string) => Promise<UserRecord | null>;
+	getByEmail: (email: string) => Promise<UserRecord | null>;
 
-	insert: (context: ReadonlyDeep<QueryContext>, userRecord: UserRecordInsertRequiredFields) => Promise<UserRecord>;
-	update: (context: ReadonlyDeep<QueryContext>, userRecord: UserRecord) => Promise<UserRecord>;
-	delete: (context: ReadonlyDeep<QueryContext>, id: number) => Promise<void>;
+	insert: (userRecord: UserRecordInsertFields) => Promise<UserRecord>;
+	update: (userRecord: UserRecord) => Promise<UserRecord>;
+	delete: (id: number) => Promise<void>;
 }
 
 
@@ -90,12 +120,12 @@ export module UserRestApi {
 	/**
 	 * [POST] /users
 	 */
-	export type CreateUser = RestEndpoint<{}, Pick<UserRecordInsertFields, 'username' | 'email' | 'name'>, ClientUserRecord>;
+	export type CreateUser = RestEndpoint<{}, Pick<UserRecordInsertFields, 'username' | 'email' | 'displayName'>, ClientUserRecord>;
 
 	 /**
 	 * [POST] /users/:id
 	 */
-	export type UpdateUser = RestEndpoint<{}, Pick<UserRecordInsertFields, 'name'>, ClientUserRecord>;
+	export type UpdateUser = RestEndpoint<{}, Pick<UserRecordInsertFields, 'displayName'>, ClientUserRecord>;
 
 	/**
 	 * [POST] /users/:id/password

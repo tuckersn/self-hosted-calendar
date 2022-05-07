@@ -1,5 +1,5 @@
 import { ReadonlyDeep } from "type-fest";
-import { QueryContext } from "./wrappers/database";
+
 import { RestEndpoint } from "./wrappers/rest-endpoint";
 
 export enum UserLoginMethod {
@@ -35,30 +35,30 @@ export interface UserLoginRecord {
 	loginDate: Date;
 	ip: string;
 	userAgent: string | null;
-	method: UserLoginMethod;
+	loginMethod: UserLoginMethod;
 }
 
 
 export type UserLoginRecordInsertRequiredFields = Pick<UserLoginRecord, 'userId' | 'ip'>;
-export type UserLoginRecordInsertOptionalFields = Pick<UserLoginRecord, 'userAgent' | 'method'>;
+export type UserLoginRecordInsertOptionalFields = Pick<UserLoginRecord, 'userAgent' | 'loginMethod'>;
 export type UserLoginRecordInsertFields = UserLoginRecordInsertOptionalFields & Partial<UserLoginRecordInsertRequiredFields>;
 
 export const DEFAULT_USER_LOGIN_RECORD_FIELDS: UserLoginRecordInsertOptionalFields = {
 	userAgent: null,
-	method: UserLoginMethod.UNKNOWN
+	loginMethod: UserLoginMethod.UNKNOWN
 }
 
 export interface UserLoginQueryFunctions {
 	// Standard Queries
-	getById: (context: ReadonlyDeep<QueryContext>, id: number) => Promise<UserLoginRecord | null>;
-	getByIp: (context: ReadonlyDeep<QueryContext>, ip: string) => Promise<UserLoginRecord[]>;
-	getByUserId: (context: ReadonlyDeep<QueryContext>, userId: number) => Promise<UserLoginRecord[]>;
-	insert: (context: ReadonlyDeep<QueryContext>, UserLoginRecord: UserLoginRecordInsertRequiredFields) => Promise<UserLoginRecord>;
-	delete: (context: ReadonlyDeep<QueryContext>, id: number) => Promise<void>;
+	getById: (id: number) => Promise<UserLoginRecord | null>;
+	getByIp: (ip: string) => Promise<UserLoginRecord[]>;
+	getByUserId: (userId: number) => Promise<UserLoginRecord[]>;
+	insert: (UserLoginRecord: UserLoginRecordInsertFields) => Promise<UserLoginRecord>;
+	delete: (id: number) => Promise<void>;
 
 	// Specialized Queries
-	getByUsername: (context: ReadonlyDeep<QueryContext>, username: string) => Promise<UserLoginRecord | null>;
-	getByEmail: (context: ReadonlyDeep<QueryContext>, email: string) => Promise<UserLoginRecord | null>;
+	getByUsername: (username: string) => Promise<UserLoginRecord | null>;
+	getByEmail: (email: string) => Promise<UserLoginRecord | null>;
 }
 
 export module LoginREST {

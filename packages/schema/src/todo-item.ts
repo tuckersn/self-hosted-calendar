@@ -1,5 +1,5 @@
 import { ReadonlyDeep } from "type-fest";
-import { QueryContext } from "./wrappers/database";
+
 import { RestEndpoint } from "./wrappers/rest-endpoint";
 
 export enum TodoItemType {
@@ -82,7 +82,7 @@ export interface TodoItemRecord {
 	 * When should this item be completed by?
 	 * This will be used by notifications and reminders.
 	 */
-	dueDate: Date | null;
+	due: Date | null;
 	/**
 	 * Last time this item was updated.
 	 */
@@ -98,31 +98,31 @@ export interface TodoItemRecord {
 }
 
 export type TodoItemRecordInsertRequiredFields = Pick<TodoItemRecord, 'title'>;
-export type TodoItemRecordInsertOptionalFields = Pick<TodoItemRecord, 'itemType' | 'dueDate' | 'updated' | 'completed' | 'status'>;
-export type TodoItemRecordInsertFields = TodoItemRecordInsertOptionalFields & Partial<TodoItemRecordInsertRequiredFields>;
+export type TodoItemRecordInsertOptionalFields = Pick<TodoItemRecord, 'itemType' | 'due' | 'updated' | 'completed' | 'status'>;
+export type TodoItemRecordInsertFields = TodoItemRecordInsertRequiredFields & Partial<TodoItemRecordInsertOptionalFields>;
 
 export const DEFAULT_TODO_ITEM_RECORD_FIELDS: TodoItemRecordInsertOptionalFields = {
 	itemType: TodoItemType.ShortTerm,
 	status: TodoItemStatus.Active,
-	dueDate: null,
+	due: null,
 	updated: null,
 	completed: null
 };
 
 export interface TodoItemQueryFunctions {
 	// Standard queries
-	getById: (context: ReadonlyDeep<QueryContext>, id: number) => Promise<TodoItemRecord | null>;
-	getByUUID: (context: ReadonlyDeep<QueryContext>, uuid: string) => Promise<TodoItemRecord | null>;
-	insert: (context: ReadonlyDeep<QueryContext>, record: TodoItemRecordInsertFields) => Promise<TodoItemRecord>;
-	update: (context: ReadonlyDeep<QueryContext>, record: TodoItemRecord) => Promise<TodoItemRecord>;
-	deleteById: (context: ReadonlyDeep<QueryContext>, id: number) => Promise<void>;
-	deleteByUUID: (context: ReadonlyDeep<QueryContext>, uuid: string) => Promise<void>;
+	getById: (id: number) => Promise<TodoItemRecord | null>;
+	getByUUID: (uuid: string) => Promise<TodoItemRecord | null>;
+	insert: (record: TodoItemRecordInsertFields) => Promise<TodoItemRecord>;
+	update: (record: TodoItemRecord) => Promise<TodoItemRecord>;
+	deleteById: (id: number) => Promise<void>;
+	deleteByUUID: (uuid: string) => Promise<void>;
 	
 	// Specialized queries
-	getUpcoming: (context: ReadonlyDeep<QueryContext>) => Promise<TodoItemRecord[]>;
-	getRecentCreated: (context: ReadonlyDeep<QueryContext>) => Promise<TodoItemRecord[]>;
-	getRecentCompleted: (context: ReadonlyDeep<QueryContext>) => Promise<TodoItemRecord[]>;
-	getRecentInactive: (context: ReadonlyDeep<QueryContext>) => Promise<TodoItemRecord[]>;	
+	getUpcoming: () => Promise<TodoItemRecord[]>;
+	getRecentCreated: () => Promise<TodoItemRecord[]>;
+	getRecentCompleted: () => Promise<TodoItemRecord[]>;
+	getRecentInactive: () => Promise<TodoItemRecord[]>;	
 }
 
 
