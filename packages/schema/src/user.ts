@@ -1,4 +1,3 @@
-import gql from 'graphql-tag';
 import { DocumentNode } from "graphql";
 
 import { RestEndpoint } from "./wrappers/rest-endpoint";
@@ -107,8 +106,8 @@ export interface UserQueryFunctions {
 
 
 
-export const UserGQL: DocumentNode = gql`
-`;
+// export const UserGQL: DocumentNode = gql`
+// `;
 
 
 

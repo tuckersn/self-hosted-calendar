@@ -2,7 +2,7 @@ import { MiddlewareFunction } from "@internal/schema/dist/wrappers/rest-endpoint
 import { Database } from "@internal/database/dist";
 import { UserType } from "@internal/schema/dist";
 
-const adminAuthorizationMiddleware: MiddlewareFunction = async (req, res, next) => {
+export const adminAuthorizationMiddleware: MiddlewareFunction = async (req, res, next) => {
 	const {locals: { user }} = res;
 
 	if(user === undefined) {

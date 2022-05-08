@@ -1,7 +1,7 @@
 import { MiddlewareFunction } from "@internal/schema/dist/wrappers/rest-endpoint";
 import { Database } from "@internal/database/dist";
 
-const authenticationMiddleware: MiddlewareFunction = async (req, res) => {
+export const authenticationMiddleware: MiddlewareFunction = async (req, res) => {
 	const { body, headers, params } = req;
 	const { authentication } = headers;
 

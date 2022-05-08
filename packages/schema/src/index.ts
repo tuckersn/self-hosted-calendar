@@ -6,3 +6,5 @@ export * from "./user-api-key";
 export * from "./board";
 export * from "./board-membership";
 export * from "./todo-item";
+
+export { ResLocals, MiddlewareFunction, RouteFunction } from "./wrappers/rest-endpoint";

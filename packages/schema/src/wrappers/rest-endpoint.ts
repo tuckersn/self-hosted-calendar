@@ -28,7 +28,8 @@ export interface ResLocals {
 	user?: UserRecord;
 }
 
-export type MiddlewareFunction = (req: Request, res: Response<any, ResLocals>, next: () => void) => Promisable<void>;
+export type RouteFunction = (req: Request, res: Response<any, ResLocals>) => Promisable<any>;
+export type MiddlewareFunction = (req: Request, res: Response<any, ResLocals>, next: () => void) => Promisable<any>;
 
 export type RestEndpoint<REQ_PARAMS extends {[key: string]: string}, REQ_BODY extends Object | undefined, RES_BODY extends Object | undefined, RES_LOCALS extends ResLocals = ResLocals> = {
 	Params: REQ_PARAMS,

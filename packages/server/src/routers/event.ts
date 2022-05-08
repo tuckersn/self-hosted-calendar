@@ -1,7 +1,9 @@
 import { Router } from "express";
+import { authenticationMiddleware } from "../middleware";
 import { generalErrorHandlingMiddleware } from "../middleware/exceptionWrappers";
 
 export const eventRouter: Router = Router();
+eventRouter.use(authenticationMiddleware);
 
 // Get event by id
 eventRouter.get("/:id", generalErrorHandlingMiddleware(async (req, res) => {
