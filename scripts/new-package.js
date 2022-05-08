@@ -50,8 +50,8 @@ rl.on("close", () => {
 		}
 	}));
 
-	console.log("Executing:", 'lerna add @internal/ts-config --scope=@internal/' + PACKAGE_NAME)
-	execSync('lerna add @internal/ts-config --scope=@internal/' + PACKAGE_NAME);
+	console.log("Executing:", 'pnpm add --workspace @internal/ts-config')
+	execSync('pnpm add --workspace @internal/ts-config');
 	console.log("Creating:", path.join(PACKAGE_DIR, "tsconfig.json"));
 	fs.writeFileSync(path.join(PACKAGE_DIR, "tsconfig.json"), json({
 		"extends": "@internal/ts-config",
@@ -68,8 +68,8 @@ rl.on("close", () => {
 	console.log("Creating:", path.join(PACKAGE_DIR, "src/index.ts"));
 	fs.writeFileSync(path.join(PACKAGE_DIR, "src/index.ts"), `console.log("Hello World!");`);
 
-	// console.log("Executing:", 'lerna add @internal/eslint-config --scope=@internal/' + PACKAGE_NAME)
-	// execSync('lerna add @internal/eslint-config --scope=@internal/' + PACKAGE_NAME);
+	// console.log("Executing:", 'pnpm add --workspace @internal/eslint-config')
+	// execSync('pnpm add --workspace @internal/eslint-config');
 	// console.log("Creating:", path.join(PACKAGE_DIR, ".eslintrc"));
 	// fs.writeFileSync(path.join(PACKAGE_DIR, ".eslintrc"), json({
 	// 	extends: "@internal/eslint-config"
@@ -88,8 +88,8 @@ rl.on("close", () => {
 		});
 	});`.split("\n").map((s) => s.replace(/^\t/, '')).join("\n"))
 	
-	console.log("Executing:", 'lerna add @internal/prettier-config --scope=@internal/' + PACKAGE_NAME)
-	execSync('lerna add @internal/prettier-config --scope=@internal/' + PACKAGE_NAME);
+	console.log("Executing:", 'pnpm add --workspace @internal/prettier-config')
+	execSync('pnpm add --workspace @internal/prettier-config');
 	console.log("Creating:", path.join(PACKAGE_DIR, ".prettierrc.js"));
 	fs.writeFileSync(path.join(PACKAGE_DIR, ".prettierrc.js"), `module.exports = {
 		...require("workspace:@internal/prettier-config")
