@@ -5,7 +5,7 @@
 -- Dumped from database version 13.3
 -- Dumped by pg_dump version 14.1
 
--- Started on 2022-05-08 01:43:46
+-- Started on 2022-05-08 01:46:34
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -17,8 +17,6 @@ SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
-
-SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
@@ -334,7 +332,7 @@ CREATE UNIQUE INDEX index_user_username ON public."user" USING btree (username);
 CREATE UNIQUE INDEX index_user_uuid ON public."user" USING btree (uuid);
 
 
--- Completed on 2022-05-08 01:43:46
+-- Completed on 2022-05-08 01:46:34
 
 --
 -- PostgreSQL database dump complete

@@ -5,7 +5,7 @@ export function userQueryFunctions(connection: Sequelize): UserQueryFunctions {
 
 	const getById: UserQueryFunctions['getById'] = async (id: number) => {
 		const record = (await connection!.query(`
-			SELECT id, uuid, username, email, created, displayName
+			SELECT id, uuid, username, email, created, displayName, userType
 			FROM user
 			WHERE id = :id`, {
 				replacements: {
@@ -25,7 +25,7 @@ export function userQueryFunctions(connection: Sequelize): UserQueryFunctions {
 		getById,
 		getByEmail: async (email: string) => {
 			const record = (await connection!.query(`
-				SELECT id, uuid, username, email, created, displayName
+				SELECT id, uuid, username, email, created, displayName, userType
 				FROM user
 				WHERE email = :email`, {
 					replacements: {
@@ -41,7 +41,7 @@ export function userQueryFunctions(connection: Sequelize): UserQueryFunctions {
 		},
 		getByUsername: async (username: string) => {
 			const record = (await connection!.query(`
-				SELECT id, uuid, username, email, created, displayName
+				SELECT id, uuid, username, email, created, displayName, userType
 				FROM user
 				WHERE username = :username`, {
 					replacements: {
@@ -57,13 +57,14 @@ export function userQueryFunctions(connection: Sequelize): UserQueryFunctions {
 		},
 		insert: async (userRecord: UserRecordInsertFields) => {
 			const result = (await connection!.query(`
-				INSERT INTO user (uuid, username, email, created, displayName)
-				VALUES (uuid_generate_v4(), :username, :email, NOW(), :displayName)
-				RETURNING id, uuid, username, email, created, displayName`, {
+				INSERT INTO user (uuid, username, email, displayName, userType)
+				VALUES (uuid_generate_v4(), :username, :email, :displayName, :userType)
+				RETURNING id, uuid, username, email, created, displayName, userType`, {
 					replacements: {
 						username: userRecord.username,
 						email: userRecord.email,
-						displayName: userRecord.displayName
+						displayName: userRecord.displayName,
+						userType: userRecord.userType
 					},
 					type: QueryTypes.INSERT
 			}));
@@ -87,16 +88,17 @@ export function userQueryFunctions(connection: Sequelize): UserQueryFunctions {
 
 			const result: Array<any> = (await connection!.query(`
 				UPDATE public."user"
-				SET id=:id, uuid=:uuid, username=:username, email=:email, passwordHash=:passwordHash, displayName=:displayName
+				SET id=:id, uuid=:uuid, username=:username, email=:email, passwordHash=:passwordHash, displayName=:displayName, userType=:userType
 				WHERE id = :id
-				RETURNING id, uuid, username, email, created, displayName`, {
+				RETURNING id, uuid, username, email, created, displayName, userType`, {
 					replacements: {
 						id,
 						username: userRecord.username,
 						email: userRecord.email,
 						displayName: userRecord.displayName,
 						passwordHash: userRecord.passwordHash,
-						uuid: userRecord.uuid
+						uuid: userRecord.uuid,
+						userType: userRecord.userType
 					},
 					type: QueryTypes.RAW,
 					//@ts-expect-error

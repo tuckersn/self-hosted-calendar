@@ -71,6 +71,7 @@ export interface UserRecord {
 	id: number;
 	uuid: string;
 	username: string;
+	userType: UserType;
 	displayName: string | null;
 	email: string;
 	passwordHash: string | null;
@@ -84,7 +85,7 @@ export interface UserRecord {
  */
 export type ClientUserRecord = Pick<UserRecord, 'username' | 'displayName' | 'email' | 'created'>;
 
-export type UserRecordInsertRequiredFields = Pick<UserRecord, 'username' | 'email'>;
+export type UserRecordInsertRequiredFields = Pick<UserRecord, 'username' | 'email' | 'userType'>;
 export type UserRecordInsertOptionalFields = Pick<UserRecord, 'displayName' | 'passwordHash'>;
 export type UserRecordInsertFields = UserRecordInsertOptionalFields & Partial<UserRecordInsertRequiredFields>;
 
