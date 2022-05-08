@@ -1,4 +1,4 @@
-import { UserQueryFunctions, UserLoginQueryFunctions, BoardQueryFunctions, BoardMembershipQueryFunctions, EventQueryFunctions, EventAttendeeQueryFunctions, TodoItemQueryFunctions, UserRecordInsertFields, UserRecord, UserLoginRecordInsertFields, BoardRecord, BoardRecordInsertFields, EventRecordInsertFields, EventRecord, BoardMembershipRecordInsertFields, EventAttendeeRecordInsertFields, TodoItemRecordInsertFields, TodoItemRecord } from "@internal/schema/dist/index";
+import { UserQueryFunctions, UserLoginQueryFunctions, BoardQueryFunctions, BoardMembershipQueryFunctions, EventQueryFunctions, EventAttendeeQueryFunctions, TodoItemQueryFunctions, UserRecordInsertFields, UserRecord, UserLoginRecordInsertFields, BoardRecord, BoardRecordInsertFields, EventRecordInsertFields, EventRecord, BoardMembershipRecordInsertFields, EventAttendeeRecordInsertFields, TodoItemRecordInsertFields, TodoItemRecord, UserApiKeyRecordInsertFields, UserApiKeyRecord } from "@internal/schema/dist/index";
 import { Promisable, ReadonlyDeep } from "type-fest";
 import { Database } from "../database";
 
@@ -25,14 +25,14 @@ export async function SqliteDatabase(): Promise<Database> {
 			insert: async (userRecord: UserRecordInsertFields) => {
 				throw new Error("Method not implemented.");
 			},
-			update: async (userRecord: UserRecord) => {
+			updateById: async (id: number, userRecord: Partial<UserRecord>) => {
 				throw new Error("Method not implemented.");
 			},
 			delete: async (id: number) => {
 				throw new Error("Method not implemented.");
 			}
 		},
-		userLogins: {
+		userLogin: {
 			getById: async (id: number) => {
 				throw new Error("Method not implemented.");
 			},
@@ -52,6 +52,26 @@ export async function SqliteDatabase(): Promise<Database> {
 				throw new Error("Method not implemented.");
 			},
 			delete: async (id: number) => {
+				throw new Error("Method not implemented.");
+			}
+		},
+		userApiKey: {
+			getById: async (id: number) => {
+				throw new Error("Method not implemented.");
+			},
+			getByUserId: async (userId: number) => {
+				throw new Error("Method not implemented.");
+			},
+			getByApiKey: async (apiKey: string) => {
+				throw new Error("Method not implemented.");
+			},
+			insert: async (userApiKeyRecord: UserApiKeyRecordInsertFields) => {
+				throw new Error("Method not implemented.");
+			},
+			delete: async (id: number) => {
+				throw new Error("Method not implemented.");
+			},
+			updateById: async (id: number, userApiKeyRecord: Partial<UserApiKeyRecord>) => {
 				throw new Error("Method not implemented.");
 			}
 		},

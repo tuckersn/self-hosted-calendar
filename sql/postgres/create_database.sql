@@ -5,7 +5,7 @@
 -- Dumped from database version 13.3
 -- Dumped by pg_dump version 14.1
 
--- Started on 2022-05-07 16:45:34
+-- Started on 2022-05-08 01:43:46
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -24,7 +24,7 @@ SET default_table_access_method = heap;
 
 --
 -- TOC entry 200 (class 1259 OID 24720)
--- Name: board; Type: TABLE; Schema: public; Owner: postgres
+-- Name: board; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.board (
@@ -36,11 +36,9 @@ CREATE TABLE public.board (
 );
 
 
-ALTER TABLE public.board OWNER TO postgres;
-
 --
 -- TOC entry 202 (class 1259 OID 24740)
--- Name: boardMember; Type: TABLE; Schema: public; Owner: postgres
+-- Name: boardMember; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public."boardMember" (
@@ -52,11 +50,9 @@ CREATE TABLE public."boardMember" (
 );
 
 
-ALTER TABLE public."boardMember" OWNER TO postgres;
-
 --
 -- TOC entry 203 (class 1259 OID 24749)
--- Name: boardMembers_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: boardMembers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 ALTER TABLE public."boardMember" ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
@@ -71,7 +67,7 @@ ALTER TABLE public."boardMember" ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTIT
 
 --
 -- TOC entry 201 (class 1259 OID 24738)
--- Name: board_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: board_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 ALTER TABLE public.board ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
@@ -87,7 +83,7 @@ ALTER TABLE public.board ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 
 --
 -- TOC entry 206 (class 1259 OID 24760)
--- Name: event; Type: TABLE; Schema: public; Owner: postgres
+-- Name: event; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.event (
@@ -101,11 +97,9 @@ CREATE TABLE public.event (
 );
 
 
-ALTER TABLE public.event OWNER TO postgres;
-
 --
 -- TOC entry 204 (class 1259 OID 24751)
--- Name: eventAttendee; Type: TABLE; Schema: public; Owner: postgres
+-- Name: eventAttendee; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public."eventAttendee" (
@@ -117,11 +111,9 @@ CREATE TABLE public."eventAttendee" (
 );
 
 
-ALTER TABLE public."eventAttendee" OWNER TO postgres;
-
 --
 -- TOC entry 205 (class 1259 OID 24758)
--- Name: eventAttendee_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: eventAttendee_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 ALTER TABLE public."eventAttendee" ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
@@ -136,7 +128,7 @@ ALTER TABLE public."eventAttendee" ALTER COLUMN id ADD GENERATED ALWAYS AS IDENT
 
 --
 -- TOC entry 207 (class 1259 OID 24768)
--- Name: todoItem; Type: TABLE; Schema: public; Owner: postgres
+-- Name: todoItem; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public."todoItem" (
@@ -152,11 +144,9 @@ CREATE TABLE public."todoItem" (
 );
 
 
-ALTER TABLE public."todoItem" OWNER TO postgres;
-
 --
 -- TOC entry 208 (class 1259 OID 24777)
--- Name: user; Type: TABLE; Schema: public; Owner: postgres
+-- Name: user; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public."user" (
@@ -170,11 +160,40 @@ CREATE TABLE public."user" (
 );
 
 
-ALTER TABLE public."user" OWNER TO postgres;
+--
+-- TOC entry 210 (class 1259 OID 24816)
+-- Name: userApiKey; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public."userApiKey" (
+    id integer NOT NULL,
+    "apiKey" character varying NOT NULL,
+    created time with time zone DEFAULT now() NOT NULL,
+    expiration time with time zone,
+    active boolean DEFAULT true NOT NULL,
+    "userId" integer NOT NULL,
+    "keyName" character varying DEFAULT 'API Key'::character varying NOT NULL
+);
+
+
+--
+-- TOC entry 211 (class 1259 OID 24827)
+-- Name: userApiKey_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+ALTER TABLE public."userApiKey" ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public."userApiKey_id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
 
 --
 -- TOC entry 209 (class 1259 OID 24786)
--- Name: userLogin; Type: TABLE; Schema: public; Owner: postgres
+-- Name: userLogin; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public."userLogin" (
@@ -187,11 +206,9 @@ CREATE TABLE public."userLogin" (
 );
 
 
-ALTER TABLE public."userLogin" OWNER TO postgres;
-
 --
--- TOC entry 2896 (class 2606 OID 24748)
--- Name: boardMember boardMembers_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 2906 (class 2606 OID 24748)
+-- Name: boardMember boardMembers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public."boardMember"
@@ -199,8 +216,8 @@ ALTER TABLE ONLY public."boardMember"
 
 
 --
--- TOC entry 2893 (class 2606 OID 24730)
--- Name: board board_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 2903 (class 2606 OID 24730)
+-- Name: board board_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.board
@@ -208,8 +225,8 @@ ALTER TABLE ONLY public.board
 
 
 --
--- TOC entry 2898 (class 2606 OID 24757)
--- Name: eventAttendee eventAttendee_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 2908 (class 2606 OID 24757)
+-- Name: eventAttendee eventAttendee_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public."eventAttendee"
@@ -217,8 +234,8 @@ ALTER TABLE ONLY public."eventAttendee"
 
 
 --
--- TOC entry 2900 (class 2606 OID 24767)
--- Name: event event_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 2910 (class 2606 OID 24767)
+-- Name: event event_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.event
@@ -226,8 +243,8 @@ ALTER TABLE ONLY public.event
 
 
 --
--- TOC entry 2903 (class 2606 OID 24776)
--- Name: todoItem todoItem_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 2913 (class 2606 OID 24776)
+-- Name: todoItem todoItem_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public."todoItem"
@@ -235,8 +252,17 @@ ALTER TABLE ONLY public."todoItem"
 
 
 --
--- TOC entry 2910 (class 2606 OID 24794)
--- Name: userLogin userLogin_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 2924 (class 2606 OID 24826)
+-- Name: userApiKey userApiKey_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."userApiKey"
+    ADD CONSTRAINT "userApiKey_pkey" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2920 (class 2606 OID 24794)
+-- Name: userLogin userLogin_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public."userLogin"
@@ -244,8 +270,8 @@ ALTER TABLE ONLY public."userLogin"
 
 
 --
--- TOC entry 2908 (class 2606 OID 24785)
--- Name: user user_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 2918 (class 2606 OID 24785)
+-- Name: user user_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public."user"
@@ -253,46 +279,62 @@ ALTER TABLE ONLY public."user"
 
 
 --
--- TOC entry 2894 (class 1259 OID 24805)
--- Name: index_board_uuid; Type: INDEX; Schema: public; Owner: postgres
+-- TOC entry 2904 (class 1259 OID 24805)
+-- Name: index_board_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_board_uuid ON public.board USING btree (uuid);
 
 
 --
--- TOC entry 2901 (class 1259 OID 24807)
--- Name: index_event_uuid; Type: INDEX; Schema: public; Owner: postgres
+-- TOC entry 2911 (class 1259 OID 24807)
+-- Name: index_event_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_event_uuid ON public.event USING btree (uuid);
 
 
 --
--- TOC entry 2904 (class 1259 OID 24810)
--- Name: index_user_email; Type: INDEX; Schema: public; Owner: postgres
+-- TOC entry 2921 (class 1259 OID 24829)
+-- Name: index_userApiKey_apiKey; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX "index_userApiKey_apiKey" ON public."userApiKey" USING btree ("apiKey");
+
+
+--
+-- TOC entry 2922 (class 1259 OID 24830)
+-- Name: index_userApiKey_userId; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX "index_userApiKey_userId" ON public."userApiKey" USING btree ("userId");
+
+
+--
+-- TOC entry 2914 (class 1259 OID 24810)
+-- Name: index_user_email; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_user_email ON public."user" USING btree (email);
 
 
 --
--- TOC entry 2905 (class 1259 OID 24809)
--- Name: index_user_username; Type: INDEX; Schema: public; Owner: postgres
+-- TOC entry 2915 (class 1259 OID 24809)
+-- Name: index_user_username; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_user_username ON public."user" USING btree (username);
 
 
 --
--- TOC entry 2906 (class 1259 OID 24808)
--- Name: index_user_uuid; Type: INDEX; Schema: public; Owner: postgres
+-- TOC entry 2916 (class 1259 OID 24808)
+-- Name: index_user_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_user_uuid ON public."user" USING btree (uuid);
 
 
--- Completed on 2022-05-07 16:45:35
+-- Completed on 2022-05-08 01:43:46
 
 --
 -- PostgreSQL database dump complete

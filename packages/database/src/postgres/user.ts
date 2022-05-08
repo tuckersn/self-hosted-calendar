@@ -79,11 +79,43 @@ export function userQueryFunctions(connection: Sequelize): UserQueryFunctions {
 			return record;
 						
 		},
-		update: async (userRecord: UserRecord) => {
-			throw new Error("Method not implemented.");
+		updateById: async (id: number, userRecord: Partial<UserRecord>) => {
+			const record = getById(id);
+			if(record === null) {
+				throw new Error("Failed to update user record, no record with that id");
+			}
+
+			const result: Array<any> = (await connection!.query(`
+				UPDATE public."user"
+				SET id=:id, uuid=:uuid, username=:username, email=:email, passwordHash=:passwordHash, displayName=:displayName
+				WHERE id = :id
+				RETURNING id, uuid, username, email, created, displayName`, {
+					replacements: {
+						id,
+						username: userRecord.username,
+						email: userRecord.email,
+						displayName: userRecord.displayName,
+						passwordHash: userRecord.passwordHash,
+						uuid: userRecord.uuid
+					},
+					type: QueryTypes.RAW,
+					//@ts-expect-error
+					returning: true
+				}));
+			
+			return result.pop()! as UserRecord;
 		},
 		delete: async (id: number) => {
-			throw new Error("Method not implemented.");
+			const result = (await connection!.query(`
+				DELETE FROM user
+				WHERE id = :id`, {
+					replacements: {
+						id
+					},
+					type: QueryTypes.DELETE
+				}));
+
+			return result;
 		}
 	};
 };

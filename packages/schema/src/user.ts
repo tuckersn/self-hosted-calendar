@@ -100,7 +100,7 @@ export interface UserQueryFunctions {
 	getByEmail: (email: string) => Promise<UserRecord | null>;
 
 	insert: (userRecord: UserRecordInsertFields) => Promise<UserRecord>;
-	update: (userRecord: UserRecord) => Promise<UserRecord>;
+	updateById: (id: number, userRecord: Partial<UserRecord>) => Promise<UserRecord>;
 	delete: (id: number) => Promise<void>;
 }
 

@@ -5,7 +5,7 @@ import { Promisable, ReadonlyDeep } from "type-fest";
 import { Database } from "../database";
 import { Sequelize, QueryTypes } from "sequelize";
 import { userQueryFunctions } from "./user";
-
+import { userApiKeyQueryFunctions } from "./userApikey";
 
 export async function PostgresDatabase(): Promise<Database> {
 	if(process.env.PG_HOST === undefined) {
@@ -32,7 +32,7 @@ export async function PostgresDatabase(): Promise<Database> {
 	return{
 		name: "postgres",
 		user: userQueryFunctions(connection),
-		userLogins: {
+		userLogin: {
 			getById: async (id: number) => {
 				throw new Error("Method not implemented.");
 			},
@@ -55,6 +55,7 @@ export async function PostgresDatabase(): Promise<Database> {
 				throw new Error("Method not implemented.");
 			}
 		},
+		userApiKey: userApiKeyQueryFunctions(connection),
 		board: {
 			getById: async (id: number) => {
 				throw new Error("Method not implemented.");
