@@ -3,7 +3,9 @@
 	"private": true,
 	"license": "MIT",
 	"dependencies": {
-		"@types/node": "^17.0.31"
+		"@types/node": "^17.0.31",
+		"@types/uuid": "^8.3.4",
+		"uuid": "^8.3.2"
 	},
 	"devDependencies": {
 		"@types/chai": "^4.3.1",

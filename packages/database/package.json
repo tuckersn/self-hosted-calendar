@@ -14,6 +14,7 @@
 		"@internal/prettier-config": "workspace:1.0.0",
 		"@internal/schema": "workspace:^1.0.0",
 		"@internal/ts-config": "workspace:1.0.0",
+		"pg": "^8.7.3",
 		"sequelize": "^6.19.0"
 	}
 }

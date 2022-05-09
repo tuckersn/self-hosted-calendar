@@ -1,15 +1,20 @@
-import express, { Router } from "express";
 import dotenv from "dotenv";
+dotenv.config({
+	path: process.cwd() + "/.env"
+});
+import express, { Router } from "express";
 import expressWinston from "express-winston";
 import winston from "winston";
 
-
 import { networkLoggerOptions, networkTransports } from "@internal/loggers/dist";
+import { Database, databaseInitPromise } from "@internal/database/dist";
 
 import { eventRouter } from "./routers/event";
 import { userRouter } from "./routers/user";
+import { loginRouter } from "./routers/login";
+import { apiKeyRouter } from "./routers/api-keys";
 
-dotenv.config();
+
 
 if(process.env.PORT === undefined) {
 	throw new Error("PORT env is not defined");
@@ -18,23 +23,32 @@ if(process.env.PORT === undefined) {
 
 
 
-const app = express();
+async function main() {
+	await databaseInitPromise;
+	const app = express();
 
-app.use(expressWinston.logger({
-	format: winston.format.json(),
-	transports: networkTransports
-}));
+	app.use(expressWinston.logger({
+		format: winston.format.json(),
+		transports: networkTransports
+	}));
 
-app.get("/ping", (req,res) => {
-	res.status(200).send("pong");
-});
+	app.get("/ping", (req,res) => {
+		res.status(200).send("pong");
+	});
 
+	app.use("/login", loginRouter);
 
-const api = Router();
-api.use("/event", eventRouter);
-api.use("/user", userRouter);
+	const api = Router();
+	api.use(express.json());
 
-app.use("/api", api);
-app.listen(process.env.PORT!, () => {
-	console.log(`Listening @ http://localhost:${process.env.PORT!}`);
-});
+	api.use("/event", eventRouter);
+	api.use("/user", userRouter);
+	api.use("/api-key", apiKeyRouter);
+
+	app.use("/api", api);
+	app.listen(process.env.PORT!, () => {
+		console.log(`Listening @ http://localhost:${process.env.PORT!}`);
+	});
+}
+
+main();

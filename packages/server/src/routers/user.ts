@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { RouteFunction } from "@internal/schema/dist";
-import { adminAuthorizationMiddleware, authenticationMiddleware } from "../middleware";
+import { RouteFunction, userTypeToString } from "@internal/schema/dist";
+import { adminAuthorizationMiddleware, authenticationMiddleware, generalErrorHandlingMiddleware } from "../middleware";
 
 //
 // User Router
@@ -9,10 +9,10 @@ import { adminAuthorizationMiddleware, authenticationMiddleware } from "../middl
 export const userRouter: Router = Router();
 userRouter.use(authenticationMiddleware);
 
-userRouter.get("/", (async (req, res) => {
+userRouter.get("/", generalErrorHandlingMiddleware(async (req, res) => {
 	if(res.locals.user === undefined) {
 		res.status(500).json({
-			error: "User not found"
+			error: "Not logged in"
 		});
 		return;
 	}
@@ -24,7 +24,7 @@ userRouter.get("/", (async (req, res) => {
 		username: user.username,
 		//TODO: make a setting to disable email or just remove
 		email: user.email,
-		userType: user.userType,
+		userType: userTypeToString(user.userType),
 		created: user.created
 	});
 }) as RouteFunction);
@@ -37,25 +37,25 @@ const adminUserRouter = Router();
 adminUserRouter.use(adminAuthorizationMiddleware);
 
 // Get user by id
-adminUserRouter.get("/:id", (req, res) => {
+adminUserRouter.get("/:id", generalErrorHandlingMiddleware((req, res) => {
 	const { id } = req.params;
 
 	res.status(200).send();
-});
+}));
 
 // Create a new user
-adminUserRouter.post("/", (req, res) => {
+adminUserRouter.post("/", generalErrorHandlingMiddleware((req, res) => {
 	const { body } = req;
 
 	res.status(200).send();
-});
+}));
 
 // Delete an user by id
-adminUserRouter.delete("/:id", (req, res) => {
+adminUserRouter.delete("/:id", generalErrorHandlingMiddleware((req, res) => {
 	const { id } = req.params;
 
 	res.status(200).send();
-});
+}));
 
 userRouter.use("/admin", adminUserRouter);
 

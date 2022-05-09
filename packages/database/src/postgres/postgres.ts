@@ -11,7 +11,7 @@ export async function PostgresDatabase(): Promise<Database> {
 	if(process.env.PG_HOST === undefined) {
 		throw new Error("PG_HOST is not defined");
 	}
-	if(process.env.PG_USER === undefined) {
+	if(process.env.PG_USERNAME === undefined) {
 		throw new Error("PG_USER is not defined");
 	}
 	if(process.env.PG_PASSWORD === undefined) {
@@ -20,14 +20,26 @@ export async function PostgresDatabase(): Promise<Database> {
 	if(process.env.PG_DATABASE === undefined) {
 		throw new Error("PG_DATABASE is not defined");
 	}
+	if(process.env.PG_PORT === undefined) {
+		throw new Error("PG_PORT is not defined");
+	}
+	if(process.env.PG_SCHEMA === undefined) {
+		throw new Error("PG_SCHEMA is not defined");
+	}
+
 	const connection = new Sequelize({
 		dialect: "postgres",
 		host: process.env.PG_HOST,
-		username: process.env.PG_USER,
+		username: process.env.PG_USERNAME,
 		password: process.env.PG_PASSWORD,
 		database: process.env.PG_DATABASE,
-		schema: "public",
-		logging: false
+		schema: process.env.PG_SCHEMA,
+		logging: false,
+		pool: {
+			max : 10,
+			min : 0,
+			idle: 2000
+		}
 	});
 	return{
 		name: "postgres",

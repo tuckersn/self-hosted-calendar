@@ -4,22 +4,25 @@ import { PostgresDatabase } from "./postgres/postgres";
 import { SqliteDatabase } from "./sqlite/sqlite";
 
 
-const DATABASE_SETTING: 'sqlite' | 'postgres'  = (process.env.DIALECT as any) || 'sqlite';
+const DATABASE_SETTING: 'sqlite' | 'postgres' = process.env.DATABASE as any;
+if(typeof DATABASE_SETTING !== 'string') {
+	throw new Error("DATABASE environment variable is not set");
+}
 
 export let Database: DatabaseInterface;
 
-let promise: Promise<DatabaseInterface>;
+export let databaseInitPromise: Promise<DatabaseInterface>;
 switch(DATABASE_SETTING) {
 	case 'sqlite':
-		promise = SqliteDatabase();
+		databaseInitPromise = SqliteDatabase();
 		break;
 	case 'postgres':
-		promise = PostgresDatabase();
+		databaseInitPromise = PostgresDatabase();
 		break;
 	default:
 		throw new Error("Invalid env for DATABASE_SETTING");
 }
 
-promise.then(database => {
+databaseInitPromise.then(database => {
 	Database = database;
 });

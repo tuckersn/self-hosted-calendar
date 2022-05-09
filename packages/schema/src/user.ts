@@ -97,6 +97,7 @@ export interface UserQueryFunctions {
 	// Standard Queries
 	getById: (id: number) => Promise<UserRecord | null>;
 	getByUsername: (username: string) => Promise<UserRecord | null>;
+	getByUUID: (uuid: string) => Promise<UserRecord | null>;
 	getByEmail: (email: string) => Promise<UserRecord | null>;
 
 	insert: (userRecord: UserRecordInsertFields) => Promise<UserRecord>;

@@ -1,8 +1,9 @@
+import { ResLocals } from "@internal/schema/dist";
 import express from "express";
 import { Promisable } from "type-fest";
 
-export function generalErrorHandlingMiddleware(cb: (req: express.Request, res: express.Response) => Promisable<void>) {
-	return async (req: express.Request, res: express.Response) => {
+export function generalErrorHandlingMiddleware(cb: (req: express.Request, res: express.Response<any, ResLocals>) => Promisable<void>) {
+	return async (req: express.Request, res: express.Response<any, ResLocals>) => {
 		try {
 			await cb(req, res);
 		} catch (err) {

@@ -10,20 +10,21 @@ export interface UserApiKeyRecord {
 	created: Date;
 	expiration: Date;
 	keyName: string;
+	keyHash: string;
+	description: string;
 	active: boolean;
-	apiKey: string;
 }
 
 
-export type UserApiKeyRecordInsertRequiredFields = Pick<UserApiKeyRecord, 'userId' | 'apiKey'>;
-export type UserApiKeyRecordInsertOptionalFields = Pick<UserApiKeyRecord, 'active' | 'keyName' | 'expiration'>;
-export type UserApiKeyRecordInsertFields = UserApiKeyRecordInsertOptionalFields & Partial<UserApiKeyRecordInsertRequiredFields>;
+export type UserApiKeyRecordInsertRequiredFields = Pick<UserApiKeyRecord, 'userId' | 'keyHash' | 'keyName'>;
+export type UserApiKeyRecordInsertOptionalFields = Pick<UserApiKeyRecord, 'active' | 'description' | 'expiration'>;
+export type UserApiKeyRecordInsertFields = UserApiKeyRecordInsertRequiredFields & Partial<UserApiKeyRecordInsertOptionalFields>;
 
 export interface UserApiKeyQueryFunctions {
 	// Standard queries
 	getById: (id: number) => Promise<UserApiKeyRecord | null>;
 	getByUserId: (userId: number) => Promise<UserApiKeyRecord[]>;
-	getByApiKey: (apiKey: string) => Promise<UserApiKeyRecord | null>;
+	getByKeyName: (keyName: string) => Promise<UserApiKeyRecord | null>;
 
 	insert: (UserApiKeyRecord: UserApiKeyRecordInsertFields) => Promise<UserApiKeyRecord>;
 	delete: (id: number) => Promise<void>;

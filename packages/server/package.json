@@ -12,6 +12,7 @@
 		"@internal/prettier-config": "workspace:^1.0.0",
 		"@internal/schema": "workspace:^1.0.0",
 		"@internal/ts-config": "workspace:1.0.0",
+		"bcryptjs": "^2.4.3",
 		"dotenv": "^16.0.0",
 		"express": "^4.17.3",
 		"express-graphql": "^0.12.0",
@@ -24,6 +25,7 @@
 		"build": "tsc"
 	},
 	"devDependencies": {
+		"@types/bcryptjs": "^2.4.2",
 		"@types/express": "^4.17.13"
 	}
 }

@@ -22,6 +22,9 @@ export async function SqliteDatabase(): Promise<Database> {
 			getByUsername: async (username: string) => {
 				throw new Error("Method not implemented.");
 			},
+			getByUUID: async (uuid: string) => {
+				throw new Error("Method not implemented.");
+			},
 			insert: async (userRecord: UserRecordInsertFields) => {
 				throw new Error("Method not implemented.");
 			},
@@ -62,7 +65,7 @@ export async function SqliteDatabase(): Promise<Database> {
 			getByUserId: async (userId: number) => {
 				throw new Error("Method not implemented.");
 			},
-			getByApiKey: async (apiKey: string) => {
+			getByKeyName: async (keyName: string) => {
 				throw new Error("Method not implemented.");
 			},
 			insert: async (userApiKeyRecord: UserApiKeyRecordInsertFields) => {

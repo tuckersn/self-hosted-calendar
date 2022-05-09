@@ -1,51 +1,85 @@
 import { Sequelize, QueryTypes } from "sequelize";
 import { UserApiKeyQueryFunctions, UserApiKeyRecord, UserApiKeyRecordInsertFields } from "@internal/schema/dist";
 
+
+export interface PostgresUserApiKeyRecord {
+	id: number;
+	key_hash: string;
+	key_name: string;
+	user_id: number;
+	created: Date;
+	expiration: Date;
+	active: boolean;
+	description: string;
+}
+
+
 export function userApiKeyQueryFunctions(connection: Sequelize): UserApiKeyQueryFunctions {
 
 	const getById: UserApiKeyQueryFunctions['getById'] = async (id: number) => {
 		const record = (await connection!.query(`
-			SELECT id, userId, created, expiration, keyName, active, apiKey
-			FROM userApiKey
+			SELECT id, user_id, created, expiration, key_name, active, key_hash, description
+			FROM user_api_key
 			WHERE id = :id`, {
 				replacements: {
 					id
 				},
 				type: QueryTypes.SELECT
-		})).pop() as (UserApiKeyRecord) | undefined;
+		})).pop() as (PostgresUserApiKeyRecord) | undefined;
 
 		if(record === undefined)
 			return null;
 
-		return record;
+		return {
+			id: record.id,
+			keyHash: record.key_hash,
+			keyName: record.key_name,
+			userId: record.user_id,
+			active: record.active,
+			created: record.created,
+			description: record.description,
+			expiration: record.expiration
+		}
 	}
 
 	return {
 		getById,
 		getByUserId: async (userId: number) => {
 			const record = (await connection!.query(`
-				SELECT id, userId, created, expiration, keyName, active, apiKey
-				FROM userApiKey
-				WHERE userId = :userId`, {
+				SELECT id, user_id, created, expiration, key_name, active, key_hash, description
+				FROM user_api_key
+				WHERE user_id = :userId`, {
 					replacements: {
 						userId
 					},
 					type: QueryTypes.SELECT
-			})) as UserApiKeyRecord[];
+			})) as PostgresUserApiKeyRecord[];
 
-			return record;
+			return record.map((record) => {
+				return {
+					id: record.id,
+					keyHash: record.key_hash,
+					keyName: record.key_name,
+					userId: record.user_id,
+					active: record.active,
+					created: record.created,
+					description: record.description,
+					expiration: record.expiration
+				}
+			});
 		},
 		insert: async (userApiKeyRecord: UserApiKeyRecordInsertFields) => {
 			const result = (await connection!.query(`
-				INSERT INTO userApiKey (userId, expiration, keyName, active, apiKey)
-				VALUES (:userId, :expiration, :keyName, :active, :apiKey)
+				INSERT INTO user_api_key (user_id, expiration, key_name, active, key_hash, description)
+				VALUES (:userId, :expiration, :keyName, :active, :keyHash, :description)
 				RETURNING id`, {
 					replacements: {
 						userId: userApiKeyRecord.userId,
-						expiration: userApiKeyRecord.expiration,
+						expiration: userApiKeyRecord.expiration || null,
 						keyName: userApiKeyRecord.keyName,
-						active: userApiKeyRecord.active,
-						apiKey: userApiKeyRecord.apiKey
+						active: userApiKeyRecord.active || false,
+						keyHash: userApiKeyRecord.keyHash,
+						description: userApiKeyRecord.description || null
 					},
 					type: QueryTypes.RAW,
 					//@ts-expect-error
@@ -58,7 +92,7 @@ export function userApiKeyQueryFunctions(connection: Sequelize): UserApiKeyQuery
 		},
 		delete: async (id: number) => {
 			const result = (await connection!.query(`
-				DELETE FROM userApiKey
+				DELETE FROM user_api_key
 				WHERE id = :id`, {
 					replacements: {
 						id
@@ -77,8 +111,8 @@ export function userApiKeyQueryFunctions(connection: Sequelize): UserApiKeyQuery
 
 			const record = Object.assign({}, userApiKeyRecord, );
 			const result = (await connection!.query(`
-				UPDATE userApiKey
-				SET userId = :userId, expiration = :expiration, keyName = :keyName, active = :active, apiKey = :apiKey
+				UPDATE user_api_key
+				SET user_id = :userId, expiration = :expiration, key_name = :keyName, active = :active, key_hash = :keyHash, description = :keyLastFiveChar
 				WHERE id = :id
 				RETURNING id`, {
 					replacements: {
@@ -87,28 +121,38 @@ export function userApiKeyQueryFunctions(connection: Sequelize): UserApiKeyQuery
 						expiration: userApiKeyRecord.expiration,
 						keyName: userApiKeyRecord.keyName,
 						active: userApiKeyRecord.active,
-						apiKey: userApiKeyRecord.apiKey
+						keyHash: userApiKeyRecord.keyHash,
+						keyLastFiveChar: userApiKeyRecord.description
 					},
 					type: QueryTypes.UPDATE
 			})).pop() as any;
 
 			return result;
 		},
-		getByApiKey: async (apiKey: string) => {
+		getByKeyName: async (keyName: string) => {
 			const record = (await connection!.query(`
-				SELECT id, userId, created, expiration, keyName, active, apiKey
-				FROM userApiKey
-				WHERE apiKey = :apiKey`, {
+				SELECT id, user_id, created, expiration, key_name, active, key_hash, description
+				FROM user_api_key
+				WHERE key_name = :keyName`, {
 					replacements: {
-						apiKey
+						keyName
 					},
 					type: QueryTypes.SELECT
-			})).pop() as (UserApiKeyRecord) | undefined;
+			})).pop() as (PostgresUserApiKeyRecord) | undefined;
 
 			if(record === undefined)
 				return null;
 
-			return record;
+			return {
+				id: record.id,
+				keyHash: record.key_hash,
+				keyName: record.key_name,
+				userId: record.user_id,
+				active: record.active,
+				created: record.created,
+				description: record.description,
+				expiration: record.expiration
+			}
 		}	
 	}
 }
