@@ -1,11 +1,20 @@
 import React from 'react';
 import './App.scss';
-import { HomePage } from './pages/HomePage';
+
+import {
+	BrowserRouter as Router,
+	Routes,
+	Route,
+	Link,
+	Outlet
+  } from "react-router-dom";
 
 function App() {
 	return (
 		<div>
-			<HomePage></HomePage>
+			app stuff here
+			<Link to={'/me'}>test</Link>
+			<Outlet></Outlet>
 		</div>
 	);
 }
