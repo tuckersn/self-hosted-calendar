@@ -15,11 +15,12 @@ const Frame = styled.div`
 	height: 100%;
 	width: 100%;
 	display: flex;
+	flex-direction: column;
 `;
 
-const SideBar = styled.div`
-	flex: 0 0 200px;
-	border-right: 2px solid rga(0,0,0,0.1);
+const TitleBar = styled.div`
+	flex: 0 0 32px;
+	border-bottom: 2px solid red;
 `;
 
 const Content = styled.div`
@@ -30,10 +31,11 @@ const Content = styled.div`
 function App() {
 	return (
 		<Frame>
-			<SideBar>
+			<TitleBar>
 				app stuff here
 				<Link to={'/me'}>test</Link>
-			</SideBar>
+				<Link to={'/login'}>Sign In</Link>
+			</TitleBar>
 			<Content>
 				<Outlet></Outlet>
 			</Content>
