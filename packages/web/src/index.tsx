@@ -9,6 +9,7 @@ import { LoginPage } from './pages/login/LoginPage';
 import { AccountInfoPage } from './pages/account/AccountInfoPage';
 import { BoardPage } from './pages/board/BoardPage';
 import { ErrorPage } from './pages/ErrorPage';
+import { LoginRegisterPage } from './pages/login/LoginRegisterPage';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -22,7 +23,10 @@ root.render(
 				<Route index element={<HomePage/>}/>
 				
 				{/* Password & OAuth login */}
-				<Route path="login" element={<LoginPage/>}/>
+				<Route path="login">
+					<Route index element={<LoginPage/>}/>
+					<Route path="register" element={<LoginRegisterPage/>}/>
+				</Route>
 				
 				{/* User's account info */}
 				<Route path="me" element={<AccountInfoPage/>}/>
