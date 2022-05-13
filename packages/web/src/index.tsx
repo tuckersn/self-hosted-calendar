@@ -4,10 +4,11 @@ import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { HomePage } from './pages/HomePage';
-import { LoginPage } from './pages/LoginPage';
-import { AccountInfoPage } from './pages/AccountInfoPage';
-import { BoardPage } from './pages/BoardPage';
+import { HomePage } from './pages/home/HomePage';
+import { LoginPage } from './pages/login/LoginPage';
+import { AccountInfoPage } from './pages/account/AccountInfoPage';
+import { BoardPage } from './pages/board/BoardPage';
+import { ErrorPage } from './pages/ErrorPage';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -34,6 +35,8 @@ root.render(
 					{/* Board creation form */}
 					<Route path="new" element={<div/>}/>
 				</Route>
+
+				<Route path="*" element={<ErrorPage errorCode={404} errorMessage={"Page not found."}/>}/>
 	
 			</Route>
 		</Routes>

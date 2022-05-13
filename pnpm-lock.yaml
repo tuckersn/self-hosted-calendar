@@ -181,6 +181,7 @@ importers:
       '@types/styled-components': ^5.1.25
       react: ^18.0.0
       react-dom: ^18.0.0
+      react-icons: ^4.3.1
       react-router-dom: ^6.3.0
       react-scripts: 5.0.1
       sass: ^1.51.0
@@ -204,6 +205,7 @@ importers:
       '@types/react-dom': 18.0.3
       react: 18.1.0
       react-dom: 18.1.0_react@18.1.0
+      react-icons: 4.3.1_react@18.1.0
       react-router-dom: 6.3.0_ef5jwxihqo6n7gxfmzogljlgcm
       react-scripts: 5.0.1_wdljkj4y2arvhnqkydjbn6uf64
       sass: 1.51.0
@@ -8584,6 +8586,14 @@ packages:
 
   /react-error-overlay/6.0.11:
     resolution: {integrity: sha512-/6UZ2qgEyH2aqzYZgQPxEnz33NJ2gNsnHA2o5+o4wW9bLM/JYQitNP9xPhsXwC08hMMovfGe/8retsdDsczPRg==}
+    dev: false
+
+  /react-icons/4.3.1_react@18.1.0:
+    resolution: {integrity: sha512-cB10MXLTs3gVuXimblAdI71jrJx8njrJZmNMEMC+sQu5B/BIOmlsAjskdqpn81y8UBVEGuHODd7/ci5DvoSzTQ==}
+    peerDependencies:
+      react: '*'
+    dependencies:
+      react: 18.1.0
     dev: false
 
   /react-is/16.13.1:
