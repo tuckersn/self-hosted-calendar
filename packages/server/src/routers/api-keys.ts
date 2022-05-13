@@ -91,7 +91,7 @@ adminRouter.post("/force-create", generalErrorHandlingMiddleware(async (req: Req
 		key,
 		keyName,
 		hash
-	} = generateApiKey(user.uuid);
+	} = generateApiKey();
 
 	await Database.userApiKey.insert({
 		keyName,

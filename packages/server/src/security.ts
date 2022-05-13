@@ -5,12 +5,11 @@ import bcrypt from "bcryptjs";
 import { UUID } from "@internal/common/dist/uuid";
 import { UserApiKeyRecord } from "@internal/schema/dist";
 
-export const API_KEY_SALT_ROUNDS = 15;
 
-export function generateApiKey(userUUID: string) {
+export function generateApiKey() {
 	const keyName = UUID.alphaNumeric(8);
 	const password = Buffer.from(crypto.randomUUID()).toString('base64');
-	const hash = bcrypt.hashSync(password, bcrypt.genSaltSync(API_KEY_SALT_ROUNDS));
+	const hash = bcrypt.hashSync(password, bcrypt.genSaltSync(parseInt(process.env.SALT_ROUNDS_API_KEY!)));
 	const key = `cal-${keyName}-` + password;
 	return {
 		key,
@@ -19,6 +18,11 @@ export function generateApiKey(userUUID: string) {
 	}
 };
 
-export function verifyApiKeyPass(keyPass: string, apiKeyRecord: UserApiKeyRecord) {
-	return bcrypt.compareSync(keyPass, apiKeyRecord.keyHash);
+export function hashPassword(password: string) {
+	return bcrypt.hashSync(password, bcrypt.genSaltSync(parseInt(process.env.SALT_ROUNDS_PASSWORD!)));
+}
+
+
+export function verifyHash(secret: string, hash: string) {
+	return bcrypt.compareSync(secret, hash);
 }

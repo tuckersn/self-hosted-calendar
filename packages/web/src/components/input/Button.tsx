@@ -1,5 +1,6 @@
 import React, { CSSProperties, useEffect, useState } from "react"
 import { Promisable } from "type-fest";
+import { COLORS } from "../../common/style";
 
 
 export const BUTTON_DEFAULT_STYLE: CSSProperties = {
@@ -28,7 +29,19 @@ export const Button: React.FC<{
 	return <div onClick={(event) => {
 			if(onClick)
 				onClick(event);
-		}} style={style}>
+	}} style={style} onMouseEnter={() => {
+		setStyle(Object.assign({}, style, {
+			background: "rgba(255,255,255,0.2)",
+			border: `2px solid ${COLORS.hover}`,
+			color: COLORS.hover
+		}));
+	}} onMouseLeave={() => {
+		setStyle(Object.assign({}, style, {
+			background: "transparent",
+			border: BUTTON_DEFAULT_STYLE.border,
+			color: COLORS.primary
+		}));
+	}}>
 		{children}
 	</div>;
 }

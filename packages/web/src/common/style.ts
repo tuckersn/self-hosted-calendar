@@ -1,5 +1,6 @@
 export const COLORS = {
 	primary: "#ffffff",
-	link: "#00a8ff",
+	hover: "#00a8ff",
+	highLight: "#6acafc",
 	background: "#000000"
 }

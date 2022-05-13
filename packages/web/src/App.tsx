@@ -106,7 +106,7 @@ function App() {
 					<Link to={'/me'}>test</Link>
 				</TitleBarCenter>			
 				<TitleBarRight>
-					<Link style={{flex: 1}} to={'/login'}>Sign In</Link>
+					<Link style={{flex: 1, paddingRight: "8px"}} to={'/login'}>Log In / Sign Up</Link>
 					<TitleBarUserIconContainer>
 						<img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" height={"32px"} width={"32px"} alt="user icon"/>
 					</TitleBarUserIconContainer>

@@ -1,7 +1,7 @@
 import { MiddlewareFunction } from "@internal/schema/dist/wrappers/rest-endpoint";
 import { Database } from "@internal/database/dist";
 import { UserType } from "@internal/schema/dist";
-import { verifyApiKeyPass } from "../security";
+import { verifyHash } from "../security";
 
 export const authenticationMiddleware: MiddlewareFunction = async (req, res, next) => {
 
@@ -56,7 +56,7 @@ export const authenticationMiddleware: MiddlewareFunction = async (req, res, nex
 
 			console.log("API KEY RECORD", apiKeyRecord);
 
-			const valid = verifyApiKeyPass(keyPass, apiKeyRecord);
+			const valid = verifyHash(keyPass, apiKeyRecord.keyHash);
 			if(!valid) {
 				res.status(401).json({
 					error: "Unauthorized"

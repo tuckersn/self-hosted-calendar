@@ -13,17 +13,17 @@ import { eventRouter } from "./routers/event";
 import { userRouter } from "./routers/user";
 import { loginRouter } from "./routers/login";
 import { apiKeyRouter } from "./routers/api-keys";
+import { verifyRequiredEnvsAreDefined } from "./env";
 
 
 
-if(process.env.PORT === undefined) {
-	throw new Error("PORT env is not defined");
-}
-
-
+verifyRequiredEnvsAreDefined();
 
 
 async function main() {
+
+	
+
 	await databaseInitPromise;
 	const app = express();
 
