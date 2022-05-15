@@ -86,7 +86,7 @@ const Content = styled.div`
 
 function App() {
 
-	let navigate = useNavigate();
+	const navigate = useNavigate();
 	let location = useLocation();
 
 	return (
