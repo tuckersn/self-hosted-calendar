@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "../../components/input/Button";
 import { TextInput } from "../../components/input/TextInput";
@@ -6,6 +7,8 @@ import { ArticleLayout } from "../../components/layout/ArticleLayout";
 
 
 export function LoginRegisterPage() {
+
+	const navigate = useNavigate();
 
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
@@ -53,12 +56,23 @@ export function LoginRegisterPage() {
 					email,
 					displayName
 				}
-				console.log("User registration payload:", payload);
 
-				const result = await fetch("/api/user/register", {
-					method: "POST"
+				const result = await fetch(`${process.env.REACT_APP_SERVER_URL}/login/register`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify(payload)
 				});
-				console.log("RESULT:", result, process.env.REACT_APP_SERVER_URL);
+
+				//TODO: error popup
+				if(result.status !== 200) {
+					console.error("Error registering user:", result);
+					return;
+				}
+
+				//TODO: popup telling them to login
+				navigate("/login");
 			}}>
 				Register
 			</Button>

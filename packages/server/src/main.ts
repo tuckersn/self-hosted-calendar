@@ -5,6 +5,7 @@ dotenv.config({
 import express, { Router } from "express";
 import expressWinston from "express-winston";
 import winston from "winston";
+import { default as cors } from "cors";
 
 import { networkLoggerOptions, networkTransports } from "@internal/loggers/dist";
 import { Database, databaseInitPromise } from "@internal/database/dist";
@@ -31,6 +32,13 @@ async function main() {
 		format: winston.format.json(),
 		transports: networkTransports
 	}));
+	app.use(cors({
+		origin(requestOrigin, callback) {
+			//TODO: proper cors implementation
+			callback(null, true);
+		},
+	}));
+	
 
 	app.get("/ping", (req,res) => {
 		res.status(200).send("pong");

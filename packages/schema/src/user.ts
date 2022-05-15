@@ -2,7 +2,7 @@ import { DocumentNode } from "graphql";
 
 import { RestEndpoint } from "./wrappers/rest-endpoint";
 import { ReadonlyDeep } from 'type-fest';
-
+import { IError } from "./wrappers/error";
 
 export enum UserType {
 	/**
@@ -68,11 +68,27 @@ export function userTypeFromString(userType: string): UserType {
 
 export interface UserRecord {
 	id: number;
+	/**
+	 * Unique string id of this user.
+	 */
 	uuid: string;
+	/**
+	 * Unique name of this user.
+	 */
 	username: string;
+	/**
+	 * Unique to each user.
+	 */
+	 email: string;
 	userType: UserType;
+	/**
+	 * What to call the user, this
+	 * is not unique and defaults to the username.
+	 */
 	displayName: string | null;
-	email: string;
+	/**
+	 * bcrypt hash
+	 */
 	passwordHash: string | null;
 	created: Date;
 }
@@ -92,6 +108,28 @@ export const DEFAULT_USER_RECORD_FIELDS: UserRecordInsertOptionalFields = {
 	displayName: null,
 	passwordHash: null
 }
+
+
+export module UserErrors {
+	/**
+	 * Unique value for user errors, helps
+	 * with catch statements.
+	 */
+	export const KEY = "USER_ERROR";
+
+	export type UsernameTakenError = IError<typeof KEY, 'USERNAME_TAKEN', 'Username is taken.'>;
+	export function UsernameTakenError(): UsernameTakenError {
+		return IError(KEY, 'USERNAME_TAKEN', 'Username is taken.');
+	}
+	export type EmailTakenError = IError<typeof KEY, 'EMAIL_TAKEN', 'Email is taken.'>;
+	export function EmailTakenError(): EmailTakenError {
+		return IError(KEY, 'EMAIL_TAKEN', 'Email is taken.');
+	}
+
+	export type All = UsernameTakenError | EmailTakenError;
+}
+
+
 
 export interface UserQueryFunctions {
 	// Standard Queries

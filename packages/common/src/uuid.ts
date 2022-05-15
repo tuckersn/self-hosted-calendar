@@ -9,4 +9,7 @@ export module UUID {
 	export function alphaNumeric(size: number = 16): string {
 		return customAlphabet(Alphabets.alphaNumeric)(size);
 	}
+	export function upperAlphaNumeric(size: number = 16): string {
+		return customAlphabet(Alphabets.upperAlphaNumeric)(size);
+	}
 }

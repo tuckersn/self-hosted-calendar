@@ -9,6 +9,7 @@
 		"@internal/prettier-config": "workspace:^1.0.0",
 		"@internal/schema": "workspace:^1.0.0",
 		"@internal/ts-config": "workspace:^1.0.0",
+		"@reduxjs/toolkit": "^1.8.1",
 		"@testing-library/dom": "^8.13.0",
 		"@testing-library/jest-dom": "^5.16.4",
 		"@testing-library/react": "^13.1.1",

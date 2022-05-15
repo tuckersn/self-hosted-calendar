@@ -1,17 +1,19 @@
-import { Request, Response, Router } from "express";
+import express, { Request, Response, Router } from "express";
 import bcrypt from "bcryptjs";
 
-import { ResLocals, UserType } from "@internal/schema/dist";
+import { ResLocals, UserErrors, UserType } from "@internal/schema/dist";
 import { Database } from "@internal/database/dist";
 
 import { authenticationMiddleware } from "../middleware";
 import { generalErrorHandlingMiddleware } from "../middleware/exceptionWrappers";
 import { hashPassword, verifyHash } from "../security";
 
+
 import jwt from "jsonwebtoken";
 
 export const loginRouter: Router = Router();
 
+loginRouter.use(express.json());
 
 loginRouter.post("/", generalErrorHandlingMiddleware(async (req: Request<any, any, {
 	username?: string,
@@ -117,6 +119,8 @@ loginRouter.post("/register", generalErrorHandlingMiddleware(async (req: Request
 
 	const { body } = req;
 
+	console.log("BODY:", body);
+
 	if(typeof body !== 'object') {
 		res.status(400).json({
 			error: "Invalid input"
@@ -163,22 +167,44 @@ loginRouter.post("/register", generalErrorHandlingMiddleware(async (req: Request
 
 	try {
 		const passwordHash = hashPassword(password);
-		const user = await Database.user.insert({
-			displayName,
-			username,
-			passwordHash,
-			email,
-			userType: UserType.USER
-		});
 
-		//TODO: verify email / approve user
-		res.status(200).json({
-			uuid: user.uuid,
-			username: user.username,
-			displayName: user.displayName
-		});
-	} catch(e) {
-		console.error("Error while registering user", e);
+		try {
+			const user = await Database.user.insert({
+				displayName,
+				username,
+				passwordHash,
+				email,
+				userType: UserType.USER
+			});
+
+			//TODO: verify email / approve user
+			res.status(200).json({
+				uuid: user.uuid,
+				username: user.username,
+				displayName: user.displayName
+			});
+		} catch (e: any) {
+			if('key' in e) {
+				if(e.key === UserErrors.KEY) {
+					const error: UserErrors.All = e;
+					if(error.name === "USERNAME_TAKEN") {
+						res.status(400).json({
+							error: error.message
+						});
+						return;
+					} else if(error.name === "EMAIL_TAKEN") {
+						res.status(400).json({
+							error: error.message
+						});
+						return;
+					}
+
+				}
+			} 
+			throw e;
+		}
+	} catch(e: any) {
+		console.error(`Error while registering user || ${e.message} ||`, e);
 		res.status(400).json({
 			error: "Failed to create account."
 		});

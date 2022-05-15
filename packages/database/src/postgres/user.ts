@@ -1,6 +1,7 @@
-import { Sequelize, QueryTypes } from "sequelize";
-import { UserQueryFunctions, UserRecord, UserRecordInsertFields, UserType } from "@internal/schema/dist";
+import { Sequelize, QueryTypes, Error as SequelizeError, UniqueConstraintError } from "sequelize";
 
+import { UserErrors, UserQueryFunctions, UserRecord, UserRecordInsertFields, UserType } from "@internal/schema/dist";
+import { UUID } from "@internal/common/dist";
 export interface PostgresUserRecord {
 	id: number;
 	uuid: string;
@@ -120,28 +121,47 @@ export function userQueryFunctions(connection: Sequelize): UserQueryFunctions {
 			};
 		},
 		insert: async (userRecord: UserRecordInsertFields) => {
-			const result = (await connection!.query(`
-				INSERT INTO user_ (uuid, username, email, display_name, user_type)
-				VALUES (uuid_generate_v4(), :username, :email, :displayName, :userType)
-				RETURNING id, uuid, username, email, created, display_name, user_type`, {
-					replacements: {
-						username: userRecord.username,
-						email: userRecord.email,
-						displayName: userRecord.displayName,
-						userType: userRecord.userType
-					},
-					type: QueryTypes.INSERT
-			}));
 
-			console.log("RESULT:", result);
+			try {
+				const result = (await connection!.query(`
+					INSERT INTO user_ (uuid, username, email, display_name, user_type, password_hash)
+					VALUES (:uuid, :username, :email, :displayName, :userType, :passwordHash)
+					RETURNING id, uuid, username, email, created, display_name, user_type, password_hash`, {
+						replacements: {
+							uuid: UUID.upperAlphaNumeric(8),
+							username: userRecord.username,
+							email: userRecord.email,
+							displayName: userRecord.displayName,
+							userType: userRecord.userType,
+							passwordHash: userRecord.passwordHash
+						},
+						type: QueryTypes.RAW
+				}));
 
-			const record = await getById(result[0]);
+				// console.log("RESULT:", result);
 
-			if(record === null) {
-				throw new Error("Failed to insert user record, no record returned");
+				// const record = await getById(result[0]);
+				if(!Array.isArray(result[0])) {
+					throw new Error(`Invalid result of ${result} here.`);
+				}
+
+				const record = result[0][0];
+
+				if(record === null || record === undefined) {
+					throw new Error("Failed to insert user record, no record returned");
+				}
+
+				return record;
+			} catch(e: any) {
+				if(e instanceof UniqueConstraintError) {
+					if(e.parent.message.includes(`duplicate key value violates unique constraint "index_user_username"`)) {
+						throw UserErrors.UsernameTakenError();
+					} else if(e.parent.message.includes(`duplicate key value violates unique constraint "index_user_email"`)) {
+						throw UserErrors.EmailTakenError();
+					}
+				}
+				throw e;
 			}
-
-			return record;
 						
 		},
 		updateById: async (id: number, userRecord: Partial<UserRecord>) => {

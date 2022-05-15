@@ -134,9 +134,11 @@ importers:
       '@internal/schema': workspace:^1.0.0
       '@internal/ts-config': workspace:1.0.0
       '@types/bcryptjs': ^2.4.2
+      '@types/cors': ^2.8.12
       '@types/express': ^4.17.13
       '@types/jsonwebtoken': ^8.5.8
       bcryptjs: ^2.4.3
+      cors: ^2.8.5
       dotenv: ^16.0.0
       express: ^4.17.3
       express-graphql: ^0.12.0
@@ -153,6 +155,7 @@ importers:
       '@internal/schema': link:../schema
       '@internal/ts-config': link:../../configs/ts-config
       bcryptjs: 2.4.3
+      cors: 2.8.5
       dotenv: 16.0.0
       express: 4.18.1
       express-graphql: 0.12.0_graphql@15.8.0
@@ -163,6 +166,7 @@ importers:
       winston: 3.7.2
     devDependencies:
       '@types/bcryptjs': 2.4.2
+      '@types/cors': 2.8.12
       '@types/express': 4.17.13
       '@types/jsonwebtoken': 8.5.8
 
@@ -174,6 +178,7 @@ importers:
       '@internal/prettier-config': workspace:^1.0.0
       '@internal/schema': workspace:^1.0.0
       '@internal/ts-config': workspace:^1.0.0
+      '@reduxjs/toolkit': ^1.8.1
       '@testing-library/dom': ^8.13.0
       '@testing-library/jest-dom': ^5.16.4
       '@testing-library/react': ^13.1.1
@@ -202,6 +207,7 @@ importers:
       '@internal/prettier-config': link:../../configs/prettier-config
       '@internal/schema': link:../schema
       '@internal/ts-config': link:../../configs/ts-config
+      '@reduxjs/toolkit': 1.8.1_j24pcqpkbsj43woxscsovlj4au
       '@testing-library/dom': 8.13.0
       '@testing-library/jest-dom': 5.16.4
       '@testing-library/react': 13.1.1_ef5jwxihqo6n7gxfmzogljlgcm
@@ -2144,6 +2150,25 @@ packages:
       webpack-dev-server: 4.8.1_webpack@5.72.0
     dev: false
 
+  /@reduxjs/toolkit/1.8.1_j24pcqpkbsj43woxscsovlj4au:
+    resolution: {integrity: sha512-Q6mzbTpO9nOYRnkwpDlFOAbQnd3g7zj7CtHAZWz5SzE5lcV97Tf8f3SzOO8BoPOMYBFgfZaqTUZqgGu+a0+Fng==}
+    peerDependencies:
+      react: ^16.9.0 || ^17.0.0 || ^18
+      react-redux: ^7.2.1 || ^8.0.0-beta
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-redux:
+        optional: true
+    dependencies:
+      immer: 9.0.12
+      react: 18.1.0
+      react-redux: 8.0.1_3vjunwlmc3akvx5gzli76tirsm
+      redux: 4.2.0
+      redux-thunk: 2.4.1_redux@4.2.0
+      reselect: 4.1.5
+    dev: false
+
   /@rollup/plugin-babel/5.3.1_kivsufgsujm4mhgsob5j5hyz44:
     resolution: {integrity: sha512-WFfdLWU/xVWKeRQnKmIAQULUI7Il0gZnBIH/ZFO069wYIfPu+8zrfp/KMW0atmELoRDq8FbiP3VCss9MhCut7Q==}
     engines: {node: '>= 10.0.0'}
@@ -2479,6 +2504,10 @@ packages:
     resolution: {integrity: sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==}
     dependencies:
       '@types/node': 17.0.31
+
+  /@types/cors/2.8.12:
+    resolution: {integrity: sha512-vt+kDhq/M2ayberEtJcIN/hxXy1Pk+59g2FV/ZQceeaTyCtCucjL2Q7FXlFjtWn4n15KCr1NE2lNNFhp0lEThw==}
+    dev: true
 
   /@types/debug/4.1.7:
     resolution: {integrity: sha512-9AonUzyTjXXhEOa0DnqpzZi6VHlqKMswga9EXjpXnnqxwLtdvPPtlO8evrI5D9S6asFRCQ6v+wpiUKbw+vKqyg==}
@@ -3964,6 +3993,14 @@ packages:
 
   /core-util-is/1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
+    dev: false
+
+  /cors/2.8.5:
+    resolution: {integrity: sha512-KIHbLJqu73RGr/hnbrO9uBeixNGuvSQjul/jdFvS/KFSIH1hWVd1ng7zOHx+YrEfInLG7q4n6GHQ9cDtxv/P6g==}
+    engines: {node: '>= 0.10'}
+    dependencies:
+      object-assign: 4.1.1
+      vary: 1.1.2
     dev: false
 
   /cosmiconfig/6.0.0:
@@ -8897,6 +8934,20 @@ packages:
       strip-indent: 3.0.0
     dev: false
 
+  /redux-thunk/2.4.1_redux@4.2.0:
+    resolution: {integrity: sha512-OOYGNY5Jy2TWvTL1KgAlVy6dcx3siPJ1wTq741EPyUKfn6W6nChdICjZwCd0p8AZBs5kWpZlbkXW2nE/zjUa+Q==}
+    peerDependencies:
+      redux: ^4
+    dependencies:
+      redux: 4.2.0
+    dev: false
+
+  /redux/4.2.0:
+    resolution: {integrity: sha512-oSBmcKKIuIR4ME29/AeNUnl5L+hvBq7OaJWzaptTQJAntaPvxIJqfnjbaEiCzzaIz+XmVILfqAM3Ob0aXLPfjA==}
+    dependencies:
+      '@babel/runtime': 7.17.9
+    dev: false
+
   /regenerate-unicode-properties/10.0.1:
     resolution: {integrity: sha512-vn5DU6yg6h8hP/2OkQo3K7uVILvY4iu0oI4t3HFa81UPkhGJwkRwM10JEc3upjdhHjs/k8GJY1sRBhk5sr69Bw==}
     engines: {node: '>=4'}
@@ -8985,6 +9036,10 @@ packages:
 
   /requires-port/1.0.0:
     resolution: {integrity: sha1-kl0mAdOaxIXgkc8NpcbmlNw9yv8=}
+    dev: false
+
+  /reselect/4.1.5:
+    resolution: {integrity: sha512-uVdlz8J7OO+ASpBYoz1Zypgx0KasCY20H+N8JD13oUMtPvSHQuscrHop4KbXrbsBcdB9Ds7lVK7eRkBIfO43vQ==}
     dev: false
 
   /resolve-cwd/3.0.0:
