@@ -17,7 +17,7 @@ export interface TextInputProps {
 	onValueChange?: (value: string) => Promisable<void>;
 	onEnter?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 	style?: CSSProperties;
-	initialValue?: string;
+	value?: string;
 }
 
 export function TextInput({
@@ -25,7 +25,7 @@ export function TextInput({
 	onChange,
 	onEnter,
 	style: styleOverride,
-	initialValue
+	value: initialValue
 }: TextInputProps) {
 
 	const [value, setValue] = useState(initialValue || "");

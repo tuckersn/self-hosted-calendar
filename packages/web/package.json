@@ -17,9 +17,11 @@
 		"@types/node": "^16.11.27",
 		"@types/react": "^18.0.6",
 		"@types/react-dom": "^18.0.2",
+		"jsonwebtoken": "^8.5.1",
 		"react": "^18.0.0",
 		"react-dom": "^18.0.0",
 		"react-icons": "^4.3.1",
+		"react-redux": "^8.0.1",
 		"react-router-dom": "^6.3.0",
 		"react-scripts": "5.0.1",
 		"sass": "^1.51.0",
@@ -29,6 +31,7 @@
 	},
 	"scripts": {
 		"start": "react-scripts start",
+		"build": "cp ../../.env ./.env",
 		"deploy": "react-scripts build",
 		"test": "react-scripts test --watchAll=false",
 		"eject": "react-scripts eject"
@@ -37,7 +40,10 @@
 		"extends": [
 			"react-app",
 			"react-app/jest"
-		]
+		],
+		"rules": {
+			"@typescript-eslint/no-unused-vars": "off"
+		}
 	},
 	"browserslist": {
 		"production": [
@@ -52,6 +58,7 @@
 		]
 	},
 	"devDependencies": {
+		"@types/jsonwebtoken": "^8.5.8",
 		"@types/styled-components": "^5.1.25"
 	}
 }

@@ -46,8 +46,8 @@ async function main() {
 	api.use("/api-key", apiKeyRouter);
 
 	app.use("/api", api);
-	app.listen(process.env.PORT!, () => {
-		console.log(`Listening @ http://localhost:${process.env.PORT!}`);
+	app.listen(process.env.BACKEND_PORT!, () => {
+		console.log(`Listening @ http://localhost:${process.env.BACKEND_PORT!}`);
 	});
 }
 

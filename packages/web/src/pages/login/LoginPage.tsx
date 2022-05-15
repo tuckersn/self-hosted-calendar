@@ -66,7 +66,7 @@ export function LoginPage() {
 						Username
 					</InputFieldLeft>
 					<InputFieldRight>
-						<TextInput initialValue="username"/>
+						<TextInput value="username"/>
 					</InputFieldRight>
 				</InputField>
 				<InputField style={{paddingRight: "32px"}}>
@@ -74,7 +74,7 @@ export function LoginPage() {
 						Password
 					</InputFieldLeft>
 					<InputFieldRight>
-						<TextInput initialValue="password"/>
+						<TextInput value="password"/>
 					</InputFieldRight>
 				</InputField>
 				<br/>

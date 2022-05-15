@@ -8,10 +8,12 @@ import { authenticationMiddleware } from "../middleware";
 import { generalErrorHandlingMiddleware } from "../middleware/exceptionWrappers";
 import { hashPassword, verifyHash } from "../security";
 
+import jwt from "jsonwebtoken";
+
 export const loginRouter: Router = Router();
 
 
-loginRouter.post("/login", generalErrorHandlingMiddleware(async (req: Request<any, any, {
+loginRouter.post("/", generalErrorHandlingMiddleware(async (req: Request<any, any, {
 	username?: string,
 	password?: string
 }>, res: Response<{
@@ -60,7 +62,22 @@ loginRouter.post("/login", generalErrorHandlingMiddleware(async (req: Request<an
 
 
 	if(verifyHash(password, user.passwordHash)) {
-		//TODO: generate JWT token
+		jwt.sign({
+			username: user.username,
+			userType: user.userType
+		}, process.env.JWT_SECRET!, {
+			expiresIn: "1d"
+		}, (err, token) => {
+			if(err) {
+				res.status(500).json({
+					error: `Internal server error`
+				});
+				return;
+			}
+			res.status(200).json({
+				token: token!
+			});
+		});
 	} else {
 		res.status(401).json({
 			error: `Invalid password`
@@ -89,14 +106,7 @@ loginRouter.post("/register", generalErrorHandlingMiddleware(async (req: Request
 	password: string,
 	email: string
 }>, res: Response<any, ResLocals>) => {
-	const {
-		body: {
-			displayName,
-			username,
-			password,
-			email
-		}
-	} = req;
+
 
 	if (process.env.REGISTRATION_ENABLED !== "true") {
 		res.status(400).json({
@@ -104,6 +114,22 @@ loginRouter.post("/register", generalErrorHandlingMiddleware(async (req: Request
 		});
 		return;
 	}
+
+	const { body } = req;
+
+	if(typeof body !== 'object') {
+		res.status(400).json({
+			error: "Invalid input"
+		});
+		return;
+	}
+
+	const {
+		displayName,
+		username,
+		password,
+		email
+	} = body;
 
 	if (username === undefined || password === undefined || email === undefined || displayName === undefined) {
 		res.status(400).json({

@@ -19,6 +19,7 @@
 		"express-winston": "^4.2.0",
 		"graphql": "15",
 		"graphql-tag": "^2.12.6",
+		"jsonwebtoken": "^8.5.1",
 		"winston": "^3.7.2"
 	},
 	"scripts": {
@@ -26,6 +27,7 @@
 	},
 	"devDependencies": {
 		"@types/bcryptjs": "^2.4.2",
-		"@types/express": "^4.17.13"
+		"@types/express": "^4.17.13",
+		"@types/jsonwebtoken": "^8.5.8"
 	}
 }
