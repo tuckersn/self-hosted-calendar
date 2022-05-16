@@ -1,8 +1,15 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+
+import { JWT, jwtDecode } from "@internal/schema/dist";
+
 import { COLORS } from "../../common/style";
 import { Button } from "../../components/input/Button";
 import { TextInput } from "../../components/input/TextInput";
+import { useUser } from "../../shared/hooks/useUser";
+
+
 
 const Container = (styled.div`
 	color: ${COLORS.primary};
@@ -48,8 +55,12 @@ const InputFieldRight = (styled.div`
 
 export function LoginPage() {
 
-	let navigate = useNavigate();
+	const navigate = useNavigate();
 
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
+
+	const [user, updateUser] = useUser();
 
 	return <Container>
 		<InnerContainer>
@@ -66,7 +77,7 @@ export function LoginPage() {
 						Username
 					</InputFieldLeft>
 					<InputFieldRight>
-						<TextInput value="username"/>
+						<TextInput value={username} onValueChange={setUsername}/>
 					</InputFieldRight>
 				</InputField>
 				<InputField style={{paddingRight: "32px"}}>
@@ -74,7 +85,7 @@ export function LoginPage() {
 						Password
 					</InputFieldLeft>
 					<InputFieldRight>
-						<TextInput value="password"/>
+						<TextInput value={password} onValueChange={setPassword}/>
 					</InputFieldRight>
 				</InputField>
 				<br/>
@@ -82,8 +93,36 @@ export function LoginPage() {
 					<Button style={{
 						minWidth: "100px",
 						margin: "auto"
-					}} onClick={() => {
-						console.log("Submitting user login");
+					}} onClick={async () => {
+						const payload = {
+							username,
+							password
+						}
+		
+						const result = await fetch(`${process.env.REACT_APP_SERVER_URL}/login`, {
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json"
+							},
+							body: JSON.stringify(payload)
+						});
+
+						const json = await result.json();
+		
+						//TODO: error popup
+						if(result.status !== 200) {
+							console.error("Error logging in:", result, "BODY:", json);
+							return;
+						}
+
+						// Assumes correct response from server.
+						const jwt = jwtDecode(json.token);
+						localStorage.setItem("jwt", json.token);
+						console.log("JWT:", jwt);
+						updateUser(jwt);
+
+						//TODO: popup telling them to login
+						navigate("/");
 					}}>
 						Submit
 					</Button>

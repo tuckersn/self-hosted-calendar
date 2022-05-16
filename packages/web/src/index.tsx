@@ -13,42 +13,45 @@ import { AccountInfoPage } from './pages/account/AccountInfoPage';
 import { BoardPage } from './pages/board/BoardPage';
 import { ErrorPage } from './pages/ErrorPage';
 import { LoginRegisterPage } from './pages/login/LoginRegisterPage';
+import { Provider } from 'react-redux';
+import { store } from './common/store/store';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-	<BrowserRouter>
-		<Routes>
-			<Route path="/" element={<App/>}>
-				
-				{/* Dashboard */}
-				<Route index element={<HomePage/>}/>
-				
-				{/* Password & OAuth login */}
-				<Route path="login">
-					<Route index element={<LoginPage/>}/>
-					<Route path="register" element={<LoginRegisterPage/>}/>
+	<Provider store={store}>
+		<BrowserRouter>
+			<Routes>
+				<Route path="/" element={<App/>}>
+					
+					{/* Dashboard */}
+					<Route index element={<HomePage/>}/>
+					
+					{/* Password & OAuth login */}
+					<Route path="login">
+						<Route index element={<LoginPage/>}/>
+						<Route path="register" element={<LoginRegisterPage/>}/>
+					</Route>
+					
+					{/* User's account info */}
+					<Route path="me" element={<AccountInfoPage/>}/>
+
+					<Route path="board" element={<BoardPage/>}>
+						{/* List of user's boards */}
+						<Route index element={<div/>}/>
+						{/* Specific boards */}
+						<Route path=":boardId" element={<div/>}/>
+						{/* Board creation form */}
+						<Route path="new" element={<div/>}/>
+					</Route>
+
+					<Route path="*" element={<ErrorPage errorCode={404} errorMessage={"Page not found."}/>}/>
+		
 				</Route>
-				
-				{/* User's account info */}
-				<Route path="me" element={<AccountInfoPage/>}/>
-
-				<Route path="board" element={<BoardPage/>}>
-					{/* List of user's boards */}
-					<Route index element={<div/>}/>
-					{/* Specific boards */}
-					<Route path=":boardId" element={<div/>}/>
-					{/* Board creation form */}
-					<Route path="new" element={<div/>}/>
-				</Route>
-
-				<Route path="*" element={<ErrorPage errorCode={404} errorMessage={"Page not found."}/>}/>
-	
-			</Route>
-		</Routes>
-	</BrowserRouter>
-
+			</Routes>
+		</BrowserRouter>
+	</Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

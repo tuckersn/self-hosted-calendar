@@ -41,7 +41,7 @@ export async function PostgresDatabase(): Promise<Database> {
 			idle: 2000
 		}
 	});
-	return{
+	return {
 		name: "postgres",
 		user: userQueryFunctions(connection),
 		userLogin: {

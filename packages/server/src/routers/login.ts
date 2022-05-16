@@ -15,6 +15,10 @@ export const loginRouter: Router = Router();
 
 loginRouter.use(express.json());
 
+loginRouter.get("/", (req, res) => {
+	res.send("login");
+});
+
 loginRouter.post("/", generalErrorHandlingMiddleware(async (req: Request<any, any, {
 	username?: string,
 	password?: string
@@ -65,12 +69,16 @@ loginRouter.post("/", generalErrorHandlingMiddleware(async (req: Request<any, an
 
 	if(verifyHash(password, user.passwordHash)) {
 		jwt.sign({
+			userId: user.uuid,
 			username: user.username,
+			displayName: user.displayName,
+			profilePic: "TODO",
 			userType: user.userType
 		}, process.env.JWT_SECRET!, {
 			expiresIn: "1d"
 		}, (err, token) => {
 			if(err) {
+				console.error("ERROR ON LOGIN:", err);
 				res.status(500).json({
 					error: `Internal server error`
 				});
@@ -79,6 +87,7 @@ loginRouter.post("/", generalErrorHandlingMiddleware(async (req: Request<any, an
 			res.status(200).json({
 				token: token!
 			});
+			return;
 		});
 	} else {
 		res.status(401).json({
@@ -86,12 +95,6 @@ loginRouter.post("/", generalErrorHandlingMiddleware(async (req: Request<any, an
 		});
 		return;
 	}
-	
-	
-	
-	res.status(200).json({
-		token: "TEST"
-	});
 }));
 
 // Checks if sign up is enabled

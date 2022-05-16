@@ -33,10 +33,8 @@ async function main() {
 		transports: networkTransports
 	}));
 	app.use(cors({
-		origin(requestOrigin, callback) {
-			//TODO: proper cors implementation
-			callback(null, true);
-		},
+		//TODO: * for now, not sure what I want to here yet.
+		origin: "*",
 	}));
 	
 

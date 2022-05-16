@@ -46,3 +46,9 @@ pnpm start
 ```
 node ./packages/dist/main.js
 ```
+
+
+
+
+# Notable todos
+- Implement refresh/access tokens instead of daily localStorage tokens
