@@ -7,7 +7,8 @@ export const BUTTON_DEFAULT_STYLE: CSSProperties = {
 	border: "2px solid white",
 	paddingLeft: "8px",
 	paddingRight: "8px",
-	paddingBottom: "1px"
+	paddingBottom: "1px",
+	width: "min-content"
 }
 
 

@@ -11,6 +11,9 @@ import {
 	useLocation
   } from "react-router-dom";
 import styled from 'styled-components';
+import { useUser } from './shared/hooks/useUser';
+import { setUser } from './common/store/userSlice';
+import { Button } from './components/input/Button';
 
 const TITLE_BAR_HEIGHT = '32px';
 
@@ -42,7 +45,8 @@ const TitleBarLeft = (styled.div`
 `);
 
 const TitleBarCenter = (styled.div`
-
+	flex: 1;
+	display: flex;
 `);
 
 const TitleBarRight = (styled.div`
@@ -50,6 +54,7 @@ const TitleBarRight = (styled.div`
 	display: flex;
 
 	align-items: center;
+	justify-content: flex-end;
 	text-align: right;
 `);
 
@@ -87,7 +92,7 @@ const Content = styled.div`
 function App() {
 
 	const navigate = useNavigate();
-	let location = useLocation();
+	const [user, setUser] = useUser();
 
 	return (
 		<Frame>
@@ -103,13 +108,37 @@ function App() {
 					</TitleBarLogoButtonContainer>
 				</TitleBarLeft>
 				<TitleBarCenter>
-					<Link to={'/me'}>test</Link>
+					{
+						user !== null ?
+						<div contentEditable={true} style={{
+								flex: "1",
+								width: "auto",
+								border: "1px solid cyan",
+								textAlign: "center"
+							}}>
+								search/command bar here
+						</div> : <div></div>
+					}
 				</TitleBarCenter>			
 				<TitleBarRight>
-					<Link style={{flex: 1, paddingRight: "8px"}} to={'/login'}>Log In / Sign Up</Link>
-					<TitleBarUserIconContainer>
-						<img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" height={"32px"} width={"32px"} alt="user icon"/>
-					</TitleBarUserIconContainer>
+				{
+						user === null ?
+						<React.Fragment>
+							<Link style={{flex: 1, paddingRight: "8px"}} to={'/login'}>Log In / Sign Up</Link>
+						</React.Fragment> :
+						<React.Fragment>
+							<Button style={{paddingRight: "8px"}} onClick={() => {
+								localStorage.removeItem("jwt");
+								setUser(null);
+								navigate("/");
+							}}>Logout</Button>
+							<TitleBarUserIconContainer>
+								<Link to={'/me'}>
+									<img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" height={"32px"} width={"32px"} alt="user icon"/>
+								</Link>
+							</TitleBarUserIconContainer>
+						</React.Fragment>
+					}
 				</TitleBarRight>
 			</TitleBar>
 			<Content>

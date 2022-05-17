@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 
@@ -15,9 +16,15 @@ export function ErrorPage({
 	errorCode?: number,
 	errorMessage?: string
 }) {
+
+	const location = useLocation();
+	const state: {
+		errorCode?: number,
+		errorMessage?: string
+	} = location.state as any;
 	
-	errorCode = errorCode || -1;
-	errorMessage = errorMessage || "unknown";
+	errorCode = errorCode || state?.errorCode || -1;
+	errorMessage = errorMessage || state?.errorMessage || "unknown";
 
 	return <ErrorContainer>
 		<h1>Oh no!</h1>

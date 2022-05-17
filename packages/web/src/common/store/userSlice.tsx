@@ -1,15 +1,20 @@
-import { JWT } from "@internal/schema/dist";
+import { JWT, jwtDecode } from "@internal/schema/dist";
 import { createSlice } from "@reduxjs/toolkit";
 
 export type UserState = {
 	value: JWT | null;	
 }
 
+const jwt = localStorage.getItem("jwt");
+let token: JWT | null = null;
+if(jwt !== null) {
+	token = jwtDecode(jwt);
+}
 
 export const userSlice = createSlice({
 	name: "user",
 	initialState: {
-		value: null
+		value:  token
 	},
 	reducers: {
 		setUser: (state: UserState, action: {payload:JWT|null}) => {

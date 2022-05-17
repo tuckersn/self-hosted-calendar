@@ -57,7 +57,7 @@ export function LoginPage() {
 
 	const navigate = useNavigate();
 
-	const [username, setUsername] = useState("");
+	const [username, setUsername] = useState(localStorage.getItem("username") || "");
 	const [password, setPassword] = useState("");
 
 	const [user, updateUser] = useUser();
@@ -118,6 +118,7 @@ export function LoginPage() {
 						// Assumes correct response from server.
 						const jwt = jwtDecode(json.token);
 						localStorage.setItem("jwt", json.token);
+						localStorage.setItem("username", jwt.username);
 						console.log("JWT:", jwt);
 						updateUser(jwt);
 

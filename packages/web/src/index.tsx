@@ -46,6 +46,7 @@ root.render(
 						<Route path="new" element={<div/>}/>
 					</Route>
 
+					<Route path="error" element={<ErrorPage/>}/>
 					<Route path="*" element={<ErrorPage errorCode={404} errorMessage={"Page not found."}/>}/>
 		
 				</Route>
