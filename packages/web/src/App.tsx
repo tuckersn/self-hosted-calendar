@@ -15,8 +15,9 @@ import { useUser } from './shared/hooks/useUser';
 import { setUser } from './common/store/userSlice';
 import { Button } from './components/inputs/Button';
 import { Toggle } from './components/inputs/Toggle';
+import { CornerMenu } from './components/corner-menu/CornerMenu';
 
-const TITLE_BAR_HEIGHT = '32px';
+const TITLE_BAR_HEIGHT = 32;
 
 const Frame = styled.div`
 	height: 100vh;
@@ -30,9 +31,10 @@ const Frame = styled.div`
 const TitleBar = styled.div`
 	display: flex;
 
-	flex: 0 0 ${TITLE_BAR_HEIGHT};
+	flex: 0 0 ${TITLE_BAR_HEIGHT}px;
 	width: 100%;
 	align-items: center;
+	overflow: none;
 
 	border-bottom: 2px solid red;
 	background-color: rgba(255,255,255,0.15);
@@ -59,20 +61,25 @@ const TitleBarRight = (styled.div`
 	text-align: right;
 `);
 
-const TitleBarMenuButton = (styled.div`
+const TitleBarMenuDiv = (styled.div<{ active?: boolean }>`
 	display: flex;
 	
-	height: ${TITLE_BAR_HEIGHT};
-	width: ${TITLE_BAR_HEIGHT};
+	height: ${TITLE_BAR_HEIGHT}px;
+	width: ${TITLE_BAR_HEIGHT}px;
 	
 	border: 1px solid white;
 	font-size: 11px;
 
 	align-items: center;
+
+	background-color: ${(props) => props.active ? '#626262' : '#000000'};
+	:hover {
+		background-color: rgba(255,255,255,0.5);
+	}
 `);
 
 const TitleBarLogoButtonContainer = (styled.div`
-	font-size: 28px;
+	font-size: 20px;
 	vertical-align: center;
 	text-align: center;
 	align-self: center;
@@ -102,42 +109,22 @@ function App() {
 					<Toggle style={{
 						border: 0
 					}} falseComponent={
-						<TitleBarMenuButton>
+						<TitleBarMenuDiv>
 							Menu
-						</TitleBarMenuButton>
+						</TitleBarMenuDiv>
 					} trueComponent= {
 						<React.Fragment>
-							<TitleBarMenuButton style={{
-								backgroundColor: "cyan"
-							}}>
+							<TitleBarMenuDiv active={true}>
 								Menu
-							</TitleBarMenuButton>
+							</TitleBarMenuDiv>
 							<div style={{
-								position: "relative",
+								position: "absolute",
 								width: 0,
 								height: 0,
-								top: "-1px"
+								left: 0,
+								top: (TITLE_BAR_HEIGHT + 2) + "px"
 							}}>
-								<div style={{
-									border: "1px solid white",
-									width: "250px",
-									height: "auto",
-									backgroundColor: "rgba(0,0,0,0.80)",
-									padding: "6px",
-									paddingLeft: "12px",
-									paddingRight: "12px"
-								}}> 
-									AAAAAAAAAAAAAAAAA
-									<br/>
-									AAAAAAAAAAAAAAAAA
-									<br/>
-									AAAAAAAAAAAAAAAAA
-									<br/>
-									AAAAAAAAAAAAAAAAA
-									<br/>
-									AAAAAAAAAAAAAAAAA
-									<br/>
-								</div>
+								<CornerMenu/>
 							</div>
 						</React.Fragment>
 					}/>
@@ -174,7 +161,7 @@ function App() {
 							}}>Logout</Button>
 							<TitleBarUserIconContainer>
 								<Link to={'/me'}>
-									<img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" height={"32px"} width={"32px"} alt="user icon"/>
+									<img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" height={"20px"} width={"20px"} alt="user icon"/>
 								</Link>
 							</TitleBarUserIconContainer>
 						</React.Fragment>
