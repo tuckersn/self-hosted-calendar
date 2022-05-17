@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { Button } from "../../components/input/Button";
-import { TextInput } from "../../components/input/TextInput";
-import { ArticleLayout } from "../../components/layout/ArticleLayout";
+import { Button } from "../../components/inputs/Button";
+import { TextInput } from "../../components/inputs/TextInput";
+import { ArticleLayout } from "../../components/layouts/ArticleLayout";
 
 
 export function LoginRegisterPage() {

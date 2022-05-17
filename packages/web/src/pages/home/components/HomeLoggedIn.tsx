@@ -1,15 +1,31 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { COLORS } from "../../../common/style";
-import { ArticleLayout } from "../../../components/layout/ArticleLayout";
+import { Toggle } from "../../../components/inputs/Toggle";
+import { ArticleLayout } from "../../../components/layouts/ArticleLayout";
 import { useUser } from "../../../shared/hooks/useUser";
 
+const PADDING = "1vh";
+
 const Container = (styled.div`
+	height: 100%;
 	display: flex;
+	padding: ${PADDING};
 `);
 
 const HalfOfContainer = (styled.div`
 	flex: 50%;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+`);
+
+
+const PANE_PADDING = 8;
+const HalfPane = (styled.div`
+	border: 1px solid ${COLORS.border};
+	margin: ${PADDING};
+	flex: 1;
 `);
 
 export function HomeLoggedIn() {
@@ -17,25 +33,45 @@ export function HomeLoggedIn() {
 	const [_user] = useUser();
 	// Assumes that the user is logged in
 	const user = _user!;
-
+	
 	return <Container>
 		<HalfOfContainer>
-			<ArticleLayout title="Home">
-				<h1>
-					Welcome back {user.displayName}!
-				</h1>
-				<hr/>
-				<p>
-					Dashboard here!
-				</p>
-			</ArticleLayout>
+			<HalfPane  style={{
+				border: "0",
+			}}>
+				<ArticleLayout title="Home" innerStyle={{
+					width: "100%",
+					maxWidth: "100%"
+				}}>
+					<h1>
+						Welcome back {user.displayName}!
+					</h1>
+					<hr/>
+					<p>
+						Dashboard here!
+					</p>
+				</ArticleLayout>
+			</HalfPane>
+			<HalfPane style={{
+			}}>
+				Notifications here!
+			</HalfPane>
 		</HalfOfContainer>
 		<HalfOfContainer>
-			Today's events
-			<br/>
-			Today's todos
-			<br/>
-			Recent changes
+			<HalfPane style={{
+			}}>
+				Calendar here
+			</HalfPane>
+			<HalfPane style={{
+			}}>
+				Todos here
+
+				<Toggle falseComponent={<div>
+					FALSE
+				</div>} trueComponent={<div>
+					TRUE
+				</div>}/>
+			</HalfPane>
 		</HalfOfContainer>
 	</Container>;
 };

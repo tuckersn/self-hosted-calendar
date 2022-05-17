@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { ArticleLayout } from "../../components/layout/ArticleLayout";
+import { ArticleLayout } from "../../components/layouts/ArticleLayout";
 import { useUser } from "../../shared/hooks/useUser";
 
 const Container = (styled.div`
@@ -28,6 +28,8 @@ export function AccountInfoPage() {
 	return <ArticleLayout title="Account Info">
 		<Container>
 			<h1>Hello {user?.displayName}</h1>
+
+
 		</Container>
 	</ArticleLayout>;
 }

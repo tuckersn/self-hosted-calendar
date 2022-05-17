@@ -1,9 +1,6 @@
-import styled from "styled-components";
+import styled, { CSSProperties } from "styled-components";
 
 const Container = styled.div`
-	height: 100%;
-	width: 100%;
-
 	display: flex;
 
 	flex-direction: column;
@@ -28,15 +25,19 @@ const Header = styled.div`
 export interface ArticleLayoutProps {
 	title: string;
 	children: React.ReactNode;
+	style?: CSSProperties;
+	innerStyle?: CSSProperties;
 }
 
 export function ArticleLayout({
 	title,
-	children
+	children,
+	style,
+	innerStyle
 } : ArticleLayoutProps) {
 
-	return <Container>
-		<InnerContainer>
+	return <Container style={style}>
+		<InnerContainer style={innerStyle}>
 			<Header>
 				<p style={{color: "grey"}}>BreadCrumbsHere/</p>
 				<p>{title}</p>

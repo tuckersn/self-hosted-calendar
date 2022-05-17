@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { COLORS } from "../../../common/style";
-import { ArticleLayout } from "../../../components/layout/ArticleLayout";
+import { ArticleLayout } from "../../../components/layouts/ArticleLayout";
 import { useUser } from "../../../shared/hooks/useUser";
 
 

@@ -29,5 +29,5 @@ export function ErrorPage({
 	return <ErrorContainer>
 		<h1>Oh no!</h1>
 		<h3>Error code: {errorCode}<br/>Error message: {errorMessage}</h3>
-	</ErrorContainer>
+	</ErrorContainer>;
 }

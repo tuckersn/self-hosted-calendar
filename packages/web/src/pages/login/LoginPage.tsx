@@ -5,8 +5,8 @@ import styled from "styled-components";
 import { JWT, jwtDecode } from "@internal/schema/dist";
 
 import { COLORS } from "../../common/style";
-import { Button } from "../../components/input/Button";
-import { TextInput } from "../../components/input/TextInput";
+import { Button } from "../../components/inputs/Button";
+import { TextInput } from "../../components/inputs/TextInput";
 import { useUser } from "../../shared/hooks/useUser";
 
 

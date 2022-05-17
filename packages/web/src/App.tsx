@@ -13,7 +13,8 @@ import {
 import styled from 'styled-components';
 import { useUser } from './shared/hooks/useUser';
 import { setUser } from './common/store/userSlice';
-import { Button } from './components/input/Button';
+import { Button } from './components/inputs/Button';
+import { Toggle } from './components/inputs/Toggle';
 
 const TITLE_BAR_HEIGHT = '32px';
 
@@ -98,9 +99,48 @@ function App() {
 		<Frame>
 			<TitleBar>
 				<TitleBarLeft>
-					<TitleBarMenuButton>
-						Menu
-					</TitleBarMenuButton>
+					<Toggle style={{
+						border: 0
+					}} falseComponent={
+						<TitleBarMenuButton>
+							Menu
+						</TitleBarMenuButton>
+					} trueComponent= {
+						<React.Fragment>
+							<TitleBarMenuButton style={{
+								backgroundColor: "cyan"
+							}}>
+								Menu
+							</TitleBarMenuButton>
+							<div style={{
+								position: "relative",
+								width: 0,
+								height: 0,
+								top: "-1px"
+							}}>
+								<div style={{
+									border: "1px solid white",
+									width: "250px",
+									height: "auto",
+									backgroundColor: "rgba(0,0,0,0.80)",
+									padding: "6px",
+									paddingLeft: "12px",
+									paddingRight: "12px"
+								}}> 
+									AAAAAAAAAAAAAAAAA
+									<br/>
+									AAAAAAAAAAAAAAAAA
+									<br/>
+									AAAAAAAAAAAAAAAAA
+									<br/>
+									AAAAAAAAAAAAAAAAA
+									<br/>
+									AAAAAAAAAAAAAAAAA
+									<br/>
+								</div>
+							</div>
+						</React.Fragment>
+					}/>
 					<TitleBarLogoButtonContainer onClick={() => {
 						navigate("/");
 					}}>
