@@ -16,6 +16,7 @@ import { setUser } from './common/store/userSlice';
 import { Button } from './components/inputs/Button';
 import { Toggle } from './components/inputs/Toggle';
 import { CornerMenu } from './components/corner-menu/CornerMenu';
+import { DropDown } from './components/inputs/DropDown';
 
 const TITLE_BAR_HEIGHT = 32;
 
@@ -106,7 +107,7 @@ function App() {
 		<Frame>
 			<TitleBar>
 				<TitleBarLeft>
-					<Toggle style={{
+					<Toggle closeOnOutsideClick={true} style={{
 						border: 0
 					}} falseComponent={
 						<TitleBarMenuDiv>
@@ -117,15 +118,9 @@ function App() {
 							<TitleBarMenuDiv active={true}>
 								Menu
 							</TitleBarMenuDiv>
-							<div style={{
-								position: "absolute",
-								width: 0,
-								height: 0,
-								left: 0,
-								top: (TITLE_BAR_HEIGHT + 2) + "px"
-							}}>
+							<DropDown>
 								<CornerMenu/>
-							</div>
+							</DropDown>	
 						</React.Fragment>
 					}/>
 					<TitleBarLogoButtonContainer onClick={() => {

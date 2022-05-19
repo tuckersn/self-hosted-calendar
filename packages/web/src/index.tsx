@@ -15,6 +15,7 @@ import { ErrorPage } from './pages/ErrorPage';
 import { LoginRegisterPage } from './pages/login/LoginRegisterPage';
 import { Provider } from 'react-redux';
 import { store } from './common/store/store';
+import { AdminPage } from './pages/admin/AdminPage';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -44,6 +45,10 @@ root.render(
 						<Route path=":boardId" element={<div/>}/>
 						{/* Board creation form */}
 						<Route path="new" element={<div/>}/>
+					</Route>
+
+					<Route path="admin" element={<AdminPage/>}>
+						<Route index element={<div/>}/>
 					</Route>
 
 					<Route path="error" element={<ErrorPage/>}/>

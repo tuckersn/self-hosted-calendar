@@ -1,10 +1,12 @@
 import { UserType } from "./user";
 
 export interface JWT {
-	userId: number;
+	/** USER UUID */
+	userId: string;
 	username: string;
 	displayName: string;
 	profilePic: string;
+	email: string;
 	userType: UserType;
 	iat: number;
 	exp: number;

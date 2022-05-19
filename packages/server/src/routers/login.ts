@@ -1,7 +1,7 @@
 import express, { Request, Response, Router } from "express";
 import bcrypt from "bcryptjs";
 
-import { ResLocals, UserErrors, UserType } from "@internal/schema/dist";
+import { JWT, ResLocals, UserErrors, UserType } from "@internal/schema/dist";
 import { Database } from "@internal/database/dist";
 
 import { authenticationMiddleware } from "../middleware";
@@ -72,9 +72,10 @@ loginRouter.post("/", generalErrorHandlingMiddleware(async (req: Request<any, an
 			userId: user.uuid,
 			username: user.username,
 			displayName: user.displayName,
+			email: user.email,
 			profilePic: "TODO",
 			userType: user.userType
-		}, process.env.JWT_SECRET!, {
+		} as Omit<JWT, 'iat' | 'exp'>, process.env.JWT_SECRET!, {
 			expiresIn: "1d"
 		}, (err, token) => {
 			if(err) {

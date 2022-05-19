@@ -41,7 +41,8 @@ export function HomeLoggedIn() {
 			}}>
 				<ArticleLayout title="Home" innerStyle={{
 					width: "100%",
-					maxWidth: "100%"
+					maxWidth: "100%",
+					padding: 0
 				}}>
 					<h1>
 						Welcome back {user.displayName}!

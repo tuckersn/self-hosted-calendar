@@ -1,12 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled, { CSSProperties } from "styled-components";
 import { COLORS } from "../../common/style";
 
 export interface ToggleProps {
 	style?: CSSProperties;
+
 	falseComponent: React.ReactNode;
 	trueComponent: React.ReactNode;
+
+	closeOnOutsideClick?: boolean;
 
 	value?: boolean;
 	onValue?: (value: boolean) => any;
@@ -16,22 +19,23 @@ export interface ToggleProps {
 const ToggleContainer = (styled.div`
 	border: 1px solid ${COLORS.border};
 	width: min-content;
-	padding: 4px;
-	padding-top: 0px;
-	padding-bottom: 0px;
 `);
+
+
 
 
 export function Toggle({
 	falseComponent,
 	trueComponent,
+	closeOnOutsideClick = true,
 	style,
 	value: initialValue,
 	onValue,
 } : ToggleProps) {
 
 	const [value, setValue] = useState(initialValue === undefined ? false : initialValue);
-	
+	const containerRef = useRef<HTMLDivElement>(null);
+
 	useEffect(() => {
 		if(onValue) {
 			onValue(value);
@@ -46,7 +50,30 @@ export function Toggle({
 		}
 	}, [initialValue]);
 	
-	return <ToggleContainer className="noselect" onClick={() => setValue(!value)} style={style}>
+	return <ToggleContainer ref={containerRef} className="noselect" onClick={() => {
+		console.log("ON CLICK");
+		setValue(!value)
+		if(closeOnOutsideClick && !value && containerRef !== null) {
+			const click = (event: MouseEvent) => {
+				if(event instanceof PointerEvent || event instanceof MouseEvent) {
+					const target = event.currentTarget!;
+					if(!(target instanceof Node)) {
+						setValue(false);
+						document.removeEventListener("mousedown", click);
+					} else {
+						console.log("REF:", containerRef.current)
+						if(target.contains(containerRef.current)) {
+							console.log("Contained");
+						} else {
+							setValue(false);
+							document.removeEventListener("mousedown", click);
+						}
+					}				
+				}
+			};
+			document.addEventListener("mousedown", click);
+		}
+	}} style={style}>
 		{ value ? trueComponent : falseComponent }
 	</ToggleContainer>;
 }

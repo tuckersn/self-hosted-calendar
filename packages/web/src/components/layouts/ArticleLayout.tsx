@@ -27,18 +27,20 @@ export interface ArticleLayoutProps {
 	children: React.ReactNode;
 	style?: CSSProperties;
 	innerStyle?: CSSProperties;
+	headerStyle?: CSSProperties;
 }
 
 export function ArticleLayout({
 	title,
 	children,
 	style,
-	innerStyle
+	innerStyle,
+	headerStyle
 } : ArticleLayoutProps) {
 
 	return <Container style={style}>
 		<InnerContainer style={innerStyle}>
-			<Header>
+			<Header style={headerStyle}>
 				<p style={{color: "grey"}}>BreadCrumbsHere/</p>
 				<p>{title}</p>
 			</Header>
