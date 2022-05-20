@@ -118,7 +118,9 @@ function App() {
 							<TitleBarMenuDiv active={true}>
 								Menu
 							</TitleBarMenuDiv>
-							<DropDown>
+							<DropDown style={{
+								top: TITLE_BAR_HEIGHT + "px"
+							}}>
 								<CornerMenu/>
 							</DropDown>	
 						</React.Fragment>

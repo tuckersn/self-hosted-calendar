@@ -16,6 +16,9 @@ import { LoginRegisterPage } from './pages/login/LoginRegisterPage';
 import { Provider } from 'react-redux';
 import { store } from './common/store/store';
 import { AdminPage } from './pages/admin/AdminPage';
+import { AdminDashboardPage } from './pages/admin/components/AdminDashboard';
+import { UserAdminPage } from './pages/admin/components/UserAdminPage';
+import { DatabaseAdminPage } from './pages/admin/components/DatabaseAdminPage';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -48,7 +51,9 @@ root.render(
 					</Route>
 
 					<Route path="admin" element={<AdminPage/>}>
-						<Route index element={<div/>}/>
+						<Route index element={<AdminDashboardPage/>}/>
+						<Route path="users" element={<UserAdminPage/>}/>
+						<Route path="database" element={<DatabaseAdminPage/>}/>
 					</Route>
 
 					<Route path="error" element={<ErrorPage/>}/>
