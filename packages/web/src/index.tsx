@@ -20,6 +20,8 @@ import { AdminDashboardPage } from './pages/admin/components/AdminDashboard';
 import { UserAdminPage } from './pages/admin/components/UserAdminPage';
 import { DatabaseAdminPage } from './pages/admin/components/DatabaseAdminPage';
 import { nanoid } from '@reduxjs/toolkit';
+import { CalendarPage } from './pages/calendar/CalendarPage';
+import { UISamplesPage } from './pages/debug/UISamplesPage';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -44,6 +46,8 @@ root.render(
 						{/* User's account info */}
 						<Route path="me" element={<AccountInfoPage/>}/>
 
+						<Route path="calendar" element={<CalendarPage/>}/>
+
 						<Route path="board" element={<BoardPage/>}>
 							{/* List of user's boards */}
 							<Route index element={<div/>}/>
@@ -57,6 +61,10 @@ root.render(
 							<Route index element={<AdminDashboardPage/>}/>
 							<Route path="users" element={<UserAdminPage/>}/>
 							<Route path="database" element={<DatabaseAdminPage/>}/>
+						</Route>
+
+						<Route path="debug">
+							<Route path="samples" element={<UISamplesPage/>}/>
 						</Route>
 
 						<Route path="error" element={<ErrorPage/>}/>

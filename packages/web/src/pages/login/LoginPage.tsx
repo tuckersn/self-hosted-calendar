@@ -7,7 +7,7 @@ import { JWT, jwtDecode } from "@internal/schema/dist";
 import { COLORS } from "../../common/style";
 import { Button } from "../../components/inputs/Button";
 import { TextInput } from "../../components/inputs/TextInput";
-import { useUser } from "../../shared/hooks/useUser";
+import { useUser } from "../../common/hooks/useUser";
 
 
 

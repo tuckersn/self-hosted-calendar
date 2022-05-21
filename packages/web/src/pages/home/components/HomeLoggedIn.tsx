@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { COLORS } from "../../../common/style";
 import { Toggle } from "../../../components/inputs/Toggle";
 import { ArticleLayout } from "../../../components/layouts/ArticleLayout";
-import { useUser } from "../../../shared/hooks/useUser";
+import { useUser } from "../../../common/hooks/useUser";
 
 const PADDING = "1vh";
 

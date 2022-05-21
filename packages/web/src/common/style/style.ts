@@ -5,3 +5,5 @@ export const COLORS = {
 	highLight: "#6acafc",
 	background: "#000000"
 }
+
+export const NAV_BAR_HEIGHT = 32;

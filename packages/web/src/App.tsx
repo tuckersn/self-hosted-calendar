@@ -12,15 +12,16 @@ import {
 	Location
   } from "react-router-dom";
 import styled from 'styled-components';
-import { useUser } from './shared/hooks/useUser';
+import { useUser } from './common/hooks/useUser';
 import { setUser } from './common/store/userSlice';
 import { Button } from './components/inputs/Button';
 import { Toggle } from './components/inputs/Toggle';
-import { CornerMenu } from './components/corner-menu/CornerMenu';
+import { CornerMenu } from './components/menus/CornerMenu';
 import { DropDown } from './components/inputs/DropDown';
 import { FloatingContainer } from './components/styled';
+import { NAV_BAR_HEIGHT } from './common/style';
 
-const TITLE_BAR_HEIGHT = 32;
+
 
 const Frame = styled.div`
 	height: 100vh;
@@ -34,7 +35,7 @@ const Frame = styled.div`
 const TitleBar = styled.div`
 	display: flex;
 
-	flex: 0 0 ${TITLE_BAR_HEIGHT}px;
+	flex: 0 0 ${NAV_BAR_HEIGHT}px;
 	width: 100%;
 	align-items: center;
 	overflow: none;
@@ -67,8 +68,8 @@ const TitleBarRight = (styled.div`
 const TitleBarMenuDiv = (styled.div<{ active?: boolean }>`
 	display: flex;
 	
-	height: ${TITLE_BAR_HEIGHT}px;
-	width: ${TITLE_BAR_HEIGHT}px;
+	height: ${NAV_BAR_HEIGHT}px;
+	width: ${NAV_BAR_HEIGHT}px;
 	
 	border: 1px solid white;
 	font-size: 11px;
@@ -91,8 +92,8 @@ const TitleBarLogoButtonContainer = (styled.div`
 const TitleBarUserIconContainer = (styled.div`
 	border: 1px solid cyan;
 	background-color: white;
-	height: ${TITLE_BAR_HEIGHT};
-	width: ${TITLE_BAR_HEIGHT};
+	height: ${NAV_BAR_HEIGHT};
+	width: ${NAV_BAR_HEIGHT};
 `);
 
 const Content = styled.div`
@@ -105,7 +106,7 @@ function App() {
 	const navigate = useNavigate();
 	const [user, setUser] = useUser();
 	const location = useLocation();
-	
+
 	useEffect(() => {
 		console.log(`[NAVIGATED]: ${location.pathname}`);
 	}, [location.pathname]);
@@ -133,7 +134,7 @@ function App() {
 							}}>
 								Menu
 							</TitleBarMenuDiv>
-							<FloatingContainer y={TITLE_BAR_HEIGHT}>
+							<FloatingContainer y={NAV_BAR_HEIGHT}>
 								<CornerMenu/>
 							</FloatingContainer>
 						</React.Fragment>
