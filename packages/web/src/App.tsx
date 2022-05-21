@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.scss';
 
 import {
@@ -8,7 +8,8 @@ import {
 	Link,
 	Outlet,
 	useNavigate,
-	useLocation
+	useLocation,
+	Location
   } from "react-router-dom";
 import styled from 'styled-components';
 import { useUser } from './shared/hooks/useUser';
@@ -17,6 +18,7 @@ import { Button } from './components/inputs/Button';
 import { Toggle } from './components/inputs/Toggle';
 import { CornerMenu } from './components/corner-menu/CornerMenu';
 import { DropDown } from './components/inputs/DropDown';
+import { FloatingContainer } from './components/styled';
 
 const TITLE_BAR_HEIGHT = 32;
 
@@ -102,29 +104,40 @@ function App() {
 
 	const navigate = useNavigate();
 	const [user, setUser] = useUser();
+	const location = useLocation();
+	
+	useEffect(() => {
+		console.log(`[NAVIGATED]: ${location.pathname}`);
+	}, [location.pathname]);
 
 	return (
 		<Frame>
 			<TitleBar>
 				<TitleBarLeft>
-					<Toggle closeOnOutsideClick={true} style={{
+					<DropDown style={{
 						border: 0
-					}} falseComponent={
-						<TitleBarMenuDiv>
+					}} FalseComponent={({
+						setValue
+					}) => {
+						return <TitleBarMenuDiv onClick={() => {
+							setValue(true);
+						}}>
 							Menu
 						</TitleBarMenuDiv>
-					} trueComponent= {
-						<React.Fragment>
-							<TitleBarMenuDiv active={true}>
+					}} TrueComponent= {({
+						setValue
+					}) => {
+						return <React.Fragment>
+							<TitleBarMenuDiv active={true} onClick={() => {
+								setValue(false);
+							}}>
 								Menu
 							</TitleBarMenuDiv>
-							<DropDown style={{
-								top: TITLE_BAR_HEIGHT + "px"
-							}}>
+							<FloatingContainer y={TITLE_BAR_HEIGHT}>
 								<CornerMenu/>
-							</DropDown>	
+							</FloatingContainer>
 						</React.Fragment>
-					}/>
+					}}/>
 					<TitleBarLogoButtonContainer onClick={() => {
 						navigate("/");
 					}}>
@@ -134,7 +147,7 @@ function App() {
 				<TitleBarCenter>
 					{
 						user !== null ?
-						<div contentEditable={true} style={{
+						<div style={{
 								flex: "1",
 								width: "auto",
 								border: "1px solid cyan",

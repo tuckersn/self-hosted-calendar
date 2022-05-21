@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 
 
@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom/client';
 import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { HomePage } from './pages/home/HomePage';
 import { LoginPage } from './pages/login/LoginPage';
 import { AccountInfoPage } from './pages/account/AccountInfoPage';
@@ -19,50 +19,54 @@ import { AdminPage } from './pages/admin/AdminPage';
 import { AdminDashboardPage } from './pages/admin/components/AdminDashboard';
 import { UserAdminPage } from './pages/admin/components/UserAdminPage';
 import { DatabaseAdminPage } from './pages/admin/components/DatabaseAdminPage';
+import { nanoid } from '@reduxjs/toolkit';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-	<Provider store={store}>
-		<BrowserRouter>
-			<Routes>
-				<Route path="/" element={<App/>}>
-					
-					{/* Dashboard */}
-					<Route index element={<HomePage/>}/>
-					
-					{/* Password & OAuth login */}
-					<Route path="login">
-						<Route index element={<LoginPage/>}/>
-						<Route path="register" element={<LoginRegisterPage/>}/>
-					</Route>
-					
-					{/* User's account info */}
-					<Route path="me" element={<AccountInfoPage/>}/>
+	(() => {
+		const appKey = nanoid();
+		return <Provider store={store}>
+			<BrowserRouter>
+				<Routes>
+					<Route path="/" element={<App key={appKey}/>}>
+						
+						{/* Dashboard */}
+						<Route index element={<HomePage/>}/>
+						
+						{/* Password & OAuth login */}
+						<Route path="login">
+							<Route index element={<LoginPage/>}/>
+							<Route path="register" element={<LoginRegisterPage/>}/>
+						</Route>
+						
+						{/* User's account info */}
+						<Route path="me" element={<AccountInfoPage/>}/>
 
-					<Route path="board" element={<BoardPage/>}>
-						{/* List of user's boards */}
-						<Route index element={<div/>}/>
-						{/* Specific boards */}
-						<Route path=":boardId" element={<div/>}/>
-						{/* Board creation form */}
-						<Route path="new" element={<div/>}/>
-					</Route>
+						<Route path="board" element={<BoardPage/>}>
+							{/* List of user's boards */}
+							<Route index element={<div/>}/>
+							{/* Specific boards */}
+							<Route path=":boardId" element={<div/>}/>
+							{/* Board creation form */}
+							<Route path="new" element={<div/>}/>
+						</Route>
 
-					<Route path="admin" element={<AdminPage/>}>
-						<Route index element={<AdminDashboardPage/>}/>
-						<Route path="users" element={<UserAdminPage/>}/>
-						<Route path="database" element={<DatabaseAdminPage/>}/>
-					</Route>
+						<Route path="admin" element={<AdminPage/>}>
+							<Route index element={<AdminDashboardPage/>}/>
+							<Route path="users" element={<UserAdminPage/>}/>
+							<Route path="database" element={<DatabaseAdminPage/>}/>
+						</Route>
 
-					<Route path="error" element={<ErrorPage/>}/>
-					<Route path="*" element={<ErrorPage errorCode={404} errorMessage={"Page not found."}/>}/>
-		
-				</Route>
-			</Routes>
-		</BrowserRouter>
-	</Provider>
+						<Route path="error" element={<ErrorPage/>}/>
+						<Route path="*" element={<ErrorPage errorCode={404} errorMessage={"Page not found."}/>}/>
+			
+					</Route>
+				</Routes>
+			</BrowserRouter>
+		</Provider>
+	})()
 );
 
 // If you want to start measuring performance in your app, pass a function
