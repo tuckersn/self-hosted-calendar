@@ -42,7 +42,8 @@ const TitleBar = styled.div`
 	align-items: center;
 	overflow: none;
 
-	border-bottom: 2px solid red;
+	box-shadow: 0px 0px 15px rgba(0,0,0,0.5);
+	border-bottom: 2px solid #000000;
 	background-color: rgba(255,255,255,0.15);
 `;
 
@@ -103,6 +104,8 @@ const Content = styled.div`
 `;
 
 
+
+
 function App() {
 
 	const navigate = useNavigate();
@@ -128,6 +131,7 @@ function App() {
 							Menu
 						</TitleBarMenuDiv>
 					}} TrueComponent= {({
+						value,
 						setValue
 					}) => {
 						return <React.Fragment>
@@ -136,15 +140,15 @@ function App() {
 							}}>
 								Menu
 							</TitleBarMenuDiv>
-							<FloatingContainer y={NAV_BAR_HEIGHT}>
-								<CornerMenu/>
+							<FloatingContainer y={NAV_BAR_HEIGHT+1}>
+								<CornerMenu menuOpen={value!} setMenuOpen={setValue}/>
 							</FloatingContainer>
 						</React.Fragment>
 					}}/>
 					<TitleBarLogoButtonContainer onClick={() => {
 						navigate("/");
 					}}>
-						Home
+						YourCalendar
 					</TitleBarLogoButtonContainer>
 				</TitleBarLeft>
 				<TitleBarCenter>

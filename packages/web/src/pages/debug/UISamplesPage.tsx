@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { CSS_PRESETS } from "../../common/style";
 import { Button } from "../../components/inputs/Button";
 import { DropDown } from "../../components/inputs/DropDown";
 import { Select } from "../../components/inputs/Select";
@@ -7,6 +8,9 @@ import { SelectDropDown } from "../../components/inputs/SelectDropDown";
 import { TextInput } from "../../components/inputs/TextInput";
 import { Toggle } from "../../components/inputs/Toggle";
 import { FloatingContainer } from "../../components/styled";
+
+
+const BOX_SIZE = 200;
 
 const Container = styled.div`
 	display: flex;
@@ -19,8 +23,8 @@ const Container = styled.div`
 `;
 
 const Box = styled.div`
-	height: 200px;
-	width: 200px;
+	height: ${BOX_SIZE}px;
+	width: ${BOX_SIZE}px;
 	margin: 10px;
 	padding: 25px;
 	border: 2px dashed rgba(255, 255, 255, 0.5);
@@ -29,6 +33,7 @@ const Box = styled.div`
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
+	${CSS_PRESETS.boxShadowDark}
 `;
 
 const BoxLabel = styled.div`
@@ -40,6 +45,7 @@ const BoxLabel = styled.div`
 export function UISamplesPage() {
 
 
+	const [buttonText, setButtonText] = useState<string>("");
 	const [dropdownOpen, setDropdownOpen] =  useState(false);
 	const [selected, setSelected] = useState<string>("");
 
@@ -52,7 +58,10 @@ export function UISamplesPage() {
 		</div>
 		<Container>
 			<Box>
-				<Button>
+				{buttonText}
+				<Button onClick={() => {
+					setButtonText(buttonText + "Clicked!\n");
+				}}>
 					Button
 				</Button>
 			</Box>
@@ -94,13 +103,15 @@ export function UISamplesPage() {
 					</React.Fragment>
 				}}/>
 			</Box>
-			<Box>
+			<Box style={{
+				width: `${BOX_SIZE * 1.5}px`,
+			}}>
 				<SelectDropDown
 					list={["AAA", "BBB", "CCC"]}
 					TitleComponent={({ open, value }) => {
 						return <React.Fragment>
 							{
-								open ? "v" : ">"
+								open ? "v " : "> "
 							}
 							{ value || "SelectDropDown"}
 						</React.Fragment>
@@ -112,10 +123,13 @@ export function UISamplesPage() {
 					}}
 				/>
 			</Box>
-			<Box>
+			<Box style={{
+				width: `${BOX_SIZE * 1.5}px`,
+			}}>
 				<Toggle
 					TrueComponent={() => {
 						return <div style={{
+							width: "250px",
 							padding: "16px",
 							textAlign: "center"
 						}}>
@@ -137,6 +151,7 @@ export function UISamplesPage() {
 					}}
 					FalseComponent={() => {
 						return <div style={{
+							width: "250px",
 							padding: "16px",
 							textAlign: "center"
 						}}>
@@ -145,11 +160,10 @@ export function UISamplesPage() {
 						</div>;
 					}}
 				/>
-			</Box>
-			<Box>
-			<Toggle
+				<Toggle
 					TrueComponent={() => {
 						return <div style={{
+							width: "250px",
 							padding: "16px",
 							textAlign: "center"
 						}}>
@@ -172,6 +186,7 @@ export function UISamplesPage() {
 					}}
 					FalseComponent={() => {
 						return <div style={{
+							width: "250px",
 							padding: "16px",
 							textAlign: "center"
 						}}>
@@ -180,6 +195,10 @@ export function UISamplesPage() {
 						</div>;
 					}}
 				/>
+			</Box>
+			<Box style={{
+				width: `${BOX_SIZE * 1.5}px`,
+			}}>
 			</Box>
 			<Box>
 				TEST

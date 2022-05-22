@@ -25,7 +25,7 @@ const SelectContainer = styled.div`
 
 const TitleContainer = styled.div`
 	border-bottom: 1px solid ${COLORS.border};
-	background-color: rgba(255, 255, 255, ${STYLE_VALUES.backgroundOpacity * 0.5});
+	background-color: ${COLORS.backgroundDark};
 	padding: 5px;
 `;
 

@@ -22,12 +22,19 @@ export interface SelectDropDownProps<LIST_ITEM_VALUE = any> {
 	onValue?: (value: LIST_ITEM_VALUE | null) => any;
 }
 
-const SelectDropDownContainer = styled.div<SelectDropDownProps>`
+const SelectDropDownContainer = styled.div<SelectDropDownProps & { open: boolean }>`
 	border: 1px solid rgb(255, 255, 255);
 	border-radius: 3px;
 	background-color: ${COLORS.backgroundDark};
 	padding: 5px;
 	user-select: none;
+	${
+		({ open }) => open ?
+			`border-bottom-left-radius: 0;
+			 border-bottom-right-radius: 0;` :
+			`border-bottom-left-radius: 3px;
+			 border-bottom-right-radius: 3px;`
+	}
 `;
 
 const DropDownBox = styled.div`
@@ -60,7 +67,7 @@ export function SelectDropDown(props: SelectDropDownProps) {
 	const [open, setOpen] = useState(false);
 	const [value, setValue] = useState<string | null>(null);
 
-	return <SelectDropDownContainer {...props} onClick={() => {
+	return <SelectDropDownContainer {...props} open={open} onClick={() => {
 		setOpen(!open);
 	}}>
 		<DropDown value={open} TrueComponent={() => {

@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHref, useLocation } from "react-router-dom";
 import styled, { CSSProperties } from "styled-components";
 import { useDebugMode } from "../../common/hooks";
 import { useIsAdmin } from "../../common/hooks/useIsAdmin";
 import { useUser } from "../../common/hooks/useUser";
+import { COLORS, CSS_PRESETS } from "../../common/style";
 import { DropDown } from "../inputs/DropDown";
 import { Toggle } from "../inputs/Toggle";
 
 export interface CornerMenuProps {
 	style?: CSSProperties;
+
+	menuOpen: boolean;
+	setMenuOpen: (open: boolean) => void;
 }
 
 let listingPadding = 24;
@@ -21,8 +25,8 @@ const CornerMenuContainer = (styled.div`
 	flex-direction: column;
 	width: 350px;
 	height: auto;
-	background-color: rgba(0,0,0,1);
-
+	background-color: ${COLORS.backgroundSlightlyDark};
+	${CSS_PRESETS.boxShadowBottomOnly}
 `);
 
 export type ListingProps = {
@@ -96,16 +100,23 @@ const SubListing = (styled.div`
 `);
 
 export function CornerMenu({
-	style
+	style,
+	menuOpen,
+	setMenuOpen
 } : CornerMenuProps) { 
 
 	const [user] = useUser();
 	const isAdmin = useIsAdmin();
 	const [debugMode] = useDebugMode();
+	// const history = useHistory();
+	const location = useLocation();
 	
 	useEffect(() => {
 		console.log("CornerMenu.tsx: useEffect");
-	}, []);
+		return () => {
+			setMenuOpen(!menuOpen);
+		};
+	}, [menuOpen, setMenuOpen]);
 
 	return <CornerMenuContainer style={style}>
 		<Link to={"/"}>

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from "react";
 import styled, { CSSProperties } from "styled-components";
-import { COLORS } from "../../common/style";
+import { COLORS, STYLE_VALUES } from "../../common/style";
 
 export interface ToggleProps {
 	style?: CSSProperties;
@@ -18,7 +18,11 @@ export interface ToggleProps {
 
 const ToggleContainer = (styled.div`
 	border: 1px solid ${COLORS.border};
+	border-radius: ${STYLE_VALUES.borderRadius}px;
 	width: min-content;
+	padding: ${STYLE_VALUES.paddingStandardVertical}px;
+	padding-left: ${STYLE_VALUES.paddingStandardHorizontal}px;
+	padding-right: ${STYLE_VALUES.paddingStandardHorizontal}px;
 `);
 
 

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { COLORS } from "../../../common/style";
+import { COLORS, CSS_PRESETS, STYLE_VALUES } from "../../../common/style";
 import { Toggle } from "../../../components/inputs/Toggle";
 import { ArticleLayout } from "../../../components/layouts/ArticleLayout";
 import { useUser } from "../../../common/hooks/useUser";
@@ -23,9 +23,14 @@ const HalfOfContainer = (styled.div`
 
 const PANE_PADDING = 8;
 const HalfPane = (styled.div`
-	border: 1px solid ${COLORS.border};
+	border: ${STYLE_VALUES.borderHeavy}px solid ${COLORS.border};
+	border-radius: ${STYLE_VALUES.borderRadiusHeavy}px;
 	margin: ${PADDING};
+	padding: ${STYLE_VALUES.paddingStandardVertical}px;
+	padding-left: ${STYLE_VALUES.paddingStandardHorizontal}px;
+	padding-right: ${STYLE_VALUES.paddingStandardHorizontal}px;
 	flex: 1;
+	${CSS_PRESETS.boxShadowDark};
 `);
 
 export function HomeLoggedIn() {
@@ -38,6 +43,7 @@ export function HomeLoggedIn() {
 		<HalfOfContainer>
 			<HalfPane  style={{
 				border: "0",
+				boxShadow: "none"
 			}}>
 				<ArticleLayout title="Home" innerStyle={{
 					width: "100%",
