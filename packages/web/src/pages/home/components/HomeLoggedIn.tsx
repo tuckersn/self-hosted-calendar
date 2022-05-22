@@ -67,9 +67,9 @@ export function HomeLoggedIn() {
 			}}>
 				Todos here
 
-				<Toggle falseComponent={<div>
+				<Toggle FalseComponent={() => <div>
 					FALSE
-				</div>} trueComponent={<div>
+				</div>} TrueComponent={() => <div>
 					TRUE
 				</div>}/>
 			</HalfPane>

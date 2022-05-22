@@ -6,8 +6,8 @@ import { COLORS } from "../../common/style";
 export interface ToggleProps {
 	style?: CSSProperties;
 
-	falseComponent: React.ReactNode;
-	trueComponent: React.ReactNode;
+	FalseComponent: React.ComponentType;
+	TrueComponent: React.ComponentType;
 
 	closeOnOutsideClick?: boolean;
 
@@ -25,8 +25,8 @@ const ToggleContainer = (styled.div`
 
 
 export function Toggle({
-	falseComponent,
-	trueComponent,
+	FalseComponent,
+	TrueComponent,
 	closeOnOutsideClick = true,
 	style,
 	value: initialValue,
@@ -74,6 +74,6 @@ export function Toggle({
 			document.addEventListener("mousedown", click);
 		}
 	}} style={style}>
-		{ value ? trueComponent : falseComponent }
+		{ value ? <TrueComponent/> : <FalseComponent/> }
 	</ToggleContainer>;
 }

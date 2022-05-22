@@ -3,8 +3,10 @@ import styled from "styled-components";
 import { Button } from "../../components/inputs/Button";
 import { DropDown } from "../../components/inputs/DropDown";
 import { Select } from "../../components/inputs/Select";
+import { SelectDropDown } from "../../components/inputs/SelectDropDown";
 import { TextInput } from "../../components/inputs/TextInput";
 import { Toggle } from "../../components/inputs/Toggle";
+import { FloatingContainer } from "../../components/styled";
 
 const Container = styled.div`
 	display: flex;
@@ -21,7 +23,8 @@ const Box = styled.div`
 	width: 200px;
 	margin: 10px;
 	padding: 25px;
-	border: 1px dashed rgba(255, 255, 255, 0.5);
+	border: 2px dashed rgba(255, 255, 255, 0.5);
+	border-radius: 15px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -54,7 +57,11 @@ export function UISamplesPage() {
 				</Button>
 			</Box>
 			<Box>
-				<Toggle falseComponent={<div>Toggle: false</div>} trueComponent={<div>Toggle: true</div>}/>
+				<Toggle FalseComponent={() => {
+					return <div>Toggle: false</div>
+				}} TrueComponent={() => {
+					return <div>Toggle: true</div>
+				}}/>
 			</Box>
 			<Box>
 				<button onClick={() => {
@@ -88,13 +95,91 @@ export function UISamplesPage() {
 				}}/>
 			</Box>
 			<Box>
-				TEST
+				<SelectDropDown
+					list={["AAA", "BBB", "CCC"]}
+					TitleComponent={({ open, value }) => {
+						return <React.Fragment>
+							{
+								open ? "v" : ">"
+							}
+							{ value || "SelectDropDown"}
+						</React.Fragment>
+					}}
+					ListItemComponent={({value}) => {
+						return <React.Fragment>
+							{value}
+						</React.Fragment>
+					}}
+				/>
 			</Box>
 			<Box>
-				TEST
+				<Toggle
+					TrueComponent={() => {
+						return <div style={{
+							padding: "16px",
+							textAlign: "center"
+						}}>
+							Floating Container <br/>
+							x and y<br/>
+							<FloatingContainer x={200} y={100}>
+								<div style={{
+									padding: "10px",
+									backgroundColor: "#ff0000",
+									height: "200px",
+									width: "200px"
+								}}>
+									Floating container <br/>
+									With X and Y set
+									(Click to close this)
+								</div>
+							</FloatingContainer>
+						</div>;
+					}}
+					FalseComponent={() => {
+						return <div style={{
+							padding: "16px",
+							textAlign: "center"
+						}}>
+							Floating Container <br/>
+							x and y<br/>
+						</div>;
+					}}
+				/>
 			</Box>
 			<Box>
-				TEST
+			<Toggle
+					TrueComponent={() => {
+						return <div style={{
+							padding: "16px",
+							textAlign: "center"
+						}}>
+							Floating Container <br/>
+							offsetX and offsetY
+							<FloatingContainer offsetX={50} offsetY={0}>
+								<div style={{
+									padding: "10px",
+									backgroundColor: "cyan",
+									color: "black",
+									height: "200px",
+									width: "200px"
+								}}>
+									Floating container <br/>
+									With offsetX and offsetY set
+									(Click to close this)
+								</div>
+							</FloatingContainer>
+						</div>;
+					}}
+					FalseComponent={() => {
+						return <div style={{
+							padding: "16px",
+							textAlign: "center"
+						}}>
+							Floating Container <br/>
+							offsetX and offsetY
+						</div>;
+					}}
+				/>
 			</Box>
 			<Box>
 				TEST

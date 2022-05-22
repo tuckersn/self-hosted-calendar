@@ -9,10 +9,14 @@ export const COLORS = {
 
 	hover: "#00a8ff",
 
-	highLight: "#6acafc",
+	highLight: "#418ab0",
 
 
-	background: "#000000",
+	
+	backgroundDark: "rgb(5, 5, 5)",
+	background: "rgb(15, 15, 15)",
+	backgroundLight: "rgb(45, 45, 45)",
+	/** Transparent layer of white */
 	backgroundLayer: `rgba(255,255,255,${STYLE_VALUES.backgroundOpacity})`,
 }
 

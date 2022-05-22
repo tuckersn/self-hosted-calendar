@@ -19,7 +19,7 @@ import { Toggle } from './components/inputs/Toggle';
 import { CornerMenu } from './components/menus/CornerMenu';
 import { DropDown } from './components/inputs/DropDown';
 import { FloatingContainer } from './components/styled';
-import { NAV_BAR_HEIGHT } from './common/style';
+import { COLORS, NAV_BAR_HEIGHT } from './common/style';
 
 
 
@@ -30,6 +30,8 @@ const Frame = styled.div`
 	display: flex;
 	overflow: hidden;
 	flex-direction: column;
+
+	background-color: ${COLORS.background};
 `;
 
 const TitleBar = styled.div`

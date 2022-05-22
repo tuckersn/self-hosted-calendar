@@ -2,7 +2,7 @@ import React, { CSSProperties, useEffect } from "react";
 import styled from "styled-components";
 import { COLORS, STYLE_VALUES } from "../../common/style";
 
-interface ListItemProps<LIST_ITEM_VALUE> extends SelectProps<LIST_ITEM_VALUE> {
+export interface DropDownListItemProps<LIST_ITEM_VALUE> extends SelectProps<LIST_ITEM_VALUE> {
 	value: LIST_ITEM_VALUE;
 	active: boolean;
 }
@@ -11,7 +11,7 @@ export interface SelectProps<LIST_ITEM_VALUE> {
 	list: LIST_ITEM_VALUE[];
 	
 	TitleComponent: React.ComponentType<SelectProps<LIST_ITEM_VALUE>>;
-	ListItemComponent: React.ComponentType<ListItemProps<LIST_ITEM_VALUE>>;
+	ListItemComponent: React.ComponentType<DropDownListItemProps<LIST_ITEM_VALUE>>;
 	
 	style?: CSSProperties;
 	value?: LIST_ITEM_VALUE | null;
@@ -32,12 +32,14 @@ const TitleContainer = styled.div`
 
 
 
-const ListItemContainer = styled.div<ListItemProps<any>>`
+const ListItemContainer = styled.div<DropDownListItemProps<any>>`
 	border-bottom: 1px solid ${COLORS.darkBorder};
 	${
 		({ active }) => active ?
-			`background-color: rgba(255, 255, 255, ${STYLE_VALUES.backgroundOpacity * 2.5});` :
-			`background-color: ${COLORS.backgroundLayer};`
+			`background-color: rgba(255, 255, 255, ${STYLE_VALUES.backgroundOpacity * 2.5});
+			 font-weight: bold;` :
+			`background-color: ${COLORS.backgroundLayer};
+			 color: rgba(255,255,255,0.5);`
 	}
 	padding: 5px;
 
