@@ -12,13 +12,16 @@ import {
 	Location
   } from "react-router-dom";
 import styled from 'styled-components';
+import { VscMenu } from "react-icons/vsc";
+import { MdLogout, MdMenu } from "react-icons/md"
+
 import { useUser } from './common/hooks/useUser';
 import { setUser } from './common/store/userSlice';
 import { Button } from './components/inputs/Button';
 import { Toggle } from './components/inputs/Toggle';
 import { CornerMenu } from './components/menus/CornerMenu';
 import { DropDown } from './components/inputs/DropDown';
-import { FloatingContainer } from './components/styled';
+import { FloatingContainer } from './components/style';
 import { COLORS, NAV_BAR_HEIGHT } from './common/style';
 
 
@@ -38,12 +41,13 @@ const TitleBar = styled.div`
 	display: flex;
 
 	flex: 0 0 ${NAV_BAR_HEIGHT}px;
+	max-height: ${NAV_BAR_HEIGHT}px;
 	width: 100%;
 	align-items: center;
 	overflow: none;
 
 	box-shadow: 0px 0px 15px rgba(0,0,0,0.5);
-	border-bottom: 2px solid #000000;
+	border-bottom: 2px solid #595959;
 	background-color: rgba(255,255,255,0.15);
 `;
 
@@ -71,17 +75,21 @@ const TitleBarRight = (styled.div`
 const TitleBarMenuDiv = (styled.div<{ active?: boolean }>`
 	display: flex;
 	
-	height: ${NAV_BAR_HEIGHT}px;
-	width: ${NAV_BAR_HEIGHT}px;
+	height: ${NAV_BAR_HEIGHT - 2}px;
+	width: ${NAV_BAR_HEIGHT - 2}px;
 	
-	border: 1px solid white;
+	border-right: 1px solid white;
 	font-size: 11px;
 
 	align-items: center;
+	justify-content: center;
 
-	background-color: ${(props) => props.active ? '#626262' : '#000000'};
+	background-color: ${(props) => props.active ? COLORS.backgroundExtremelyLight : COLORS.background};
 	:hover {
 		background-color: rgba(255,255,255,0.5);
+	}
+	svg {
+		margin-left: -1px;
 	}
 `);
 
@@ -125,10 +133,10 @@ function App() {
 					}} FalseComponent={({
 						setValue
 					}) => {
-						return <TitleBarMenuDiv onClick={() => {
+						return <TitleBarMenuDiv active={false} onClick={() => {
 							setValue(true);
 						}}>
-							Menu
+							<MdMenu size={20}/>
 						</TitleBarMenuDiv>
 					}} TrueComponent= {({
 						value,
@@ -138,9 +146,9 @@ function App() {
 							<TitleBarMenuDiv active={true} onClick={() => {
 								setValue(false);
 							}}>
-								Menu
+								<MdMenu size={20}/>
 							</TitleBarMenuDiv>
-							<FloatingContainer y={NAV_BAR_HEIGHT+1}>
+							<FloatingContainer y={NAV_BAR_HEIGHT}>
 								<CornerMenu menuOpen={value!} setMenuOpen={setValue}/>
 							</FloatingContainer>
 						</React.Fragment>
@@ -171,16 +179,21 @@ function App() {
 							<Link style={{flex: 1, paddingRight: "8px"}} to={'/login'}>Log In / Sign Up</Link>
 						</React.Fragment> :
 						<React.Fragment>
-							<Button style={{paddingRight: "8px"}} onClick={() => {
+							<Button onClick={() => {
 								localStorage.removeItem("jwt");
 								setUser(null);
 								navigate("/");
-							}}>Logout</Button>
-							<TitleBarUserIconContainer>
+							}}><MdLogout/></Button>
+							{/* <TitleBarUserIconContainer>
 								<Link to={'/me'}>
 									<img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" height={"20px"} width={"20px"} alt="user icon"/>
 								</Link>
-							</TitleBarUserIconContainer>
+							</TitleBarUserIconContainer> */}
+							<Button small onClick={() => {
+								navigate("/me");
+							}}>
+								<img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" height={"20px"} width={"20px"} alt="user icon"/>
+							</Button>
 						</React.Fragment>
 					}
 				</TitleBarRight>

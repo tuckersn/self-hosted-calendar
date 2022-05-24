@@ -7,7 +7,7 @@ import { Select } from "../../components/inputs/Select";
 import { SelectDropDown } from "../../components/inputs/SelectDropDown";
 import { TextInput } from "../../components/inputs/TextInput";
 import { Toggle } from "../../components/inputs/Toggle";
-import { FloatingContainer } from "../../components/styled";
+import { FloatingContainer } from "../../components/style";
 
 
 const BOX_SIZE = 200;
@@ -27,7 +27,7 @@ const Box = styled.div`
 	width: ${BOX_SIZE}px;
 	margin: 10px;
 	padding: 25px;
-	border: 2px dashed rgba(255, 255, 255, 0.5);
+	border: 3px dotted rgba(255, 255, 255, 0.5);
 	border-radius: 15px;
 	display: flex;
 	align-items: center;

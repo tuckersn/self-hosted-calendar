@@ -1,31 +1,46 @@
 import React, { CSSProperties, useEffect, useState } from "react"
 import { Promisable } from "type-fest";
-import { COLORS } from "../../common/style";
+import { COLORS, STYLE_VALUES } from "../../common/style";
 
+export interface ButtonProps {
+	children: React.ReactNode;
+	onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => Promisable<void>;
+	style?: CSSProperties;
+	small?: boolean;
+}
 
 export const BUTTON_DEFAULT_STYLE: CSSProperties = {
 	border: "2px solid white",
-	paddingLeft: "8px",
-	paddingRight: "8px",
-	paddingBottom: "1px",
-	width: "min-content"
+	borderRadius: STYLE_VALUES.borderRadius + "px",
+	padding: STYLE_VALUES.paddingStandardVertical + "px",
+	paddingLeft: STYLE_VALUES.paddingStandardHorizontal * 2 + "px",
+	paddingRight: STYLE_VALUES.paddingStandardHorizontal * 2 + "px",
+	width: "min-content",
+	userSelect: "none",
+	textAlign: "center",
+	display: "flex",
+	alignContent: "center",
+	justifyContent: "center",
+}
+
+export const BUTTON_SMALL_STYLE: CSSProperties = {
+	...BUTTON_DEFAULT_STYLE,
+	padding: "3px",
+	fontSize: "12px"
 }
 
 
-export const Button: React.FC<{
-	children: React.ReactNode;
-	onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => Promisable<void>;
-	style?: CSSProperties
-}> = ({
+export const Button: React.FC<ButtonProps> = ({
 	children,
 	onClick,
-	style: styleOverride
+	style: styleOverride,
+	small
 }) => {
-	const [style, setStyle] = useState<CSSProperties>(Object.assign({}, BUTTON_DEFAULT_STYLE, styleOverride || {}));
+	const [style, setStyle] = useState<CSSProperties>(Object.assign({}, small ? BUTTON_SMALL_STYLE : BUTTON_DEFAULT_STYLE, styleOverride || {}));
 
 	useEffect(() => {
-		setStyle(Object.assign({}, BUTTON_DEFAULT_STYLE, styleOverride || {}));
-	}, [styleOverride]);
+		setStyle(Object.assign({}, small ? BUTTON_SMALL_STYLE : BUTTON_DEFAULT_STYLE, styleOverride || {}));
+	}, [styleOverride, small]);
 
 	return <div onClick={(event) => {
 			if(onClick)

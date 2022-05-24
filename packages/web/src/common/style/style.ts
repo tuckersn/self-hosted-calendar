@@ -29,9 +29,11 @@ export const COLORS = {
 
 
 	backgroundDark: "rgb(7, 7, 7)",
-	backgroundSlightlyDark: "rgb(12,12,12)",
-	background: "rgb(15, 15, 15)",
+	backgroundSlightlyDark: "rgb(15,15,15)",
+	background: "rgb(20, 20, 20)",
 	backgroundLight: "rgb(45, 45, 45)",
+	backgroundVeryLight: "rgb(75, 75, 75)",
+	backgroundExtremelyLight: "rgb(115 115, 115)",
 	/** Transparent layer of white */
 	backgroundLayer: `rgba(255,255,255,${STYLE_VALUES.backgroundOpacity})`,
 }

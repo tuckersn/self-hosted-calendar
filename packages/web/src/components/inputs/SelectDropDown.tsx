@@ -1,7 +1,7 @@
 import { CSSProperties, useState } from "react";
 import styled from "styled-components";
 import { COLORS, STYLE_VALUES } from "../../common/style";
-import { FloatingContainer } from "../styled";
+import { FloatingContainer } from "../style";
 import { DropDown, DropDownProps } from "./DropDown";
 import { SelectProps } from "./Select";
 
