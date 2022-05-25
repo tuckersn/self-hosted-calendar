@@ -23,6 +23,8 @@ import { CornerMenu } from './components/menus/CornerMenu';
 import { DropDown } from './components/inputs/DropDown';
 import { FloatingContainer } from './components/style';
 import { COLORS, NAV_BAR_HEIGHT } from './common/style';
+import { useTitle } from './common/hooks/useTitle';
+import {Helmet} from "react-helmet";
 
 
 
@@ -120,12 +122,18 @@ function App() {
 	const [user, setUser] = useUser();
 	const location = useLocation();
 
+	const [title, setTitle] = useTitle()
+
 	useEffect(() => {
 		console.log(`[NAVIGATED]: ${location.pathname}`);
 	}, [location.pathname]);
 
 	return (
 		<Frame>
+			<Helmet>
+                <meta charSet="utf-8" />
+                <title>{title === "" ? "Calendar" : "Calendar | " + title}</title>
+            </Helmet>
 			<TitleBar>
 				<TitleBarLeft>
 					<DropDown style={{

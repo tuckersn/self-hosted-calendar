@@ -7,6 +7,8 @@ import { useUser } from "../../../common/hooks/useUser";
 import { DailyCalendar } from "../../../components/calendars/DailyCalendar";
 import { TodoNote, TodoNoteProps } from "../../../components/todos/TodoNote";
 import { ScrollContainer } from "../../../components/style/ScrollContainer";
+import { useTitle } from "../../../common/hooks/useTitle";
+import { useEffect } from "react";
 
 const PADDING = "1vh";
 
@@ -52,9 +54,13 @@ const TodoItemContainer = (styled.div`
 
 export function HomeLoggedIn() {
 
+	
 	const [_user] = useUser();
 	// Assumes that the user is logged in
 	const user = _user!;
+	const [title, setTitle] = useTitle();
+
+	
 	
 	const todoItems: TodoNoteProps[] = [{
 		title: "hello world title",
@@ -96,6 +102,10 @@ export function HomeLoggedIn() {
 		description: "hello world description of todo item here",
 		color: "purple"
 	}]
+
+	useEffect(() => {
+		setTitle("Home");
+	}, [setTitle]);
 
 	return <Container>
 		<HalfOfContainer>
