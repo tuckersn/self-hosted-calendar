@@ -10,6 +10,7 @@ export interface ButtonProps {
 }
 
 export const BUTTON_DEFAULT_STYLE: CSSProperties = {
+	backgroundColor: "rgba(0,0,0,0.5)",
 	border: "2px solid white",
 	borderRadius: STYLE_VALUES.borderRadius + "px",
 	padding: STYLE_VALUES.paddingStandardVertical + "px",

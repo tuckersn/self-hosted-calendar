@@ -4,6 +4,9 @@ import { COLORS, CSS_PRESETS, STYLE_VALUES } from "../../../common/style";
 import { Toggle } from "../../../components/inputs/Toggle";
 import { ArticleLayout } from "../../../components/layouts/ArticleLayout";
 import { useUser } from "../../../common/hooks/useUser";
+import { DailyCalendar } from "../../../components/calendars/DailyCalendar";
+import { TodoNote, TodoNoteProps } from "../../../components/todos/TodoNote";
+import { ScrollContainer } from "../../../components/style/ScrollContainer";
 
 const PADDING = "1vh";
 
@@ -33,12 +36,67 @@ const HalfPane = (styled.div`
 	${CSS_PRESETS.boxShadowDark};
 `);
 
+const TodoBoxContainer = (styled.div`
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-around;
+	flex: 1;
+	padding: 12px;
+`);
+
+const TodoItemContainer = (styled.div`
+	margin: 12px;
+`);
+
 export function HomeLoggedIn() {
 
 	const [_user] = useUser();
 	// Assumes that the user is logged in
 	const user = _user!;
 	
+	const todoItems: TodoNoteProps[] = [{
+		title: "hello world title",
+		description: "hello world description of todo item here",
+		color: "blue"
+	},
+	{
+		title: "hello world title",
+		description: "hello world description of todo item here",
+		color: "red"
+	},
+	{
+		title: "hello world title",
+		description: "hello world description of todo item here",
+		color: "green"
+	},
+	{
+		title: "hello world title",
+		description: "hello world description of todo item here",
+		color: "white"
+	},
+	{
+		title: "hello world title",
+		description: "hello world description of todo item here",
+		color: "black"
+	},
+	{
+		title: "hello world title",
+		description: "hello world description of todo item here",
+		color: "orange"
+	},
+	{
+		title: "hello world title",
+		description: "hello world description of todo item here",
+		color: "yellow"
+	},
+	{
+		title: "hello world title",
+		description: "hello world description of todo item here",
+		color: "purple"
+	}]
+
 	return <Container>
 		<HalfOfContainer>
 			<HalfPane  style={{
@@ -67,17 +125,24 @@ export function HomeLoggedIn() {
 		<HalfOfContainer>
 			<HalfPane style={{
 			}}>
-				Calendar here
+				<DailyCalendar/>
 			</HalfPane>
 			<HalfPane style={{
 			}}>
-				Todos here
-
-				<Toggle FalseComponent={() => <div>
+				<ScrollContainer>
+					<TodoBoxContainer>
+						{
+							todoItems.map((e) => {
+								return <TodoNote title={e.title} description={e.description} color={e.color}/>;
+							})
+						}
+					</TodoBoxContainer>
+				</ScrollContainer>
+				{/* <Toggle FalseComponent={() => <div>
 					FALSE
 				</div>} TrueComponent={() => <div>
 					TRUE
-				</div>}/>
+				</div>}/> */}
 			</HalfPane>
 		</HalfOfContainer>
 	</Container>;

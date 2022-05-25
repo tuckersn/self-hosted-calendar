@@ -6,11 +6,11 @@ export interface ScrollContainerProps {
 }
 
 const OuterContainer = styled.div<ScrollContainerProps>`
-
+	overflow-y: scroll;
 `;
 
 const InnerContainer = styled.div<ScrollContainerProps>`
-	
+	position: absolute;
 `;
 
 export function ScrollContainer(props: ScrollContainerProps) {
