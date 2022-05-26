@@ -112,6 +112,7 @@ const TitleBarUserIconContainer = (styled.div`
 
 const Content = styled.div`
 	flex: 1;
+	height: calc(100vh - ${NAV_BAR_HEIGHT}px);
 `;
 
 

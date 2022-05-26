@@ -172,8 +172,11 @@ export function HomeLoggedIn() {
 		</HalfOfContainer>
 		<HalfOfContainer>
 			<HalfPane style={{
+				overflowY: "scroll"
 			}}>
-				<DailyCalendar/>
+				<DailyCalendar height={2000} blockStyle={{
+					borderBottom: "1px solid #343434"
+				}}/>
 			</HalfPane>
 			<HalfPane style={{
 			}}>
