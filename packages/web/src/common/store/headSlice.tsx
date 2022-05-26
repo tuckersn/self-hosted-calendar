@@ -17,5 +17,10 @@ export const headSlice = createSlice({
 });
 
 
+window.addEventListener('locationchange', (e) => {
+    console.log('location changed!', e);
+});
+
+
 export const { setTitle } = headSlice.actions;
 export const headReducer = headSlice.reducer;

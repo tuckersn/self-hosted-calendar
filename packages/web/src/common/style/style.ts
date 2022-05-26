@@ -2,7 +2,13 @@ export const CSS_PRESETS = {
 	boxShadowBottomOnly: `box-shadow: 7px 8px 13px 4px rgba(0,0,0,0.52);`,
 	boxShadowLight: `box-shadow: 0px 0px 5px rgba(0,0,0,0.3);`,
 	boxShadow: `box-shadow: -5px 5px 15px rgba(0,0,0,0.8);`,
-	boxShadowDark: `box-shadow: -5px 5px 20px 5px rgba(0,0,0,1);`
+	boxShadowDark: `box-shadow: -5px 5px 20px 5px rgba(0,0,0,1);`,
+
+	fontSize: {
+		small: `font-size: 0.6em;`,
+		medium: `font-size: 0.8em;`,
+		large: `font-size: 1.2em;`,
+	}
 }
 
 export const STYLE_VALUES = {

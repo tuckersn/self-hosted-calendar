@@ -9,6 +9,7 @@ import { TodoNote, TodoNoteProps } from "../../../components/todos/TodoNote";
 import { ScrollContainer } from "../../../components/style/ScrollContainer";
 import { useTitle } from "../../../common/hooks/useTitle";
 import { useEffect } from "react";
+import { NotificationBox, NotificationBoxProps } from "../../../components/NotificationBox";
 
 const PADDING = "1vh";
 
@@ -17,6 +18,25 @@ const Container = (styled.div`
 	display: flex;
 	padding: ${PADDING};
 `);
+
+
+const NotificationBoxContainer = (styled.div`
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	justify-content: flex-start;
+	width: 100%;
+	height: 100%;
+
+	.NotificationContainer {
+		border-bottom: 1px solid grey;
+		:last-child {
+			border: 0;
+		}
+	}
+`);
+
 
 const HalfOfContainer = (styled.div`
 	flex: 50%;
@@ -31,10 +51,8 @@ const HalfPane = (styled.div`
 	border: ${STYLE_VALUES.borderHeavy}px solid ${COLORS.border};
 	border-radius: ${STYLE_VALUES.borderRadiusHeavy}px;
 	margin: ${PADDING};
-	padding: ${STYLE_VALUES.paddingStandardVertical}px;
-	padding-left: ${STYLE_VALUES.paddingStandardHorizontal}px;
-	padding-right: ${STYLE_VALUES.paddingStandardHorizontal}px;
 	flex: 1;
+	
 	${CSS_PRESETS.boxShadowDark};
 `);
 
@@ -101,7 +119,21 @@ export function HomeLoggedIn() {
 		title: "hello world title",
 		description: "hello world description of todo item here",
 		color: "purple"
-	}]
+	}];
+
+	const testNotifications: NotificationBoxProps[] = [{
+		title: "hello world title",
+		content: "hello world description of todo item here",
+		time: new Date()
+	},{
+		title: "Another title",
+		content: "Another description of a notification that the user has received and can click for actions related to it.",
+		time: new Date()
+	},{
+		title: "hello world title",
+		content: "another hello world item",
+		time: new Date()
+	}];
 
 	useEffect(() => {
 		setTitle("Home");
@@ -129,7 +161,13 @@ export function HomeLoggedIn() {
 			</HalfPane>
 			<HalfPane style={{
 			}}>
-				Notifications here!
+				<NotificationBoxContainer>
+					{
+						testNotifications.map((n) => {
+							return <NotificationBox {...n}/>
+						})
+					}
+				</NotificationBoxContainer>
 			</HalfPane>
 		</HalfOfContainer>
 		<HalfOfContainer>

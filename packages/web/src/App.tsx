@@ -31,7 +31,8 @@ import {Helmet} from "react-helmet";
 const Frame = styled.div`
 	height: 100vh;
 	width: 100vw;
-	
+	z-index: -999999999;
+
 	display: flex;
 	overflow: hidden;
 	flex-direction: column;
