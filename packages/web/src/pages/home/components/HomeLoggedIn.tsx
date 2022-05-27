@@ -10,6 +10,7 @@ import { ScrollContainer } from "../../../components/style/ScrollContainer";
 import { useTitle } from "../../../common/hooks/useTitle";
 import { useEffect } from "react";
 import { NotificationBox, NotificationBoxProps } from "../../../components/NotificationBox";
+import { addHours, setHours, setMinutes } from "date-fns";
 
 const PADDING = "1vh";
 
@@ -49,7 +50,7 @@ const HalfOfContainer = (styled.div`
 const PANE_PADDING = 8;
 const HalfPane = (styled.div`
 	border: ${STYLE_VALUES.borderHeavy}px solid ${COLORS.border};
-	border-radius: ${STYLE_VALUES.borderRadiusHeavy}px;
+	/* border-radius: ${STYLE_VALUES.borderRadiusHeavy}px; */
 	margin: ${PADDING};
 	flex: 1;
 	
@@ -176,6 +177,21 @@ export function HomeLoggedIn() {
 			}}>
 				<DailyCalendar height={2000} blockStyle={{
 					borderBottom: "1px solid #343434"
+				}} events={{
+					"ABC": {
+						id: "ABC",
+						start: new Date(Date.now()),
+						end: addHours(new Date(Date.now()), 1),
+						title: "Hello World Title",
+						description: "This would be a description of the event."
+					},
+					"XYZ": {
+						id: "XYZ",
+						start: setMinutes(setHours(new Date(), 2), 0),
+						end: setMinutes(setHours(new Date(), 4), 0),
+						title: "Hello World Title",
+						description: "This would be a description of the event."
+					}
 				}}/>
 			</HalfPane>
 			<HalfPane style={{

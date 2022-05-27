@@ -73,6 +73,8 @@ const TitleBarRight = (styled.div`
 	align-items: center;
 	justify-content: flex-end;
 	text-align: right;
+
+	padding-right: 4px;
 `);
 
 const TitleBarMenuDiv = (styled.div<{ active?: boolean }>`
@@ -109,6 +111,18 @@ const TitleBarUserIconContainer = (styled.div`
 	height: ${NAV_BAR_HEIGHT};
 	width: ${NAV_BAR_HEIGHT};
 `);
+
+
+const TitleBarButtonIcon = (styled.div`
+	font-size: 24px;
+	height: 100%;
+	vertical-align: center;
+	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+`);
+
 
 const Content = styled.div`
 	flex: 1;
@@ -189,21 +203,23 @@ function App() {
 							<Link style={{flex: 1, paddingRight: "8px"}} to={'/login'}>Log In / Sign Up</Link>
 						</React.Fragment> :
 						<React.Fragment>
-							<Button onClick={() => {
+							<TitleBarButtonIcon onClick={() => {
 								localStorage.removeItem("jwt");
 								setUser(null);
 								navigate("/");
-							}}><MdLogout/></Button>
+							}}><MdLogout/></TitleBarButtonIcon>
 							{/* <TitleBarUserIconContainer>
 								<Link to={'/me'}>
 									<img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" height={"20px"} width={"20px"} alt="user icon"/>
 								</Link>
 							</TitleBarUserIconContainer> */}
-							<Button small onClick={() => {
+							<TitleBarButtonIcon style={{
+								backgroundColor: "white"
+							}} onClick={() => {
 								navigate("/me");
 							}}>
 								<img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" height={"20px"} width={"20px"} alt="user icon"/>
-							</Button>
+							</TitleBarButtonIcon>
 						</React.Fragment>
 					}
 				</TitleBarRight>
