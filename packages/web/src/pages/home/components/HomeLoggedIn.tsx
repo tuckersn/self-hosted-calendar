@@ -164,8 +164,8 @@ export function HomeLoggedIn() {
 			}}>
 				<NotificationBoxContainer>
 					{
-						testNotifications.map((n) => {
-							return <NotificationBox {...n}/>
+						testNotifications.map((n, i) => {
+							return <NotificationBox key={n.title + i} {...n}/>
 						})
 					}
 				</NotificationBoxContainer>
@@ -182,14 +182,42 @@ export function HomeLoggedIn() {
 						id: "ABC",
 						start: new Date(Date.now()),
 						end: addHours(new Date(Date.now()), 1),
-						title: "Hello World Title",
+						title: "Hello World Title 1",
 						description: "This would be a description of the event."
 					},
 					"XYZ": {
 						id: "XYZ",
 						start: setMinutes(setHours(new Date(), 2), 0),
 						end: setMinutes(setHours(new Date(), 4), 0),
-						title: "Hello World Title",
+						title: "Hello World Title 2",
+						description: "This would be a description of the event."
+					},
+					"AAA": {
+						id: "AAA",
+						start: setMinutes(setHours(new Date(), 0), 0),
+						end: setMinutes(setHours(new Date(), 3), 0),
+						title: "Hello World Title 3",
+						description: "This would be a description of the event."
+					},
+					"BBB": {
+						id: "BBB",
+						start: setMinutes(setHours(new Date(), 4), 1),
+						end: setMinutes(setHours(new Date(), 5), 0),
+						title: "Hello World Title 4",
+						description: "This would be a description of the event."
+					},
+					"CCC": {
+						id: "CCC",
+						start: setMinutes(setHours(new Date(), 4), 1),
+						end: setMinutes(setHours(new Date(), 5), 0),
+						title: "Hello World Title 5",
+						description: "This would be a description of the event."
+					},
+					"DDD": {
+						id: "DDD",
+						start: setMinutes(setHours(new Date(), 4), 1),
+						end: setMinutes(setHours(new Date(), 5), 0),
+						title: "Hello World Title 6",
 						description: "This would be a description of the event."
 					}
 				}}/>
@@ -199,8 +227,8 @@ export function HomeLoggedIn() {
 				<ScrollContainer>
 					<TodoBoxContainer>
 						{
-							todoItems.map((e) => {
-								return <TodoNote title={e.title} description={e.description} color={e.color}/>;
+							todoItems.map((e, i) => {
+								return <TodoNote key={e.title + i} title={e.title} description={e.description} color={e.color}/>;
 							})
 						}
 					</TodoBoxContainer>
