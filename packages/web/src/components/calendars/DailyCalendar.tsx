@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { getHoursAndMinutes } from "@internal/common/dist";
+import { getHoursAndMinutes, getHoursAndMinutesAndSeconds } from "@internal/common/dist";
 
 import React, { useEffect, useRef, useState } from "react";
 import { COLORS } from "../../common/style";
@@ -127,6 +127,18 @@ const EventDescription = styled.div`
 `;
 
 
+const Line = styled.div<{y: number}>`
+	height: 0px;
+	background-color: #ffdd00;
+	box-shadow: 0px 2px 2px 2px #f8be00;
+	overflow: hidden;
+	position: relative;
+	top: ${(props: {y: number}) => props.y}px;
+	left: ${TIMESTAMP_WIDTH}px;
+	z-index: 5;
+`;
+
+
 /**
  * Can be assumed that eventA starts after eventB.
  * eventA.start > eventB.start
@@ -155,10 +167,30 @@ export function DailyCalendarComponent(props: DailyCalendarProps) {
 	const [eventPositions, setEventPositions] = React.useState<{[eventId: string]: EventPosition}>({});
 	const [fifteenMinuteHeight, setFifteenMinuteHeight] = React.useState<number>(height / FIFTEEN_MINUTE_SEGMENTS_IN_A_DAY);	
 
-	const [timeSlots, setTimeSlots] = useState<number[][]>(_.times(FIFTEEN_MINUTES_IN_A_DAY, () => []));
 	const [eventsKeyArray, setEventsKeyArray] = useState(Object.keys(events).sort((a,b) => {
 		return events[a].start.getTime() - events[b].start.getTime();
 	}));
+
+	const [lineY, setLineY] = useState<number>((getHoursAndMinutesAndSeconds(new Date())/24) * height);
+
+
+	useEffect(() => {
+		function updateTime() {
+			console.log("Update line:", (getHoursAndMinutesAndSeconds(new Date())/24) * height);
+			setLineY((getHoursAndMinutesAndSeconds(new Date())/24) * height);
+		}
+		
+		
+		const timer = setInterval(() => {
+			updateTime();
+		}, 1000 * 10);
+
+		
+
+		return () => {
+			clearInterval(timer);
+		};
+	}, [height, setLineY]);
 
 	/**
 	 * Update fifteenMinuteHeight on height change and such.
@@ -183,15 +215,11 @@ export function DailyCalendarComponent(props: DailyCalendarProps) {
 	 */
 	useEffect(() => {
 		const positions: typeof eventPositions = {};
-		const slots: typeof timeSlots = _.times(FIFTEEN_MINUTES_IN_A_DAY, () => []);
+		const slots: number[][] = _.times(FIFTEEN_MINUTES_IN_A_DAY, () => []);
 		const slotIndexMap: {[key: string]: number[]} = {};
 
 		for(let i = 0; i < eventsKeyArray.length; i++) {
 			const event = events[eventsKeyArray[i]];
-			/**
-			 * Duration in minutes
-			 */
-			const duration = getHoursAndMinutes(event.end) - getHoursAndMinutes(event.start);
 			const start = getHoursAndMinutes(event.start);
 			const end = getHoursAndMinutes(event.end);
 
@@ -199,7 +227,6 @@ export function DailyCalendarComponent(props: DailyCalendarProps) {
 				throw new Error("Duplicate key");
 			}
 			slotIndexMap[eventsKeyArray[i]] = [];
-			console.log("START:", Math.ceil(FIFTEEN_MINUTE_SEGMENTS_IN_A_DAY * start / 15), Math.ceil(FIFTEEN_MINUTE_SEGMENTS_IN_A_DAY * end / 15))
 			for(let j = Math.ceil(FIFTEEN_MINUTE_SEGMENTS_IN_A_DAY * start / 15); j < Math.ceil(FIFTEEN_MINUTE_SEGMENTS_IN_A_DAY * end / 15); j++) {
 				slots[j].push(i);
 				slotIndexMap[eventsKeyArray[i]].push(j)
@@ -220,15 +247,11 @@ export function DailyCalendarComponent(props: DailyCalendarProps) {
 			let widestSlot = 1;
 			let biggestSlot = 0;
 			
-			console.log("INDEX MAP:", slotIndexMap[eventsKeyArray[i]]);
 			for(let slot of slotIndexMap[eventsKeyArray[i]]) {
 				if(slots[slot].length > widestSlot)
 					widestSlot = slots[slot].length;
 				const index = slots[slot].indexOf(i);
 				if(index + 1 > biggestSlot) {
-					if(event.id === "ABC") {
-						console.log("BIGGEST:", biggestSlot, slotIndexMap[eventsKeyArray[i]], slots[slot]);
-					}
 					biggestSlot = index + 1;
 				}
 				if(biggestSlot === 0) {
@@ -246,12 +269,10 @@ export function DailyCalendarComponent(props: DailyCalendarProps) {
 				event
 			}
 		}
-		console.log("POS:", JSON.stringify(positions, null, 4), size.width);
-		//console.log("SLOTS:", JSON.stringify(slots, null, 4));
-		setTimeSlots(slots);
+		//console.log("POS:", JSON.stringify(positions, null, 4), size.width);
 		setEventPositions(positions);
 
-	}, [setEventPositions, events, fifteenMinuteHeight]);
+	}, [setEventPositions, events, fifteenMinuteHeight, size.width, eventsKeyArray]);
 
 	/**
 	 * Generates time blocks and calculate the height of each block.
@@ -268,13 +289,18 @@ export function DailyCalendarComponent(props: DailyCalendarProps) {
 		setTimeBlocks(timeStamps);
 	}, [setTimeBlocks, height, timeGrouping, fifteenMinuteHeight]);
 	
-	return <DailyCalendarOuterContainer {...props} style={props.containerStyle}>
+	return <DailyCalendarOuterContainer  {...props} style={props.containerStyle}>
 		<div style={{
 			height: 0,
 			overflow: "visible"
 		}}>
+		<Line y={lineY}/>
 		{
-			Object.keys(events).map((k) => {
+			Object.keys(events).sort((a,b) => {
+				const aDur = events[a].end.getTime() - events[a].start.getTime();
+				const bDur = events[b].end.getTime() - events[b].start.getTime();
+				return bDur - aDur;
+			}).map((k) => {
 				if(k in eventPositions) {
 					//https://stackoverflow.com/a/40568748
 					const width = size.width! - TIMESTAMP_WIDTH;
@@ -293,10 +319,6 @@ export function DailyCalendarComponent(props: DailyCalendarProps) {
 							</EventTitle>
 							<EventDescription>
 								{events[k].description}
-								<br/>
-								{events[k].start.toLocaleTimeString()} - {events[k].end.toLocaleTimeString()}
-								<br/>
-								{eventPositions[k].x}|{size.width}
 							</EventDescription>
 						</EventContainer>
 					</div>;

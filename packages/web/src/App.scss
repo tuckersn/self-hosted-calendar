@@ -38,20 +38,31 @@
   }
 }
 
-
-.thin-scroll-bar {
-	--webkit-scrollbar-width: 5px;
-	scrollbar-width: 5px;
-	scrollbar-color: rebeccapurple green;;
+* {
 	&::-webkit-scrollbar {
-		width: 5px;
+		width: 12px;
 	}
 	&::-webkit-scrollbar-track {
-		-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+		-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.674);
 	}
 	
 	&::-webkit-scrollbar-thumb {
-	  background-color: rgba(73, 73, 73, 0.466);
-	  outline: 1px solid rgba(115, 131, 147, 0.246);
+	  background-color: rgba(160, 160, 160, 0.645);
+	  border: 1px solid rgba(53, 64, 74, 0.781);
 	}
 }
+
+.thin-scroll-bar {
+	&::-webkit-scrollbar {
+		width: 6px;
+	}
+	&::-webkit-scrollbar-track {
+		-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.521);
+	}
+	
+	&::-webkit-scrollbar-thumb {
+		background-color: rgba(255, 255, 255, 0.38);
+		border: 0;
+	}
+}
+
