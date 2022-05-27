@@ -2,13 +2,15 @@ import styled from "styled-components";
 
 import { getHoursAndMinutes } from "@internal/common/dist";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { COLORS } from "../../common/style";
 import { addHours, getHours, setHours } from "date-fns";
 import { ValueOf } from "type-fest";
 import { SizeMeProps, withSize, WithSizeProps } from "react-sizeme";
+import _ from "lodash";
 
 export const FIFTEEN_MINUTE_SEGMENTS_IN_A_DAY = 24 * (60/15);
+export const FIFTEEN_MINUTES_IN_A_DAY = 24 * (60/15);
 
 export interface Event {
 	id: string,
@@ -19,6 +21,7 @@ export interface Event {
 };
 
 export interface EventPosition {
+	event: Event;
 	/**
 	 * 0-100 value, a percentage of size.width;
 	 */
@@ -34,15 +37,7 @@ export interface EventPosition {
 	/**
 	 * 0-100 value, a percentage of size.width;
 	 */
-	width: number,
-	/**
-	 * Event id array
-	 */
-	leftCollisions: string[],
-	/**
-	 * Event id array
-	 */
-	collisions: string[]
+	width: number
 };
 export interface DailyCalendarProps {
 	containerStyle?: React.CSSProperties;
@@ -101,25 +96,34 @@ const TimeBlockTimestamp = styled.div`
 type EventContainerProps = {
 	parentProps: DailyCalendarProps,
 	event: Event,
+	position: EventPosition
 }
 const EventContainer = styled.div<EventContainerProps>`
 	padding: 4px;
+	padding-right: 0;
 	position: relative;
 	right: 0;
 	background-color: #ad2d2d;
 	border: 1px solid #741111;
 	z-index: 2;
+	height: ${(props: EventContainerProps) => props.position.height}px;
+	overflow: hidden;
+	overflow-y: scroll;
+
+
 `;
 
 const EventTitle = styled.div`
-	font-size: 14px;
+	font-size: 12 px;
 	font-weight: bold;
 	color: white;
+	overflow: hidden;
 `;
 
 const EventDescription = styled.div`
-	font-size: 12px;
+	font-size: 10px;
 	color: white;
+	overflow: hidden;
 `;
 
 
@@ -151,6 +155,11 @@ export function DailyCalendarComponent(props: DailyCalendarProps) {
 	const [eventPositions, setEventPositions] = React.useState<{[eventId: string]: EventPosition}>({});
 	const [fifteenMinuteHeight, setFifteenMinuteHeight] = React.useState<number>(height / FIFTEEN_MINUTE_SEGMENTS_IN_A_DAY);	
 
+	const [timeSlots, setTimeSlots] = useState<number[][]>(_.times(FIFTEEN_MINUTES_IN_A_DAY, () => []));
+	const [eventsKeyArray, setEventsKeyArray] = useState(Object.keys(events).sort((a,b) => {
+		return events[a].start.getTime() - events[b].start.getTime();
+	}));
+
 	/**
 	 * Update fifteenMinuteHeight on height change and such.
 	 */
@@ -161,71 +170,85 @@ export function DailyCalendarComponent(props: DailyCalendarProps) {
 	}, [height, fifteenMinuteHeight, setFifteenMinuteHeight]);
 
 	/**
+	 * Update eventsKeyArray on events change.
+	 */
+	useEffect(() => {
+		setEventsKeyArray(Object.keys(events).sort((a,b) => {
+			return events[a].start.getTime() - events[b].start.getTime();
+		}));
+	}, [events, setEventsKeyArray]);
+
+	/**
 	 * Calculate the position of each event.
 	 */
 	useEffect(() => {
 		const positions: typeof eventPositions = {};
+		const slots: typeof timeSlots = _.times(FIFTEEN_MINUTES_IN_A_DAY, () => []);
+		const slotIndexMap: {[key: string]: number[]} = {};
 
-		const eventKeysSorted = Object.keys(events).sort((a,b) => {
-			return events[a].start.getTime() - events[b].start.getTime();
-		});
+		for(let i = 0; i < eventsKeyArray.length; i++) {
+			const event = events[eventsKeyArray[i]];
+			/**
+			 * Duration in minutes
+			 */
+			const duration = getHoursAndMinutes(event.end) - getHoursAndMinutes(event.start);
+			const start = getHoursAndMinutes(event.start);
+			const end = getHoursAndMinutes(event.end);
 
-		// If start of event is before the end of another
-		// add a collision entry for both events.
-
-		const eventArr = Object.values(events);
-		for(let i = 0; i < eventKeysSorted.length; i++) {
-			const key = eventKeysSorted[i];
-			const event = events[key];
-			if(event) {
-				const leftCollisions: string[] = [];
-				const collisions: string[] = [];
-				// Leaving it blank for the next loop
-				
-				for(let j = 0; j < i; j++) {
-					if(isOverlapping(event, events[eventKeysSorted[j]])) {
-						// Start is after the start of the other event and within it's range.
-						// this means that they collide.
-						collisions.push(eventKeysSorted[j]);
-						leftCollisions.push(eventKeysSorted[j]);
-						positions[eventKeysSorted[j]].collisions.push(key);
-					}
-				}
-
-				//TODO: really need a better algorithm.
-				positions[event.id] = {
-					x: 0,
-					y: 0,
-					height: 0,
-					width: 0,
-					collisions,
-					leftCollisions
-				};
+			if(eventsKeyArray[i] in slotIndexMap) {
+				throw new Error("Duplicate key");
+			}
+			slotIndexMap[eventsKeyArray[i]] = [];
+			console.log("START:", Math.ceil(FIFTEEN_MINUTE_SEGMENTS_IN_A_DAY * start / 15), Math.ceil(FIFTEEN_MINUTE_SEGMENTS_IN_A_DAY * end / 15))
+			for(let j = Math.ceil(FIFTEEN_MINUTE_SEGMENTS_IN_A_DAY * start / 15); j < Math.ceil(FIFTEEN_MINUTE_SEGMENTS_IN_A_DAY * end / 15); j++) {
+				slots[j].push(i);
+				slotIndexMap[eventsKeyArray[i]].push(j)
 			}
 		}
 
-		for(let i = 0; i < eventKeysSorted.length; i++) {
-			const key = eventKeysSorted[i];
-			const event = events[key];
-			const eventPosition = positions[event.id];
-			const x = 1 - 1 / (eventPosition.collisions.length - eventPosition.leftCollisions.length + 1);
+		for(let i = 0; i < slots.length; i++) {
+			slots[i] = slots[i].sort((a,b) => {
+				const aDur = events[eventsKeyArray[a]].end.getTime() - events[eventsKeyArray[a]].start.getTime();
+				const bDur = events[eventsKeyArray[b]].end.getTime() - events[eventsKeyArray[b]].start.getTime();
+				return aDur - bDur;
+			});
+		}
+
+		for(let i = 0; i < eventsKeyArray.length; i++) {
+			const event = events[eventsKeyArray[i]];
+			
+			let widestSlot = 1;
+			let biggestSlot = 0;
+			
+			console.log("INDEX MAP:", slotIndexMap[eventsKeyArray[i]]);
+			for(let slot of slotIndexMap[eventsKeyArray[i]]) {
+				if(slots[slot].length > widestSlot)
+					widestSlot = slots[slot].length;
+				const index = slots[slot].indexOf(i);
+				if(index + 1 > biggestSlot) {
+					if(event.id === "ABC") {
+						console.log("BIGGEST:", biggestSlot, slotIndexMap[eventsKeyArray[i]], slots[slot]);
+					}
+					biggestSlot = index + 1;
+				}
+				if(biggestSlot === 0) {
+					throw new Error("How?");
+				}
+			}
+
 			const y = fifteenMinuteHeight * getHoursAndMinutes(event.start) * 4;
 			const height = fifteenMinuteHeight * (getHoursAndMinutes(event.end) - getHoursAndMinutes(event.start)) * 4;
-			const width = 1 / (eventPosition.collisions.length + 1);
-			console.log("WIDTH:", width);
-			positions[event.id] = {
-				x,
+			positions[eventsKeyArray[i]] = {
+				x: (1 / widestSlot) * (biggestSlot - 1),
+				width: 1 / (widestSlot),
 				y,
 				height,
-				width,
-				leftCollisions: positions[event.id].leftCollisions,
-				collisions: positions[event.id].collisions
-			};
-
-			console.log("POSITION:", positions[event.id], event.id, getHoursAndMinutes(event.start), getHoursAndMinutes(event.end), (getHoursAndMinutes(event.end) - getHoursAndMinutes(event.start)) * 4);
+				event
+			}
 		}
-		
-		console.log("POS:", JSON.stringify(positions, null, 4));
+		console.log("POS:", JSON.stringify(positions, null, 4), size.width);
+		//console.log("SLOTS:", JSON.stringify(slots, null, 4));
+		setTimeSlots(slots);
 		setEventPositions(positions);
 
 	}, [setEventPositions, events, fifteenMinuteHeight]);
@@ -259,11 +282,11 @@ export function DailyCalendarComponent(props: DailyCalendarProps) {
 						height: 0,
 						overflow: "visible"
 					}}>
-						<EventContainer parentProps={props} event={events[k]} style={{
+						<EventContainer className="thin-scroll-bar" parentProps={props} event={events[k]} position={eventPositions[events[k].id]} style={{
 							top: eventPositions[k].y,
-							left: Math.floor(width * eventPositions[k].x + TIMESTAMP_WIDTH) + "px",
+							left: (width) * eventPositions[k].x + TIMESTAMP_WIDTH + "px",
 							height: eventPositions[k].height,
-							width: Math.floor(width * eventPositions[k].width) + "px"
+							width: (width) * eventPositions[k].width + "px"
 						}}>
 							<EventTitle>
 								{events[k].title}
@@ -273,7 +296,7 @@ export function DailyCalendarComponent(props: DailyCalendarProps) {
 								<br/>
 								{events[k].start.toLocaleTimeString()} - {events[k].end.toLocaleTimeString()}
 								<br/>
-								{eventPositions[k].x} {size.width}
+								{eventPositions[k].x}|{size.width}
 							</EventDescription>
 						</EventContainer>
 					</div>;

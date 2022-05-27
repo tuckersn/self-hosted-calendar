@@ -178,6 +178,20 @@ export function HomeLoggedIn() {
 				<DailyCalendar height={2000} blockStyle={{
 					borderBottom: "1px solid #343434"
 				}} events={{
+					"ZZZ": {
+						id: "ZZZ",
+						start: setMinutes(setHours(new Date(), 0), 0),
+						end: setMinutes(setHours(new Date(), 10), 0),
+						title: "ZZZZZZZZZZZZZZZZZ",
+						description: "This would be a description of the event."
+					},
+					"XXX": {
+						id: "XXX",
+						start: setMinutes(setHours(new Date(), 1), 0),
+						end: setMinutes(setHours(new Date(), 4), 0),
+						title: "XXXXX",
+						description: "This would be a description of the event."
+					},
 					"ABC": {
 						id: "ABC",
 						start: new Date(Date.now()),
@@ -194,8 +208,22 @@ export function HomeLoggedIn() {
 					},
 					"AAA": {
 						id: "AAA",
-						start: setMinutes(setHours(new Date(), 0), 0),
-						end: setMinutes(setHours(new Date(), 3), 0),
+						start: setMinutes(setHours(new Date(), 4), 0),
+						end: setMinutes(setHours(new Date(), 5), 0),
+						title: "Hello World Title 3",
+						description: "This would be a description of the event."
+					},
+					"AAAB": {
+						id: "AAAB",
+						start: setMinutes(setHours(new Date(), 3), 0),
+						end: setMinutes(setHours(new Date(), 5), 0),
+						title: "Hello World Title 3",
+						description: "This would be a description of the event."
+					},
+					"AAAC": {
+						id: "AAAC",
+						start: setMinutes(setHours(new Date(), 3), 0),
+						end: setMinutes(setHours(new Date(), 5), 0),
 						title: "Hello World Title 3",
 						description: "This would be a description of the event."
 					},
@@ -219,7 +247,22 @@ export function HomeLoggedIn() {
 						end: setMinutes(setHours(new Date(), 5), 0),
 						title: "Hello World Title 6",
 						description: "This would be a description of the event."
+					},
+					"EEE": {
+						id: "EEE",
+						start: setMinutes(setHours(new Date(), 4), 1),
+						end: setMinutes(setHours(new Date(), 7), 0),
+						title: "Hello World Title 7",
+						description: "This would be a description of the event."
+					},
+					"FFF": {
+						id: "FFF",
+						start: setMinutes(setHours(new Date(), 5), 1),
+						end: setMinutes(setHours(new Date(), 7), 0),
+						title: "Hello World Title 8",
+						description: "This would be a description of the event."
 					}
+					
 				}}/>
 			</HalfPane>
 			<HalfPane style={{

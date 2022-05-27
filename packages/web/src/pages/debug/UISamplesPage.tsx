@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import _ from "lodash";
 import { CSS_PRESETS } from "../../common/style";
 import { Button } from "../../components/inputs/Button";
 import { DropDown } from "../../components/inputs/DropDown";
@@ -200,6 +201,15 @@ export function UISamplesPage() {
 				width: `${BOX_SIZE * 1.5}px`,
 			}}>
 			</Box>
+			<Box style={{
+				height: `${BOX_SIZE * 1.5}px`,
+			}}></Box>
+			<Box style={{
+				height: `${BOX_SIZE * 1.5}px`,
+			}}></Box>
+			<Box style={{
+				height: `${BOX_SIZE * 1.5}px`,
+			}}></Box>
 			<Box>
 				TEST
 			</Box>
@@ -218,6 +228,7 @@ export function UISamplesPage() {
 			<Box>
 				TEST
 			</Box>
+
 		</Container>
 	</React.Fragment>;
 }
