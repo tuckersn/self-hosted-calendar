@@ -13,37 +13,12 @@ import { Button } from "../inputs/Button";
 import { MdEdit } from "react-icons/md";
 import { ButtonToggle } from "../inputs/ButtonToggle";
 import { TextInput } from "../inputs/TextInput";
+import { EventPopup } from "./EventPopup";
+import { EventPosition, Event } from "../../shared/calendar/event";
 
 export const FIFTEEN_MINUTE_SEGMENTS_IN_A_DAY = 24 * (60/15);
 export const FIFTEEN_MINUTES_IN_A_DAY = 24 * (60/15);
 
-export interface Event {
-	id: string,
-	start: Date,
-	end: Date,
-	title: string,
-	description: string
-};
-
-export interface EventPosition {
-	event: Event;
-	/**
-	 * 0-100 value, a percentage of size.width;
-	 */
-	x: number,
-	/**
-	 * In pixels
-	 */
-	y: number,
-	/**
-	 * In pixels
-	 */
-	height: number,
-	/**
-	 * 0-100 value, a percentage of size.width;
-	 */
-	width: number
-};
 export interface DailyCalendarProps {
 	containerStyle?: React.CSSProperties;
 	blockStyle?: React.CSSProperties;
@@ -115,6 +90,11 @@ const EventContainer = styled.div<EventContainerProps>`
 	overflow-y: scroll;
 	z-index: 50;
 
+	:hover {
+		z-index: 125;
+		border: 1px solid white;
+	}
+
 `;
 
 const EventTitle = styled.div`
@@ -143,72 +123,7 @@ const Line = styled.div<{y: number}>`
 	z-index: 100;
 `;
 
-export interface EventPopupProps {
-	event: Event | null;
-	active: boolean;
-	setActive: (active: boolean) => void;
-}
 
-const EventPopupContainer = styled.div`
-	flex: 1;
-	height: 100%;
-	width: 100%;
-	position: relative;
-	top: 0;
-	left: 0;
-	bottom: 0;
-	right: 0;
-`;
-
-const EventPopupTitle = styled.div`
-	font-size: 24px;
-	font-weight: bold;
-	color: white;
-	overflow: hidden;
-`;
-
-const EventPopupDescription = styled.div`
-	font-size: 18px;
-	color: white;
-	overflow: hidden;
-`;
-
-export function EventPopup(props: EventPopupProps) {
-	const { active, setActive, event } = props;
-
-	const [editMode, setEditMode] = useState(false);
-
-	return (
-		<Popup active={active} setActive={setActive}>
-			<EventPopupContainer>
-				{ 
-					event === null ? null :	(editMode ? (<React.Fragment>
-						<EventPopupTitle>
-							<TextInput value={event.title}></TextInput>
-						</EventPopupTitle>
-						<EventPopupDescription>
-							<TextInput value={event.description}></TextInput>
-						</EventPopupDescription>
-					</React.Fragment>) : 
-					<React.Fragment>
-						<EventPopupTitle>{event.title}</EventPopupTitle>
-						<EventPopupDescription>{event.description}</EventPopupDescription>
-					</React.Fragment>)
-				}
-				<div style={{
-					position: "absolute",
-					top: 0,
-					right: 0
-				}}>
-					<ButtonToggle small active={editMode} setActive={setEditMode}>
-						<MdEdit/>
-					</ButtonToggle>
-				</div>
-			</EventPopupContainer>
-		</Popup>
-	);
-}
-	
 
 /**
  * Can be assumed that eventA starts after eventB.
@@ -326,8 +241,9 @@ export function DailyCalendarComponent(props: DailyCalendarProps) {
 			let biggestSlot = 0;
 			
 			for(let slot of slotIndexMap[eventsKeyArray[i]]) {
-				if(slots[slot].length > widestSlot)
+				if(slots[slot].length > widestSlot) {
 					widestSlot = slots[slot].length;
+				}
 				const index = slots[slot].indexOf(i);
 				if(index + 1 > biggestSlot) {
 					biggestSlot = index + 1;
