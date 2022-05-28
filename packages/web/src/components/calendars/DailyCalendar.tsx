@@ -8,6 +8,11 @@ import { addHours, getHours, setHours } from "date-fns";
 import { ValueOf } from "type-fest";
 import { SizeMeProps, withSize, WithSizeProps } from "react-sizeme";
 import _ from "lodash";
+import { Popup } from "../style/Popup";
+import { Button } from "../inputs/Button";
+import { MdEdit } from "react-icons/md";
+import { ButtonToggle } from "../inputs/ButtonToggle";
+import { TextInput } from "../inputs/TextInput";
 
 export const FIFTEEN_MINUTE_SEGMENTS_IN_A_DAY = 24 * (60/15);
 export const FIFTEEN_MINUTES_IN_A_DAY = 24 * (60/15);
@@ -59,15 +64,16 @@ export interface DailyCalendarProps {
 }
 
 const DailyCalendarOuterContainer = styled.div`
-	flex: 1;
+	position: relative;
+	top: 0;
+	bottom: 0;
+	height: 100%;
 	overflow-x: hidden;
-	overflow-y:	hidden;
+	overflow-y:	scroll;
 `;
 
 const DailyCalendarInnerContainer = styled.div`
-	position: absolute;
 	height: ${(props: DailyCalendarProps) => props.height}px;
-	overflow-x: hidden;
 `;
 
 type TimeBlockProps = { 
@@ -79,7 +85,7 @@ const TimeBlocksContainer = styled.div<{ index: number } & TimeBlockProps & Dail
 	height: ${(props: { timeStampHeight: number }) => props.timeStampHeight}px;
 	color: grey;
 	background-color: ${({ index }) => index % 2 === 0 ? COLORS.backgroundSlightlyDark : COLORS.background};
-	
+	z-index: -10;
 `;
 
 const TIMESTAMP_WIDTH = 75;
@@ -88,7 +94,6 @@ const TimeBlockTimestamp = styled.div`
 	height: 100%;
 	width: ${TIMESTAMP_WIDTH}px;
 	user-select: none;
-	z-index: 2;
 `;
 
 
@@ -105,11 +110,10 @@ const EventContainer = styled.div<EventContainerProps>`
 	right: 0;
 	background-color: #ad2d2d;
 	border: 1px solid #741111;
-	z-index: 2;
 	height: ${(props: EventContainerProps) => props.position.height}px;
 	overflow: hidden;
 	overflow-y: scroll;
-
+	z-index: 50;
 
 `;
 
@@ -135,9 +139,76 @@ const Line = styled.div<{y: number}>`
 	position: relative;
 	top: ${(props: {y: number}) => props.y}px;
 	left: ${TIMESTAMP_WIDTH}px;
-	z-index: 5;
+	display: block;
+	z-index: 100;
 `;
 
+export interface EventPopupProps {
+	event: Event | null;
+	active: boolean;
+	setActive: (active: boolean) => void;
+}
+
+const EventPopupContainer = styled.div`
+	flex: 1;
+	height: 100%;
+	width: 100%;
+	position: relative;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+`;
+
+const EventPopupTitle = styled.div`
+	font-size: 24px;
+	font-weight: bold;
+	color: white;
+	overflow: hidden;
+`;
+
+const EventPopupDescription = styled.div`
+	font-size: 18px;
+	color: white;
+	overflow: hidden;
+`;
+
+export function EventPopup(props: EventPopupProps) {
+	const { active, setActive, event } = props;
+
+	const [editMode, setEditMode] = useState(false);
+
+	return (
+		<Popup active={active} setActive={setActive}>
+			<EventPopupContainer>
+				{ 
+					event === null ? null :	(editMode ? (<React.Fragment>
+						<EventPopupTitle>
+							<TextInput value={event.title}></TextInput>
+						</EventPopupTitle>
+						<EventPopupDescription>
+							<TextInput value={event.description}></TextInput>
+						</EventPopupDescription>
+					</React.Fragment>) : 
+					<React.Fragment>
+						<EventPopupTitle>{event.title}</EventPopupTitle>
+						<EventPopupDescription>{event.description}</EventPopupDescription>
+					</React.Fragment>)
+				}
+				<div style={{
+					position: "absolute",
+					top: 0,
+					right: 0
+				}}>
+					<ButtonToggle small active={editMode} setActive={setEditMode}>
+						<MdEdit/>
+					</ButtonToggle>
+				</div>
+			</EventPopupContainer>
+		</Popup>
+	);
+}
+	
 
 /**
  * Can be assumed that eventA starts after eventB.
@@ -162,21 +233,20 @@ export function DailyCalendarComponent(props: DailyCalendarProps) {
 	const { height, events, size } = props;
 	const timeGrouping = props.timeStampGrouping || 4;
 
+	const outerContainerRef = useRef<HTMLDivElement>(null);
 	const eventInnerContainerRef = useRef<HTMLDivElement>(null);
 	const [timeBlocks, setTimeBlocks] = React.useState<TimeBlockProps[]>([]);
 	const [eventPositions, setEventPositions] = React.useState<{[eventId: string]: EventPosition}>({});
 	const [fifteenMinuteHeight, setFifteenMinuteHeight] = React.useState<number>(height / FIFTEEN_MINUTE_SEGMENTS_IN_A_DAY);	
-
 	const [eventsKeyArray, setEventsKeyArray] = useState(Object.keys(events).sort((a,b) => {
 		return events[a].start.getTime() - events[b].start.getTime();
 	}));
-
 	const [lineY, setLineY] = useState<number>((getHoursAndMinutesAndSeconds(new Date())/24) * height);
-
+	const [popupActive, setPopupActive] = useState<boolean>(false);
+	const [popupEvent, setPopupEvent] = useState<Event | null>(null);
 
 	useEffect(() => {
 		function updateTime() {
-			console.log("Update line:", (getHoursAndMinutesAndSeconds(new Date())/24) * height);
 			setLineY((getHoursAndMinutesAndSeconds(new Date())/24) * height);
 		}
 		
@@ -185,11 +255,17 @@ export function DailyCalendarComponent(props: DailyCalendarProps) {
 			updateTime();
 		}, 1000 * 10);
 
+		if(outerContainerRef.current) {
+			outerContainerRef.current.scrollTo({
+				top: lineY
+			});
+		}
 		
 
 		return () => {
 			clearInterval(timer);
 		};
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [height, setLineY]);
 
 	/**
@@ -226,11 +302,13 @@ export function DailyCalendarComponent(props: DailyCalendarProps) {
 			if(eventsKeyArray[i] in slotIndexMap) {
 				throw new Error("Duplicate key");
 			}
+			
 			slotIndexMap[eventsKeyArray[i]] = [];
-			for(let j = Math.ceil(FIFTEEN_MINUTE_SEGMENTS_IN_A_DAY * start / 15); j < Math.ceil(FIFTEEN_MINUTE_SEGMENTS_IN_A_DAY * end / 15); j++) {
+			for(let j = Math.ceil(FIFTEEN_MINUTE_SEGMENTS_IN_A_DAY * (start/24)); j < Math.ceil(FIFTEEN_MINUTE_SEGMENTS_IN_A_DAY * (end/24)); j++) {
 				slots[j].push(i);
 				slotIndexMap[eventsKeyArray[i]].push(j)
 			}
+			
 		}
 
 		for(let i = 0; i < slots.length; i++) {
@@ -269,7 +347,8 @@ export function DailyCalendarComponent(props: DailyCalendarProps) {
 				event
 			}
 		}
-		//console.log("POS:", JSON.stringify(positions, null, 4), size.width);
+		console.log("POS:", JSON.stringify(positions, null, 4), size.width);
+		console.log("SLOTS:", slots);
 		setEventPositions(positions);
 
 	}, [setEventPositions, events, fifteenMinuteHeight, size.width, eventsKeyArray]);
@@ -289,59 +368,70 @@ export function DailyCalendarComponent(props: DailyCalendarProps) {
 		setTimeBlocks(timeStamps);
 	}, [setTimeBlocks, height, timeGrouping, fifteenMinuteHeight]);
 	
-	return <DailyCalendarOuterContainer  {...props} style={props.containerStyle}>
-		<div style={{
-			height: 0,
-			overflow: "visible"
-		}}>
-		<Line y={lineY}/>
-		{
-			Object.keys(events).sort((a,b) => {
-				const aDur = events[a].end.getTime() - events[a].start.getTime();
-				const bDur = events[b].end.getTime() - events[b].start.getTime();
-				return bDur - aDur;
-			}).map((k) => {
-				if(k in eventPositions) {
-					//https://stackoverflow.com/a/40568748
-					const width = size.width! - TIMESTAMP_WIDTH;
-					return <div key={k} style={{
-						height: 0,
-						overflow: "visible"
-					}}>
-						<EventContainer className="thin-scroll-bar" parentProps={props} event={events[k]} position={eventPositions[events[k].id]} style={{
-							top: eventPositions[k].y,
-							left: (width) * eventPositions[k].x + TIMESTAMP_WIDTH + "px",
-							height: eventPositions[k].height,
-							width: (width) * eventPositions[k].width + "px"
-						}}>
-							<EventTitle>
-								{events[k].title}
-							</EventTitle>
-							<EventDescription>
-								{events[k].description}
-							</EventDescription>
-						</EventContainer>
-					</div>;
-				}
-				return null;
-			})
-		}
-		</div>
-		{
-			timeBlocks.map((timeStamp, i) => {
-				return <TimeBlocksContainer index={i} {...timeStamp} {...props} style={props.blockStyle}>
-					<TimeBlockTimestamp>
-						{
-							timeStamp.time.toLocaleTimeString("en-US", {
-								hour: "numeric",
-								minute: "numeric"
-							})
+	return <React.Fragment>
+		<DailyCalendarOuterContainer ref={outerContainerRef} {...props} style={props.containerStyle}>
+			<DailyCalendarInnerContainer {...props}>
+				<Line y={lineY}/>
+				<div style={{
+					height: 0,
+					overflow: "visible",
+					zIndex: -5
+				}}>
+				
+				{
+					Object.keys(events).sort((a,b) => {
+						const aDur = events[a].end.getTime() - events[a].start.getTime();
+						const bDur = events[b].end.getTime() - events[b].start.getTime();
+						return bDur - aDur;
+					}).map((k) => {
+						if(k in eventPositions) {
+							//https://stackoverflow.com/a/40568748
+							const width = size.width! - TIMESTAMP_WIDTH;
+							return <div key={k} style={{
+								height: 0,
+								overflow: "visible"
+							}}>
+								<EventContainer onClick={() => {
+									setPopupEvent(events[k]);
+									setPopupActive(true);
+								}} className="thin-scroll-bar" parentProps={props} event={events[k]} position={eventPositions[events[k].id]} style={{
+									top: eventPositions[k].y,
+									left: (width) * eventPositions[k].x + TIMESTAMP_WIDTH + "px",
+									height: eventPositions[k].height,
+									width: (width) * eventPositions[k].width + "px"
+								}}>
+									<EventTitle>
+										{events[k].title}
+									</EventTitle>
+									<EventDescription>
+										{events[k].description}
+									</EventDescription>
+								</EventContainer>
+							</div>;
 						}
-					</TimeBlockTimestamp>
-				</TimeBlocksContainer>
-			})
-		}
-	</DailyCalendarOuterContainer>;
+						return null;
+					})
+				}
+				</div>
+				{
+					timeBlocks.map((timeStamp, i) => {
+						return <TimeBlocksContainer index={i} {...timeStamp} {...props} style={props.blockStyle}>
+							<TimeBlockTimestamp>
+								{
+									timeStamp.time.toLocaleTimeString("en-US", {
+										hour: "numeric",
+										minute: "numeric"
+									})
+								}
+							</TimeBlockTimestamp>
+						</TimeBlocksContainer>
+					})
+				}
+				
+			</DailyCalendarInnerContainer>
+		</DailyCalendarOuterContainer>
+		<EventPopup event={popupEvent} active={popupActive} setActive={setPopupActive}/>
+	</React.Fragment>
 }
 
 export const DailyCalendar = withSize({

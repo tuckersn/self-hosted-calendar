@@ -7,24 +7,27 @@ export interface FloatingContainerProps {
 	y?: number,
 	offsetX?: number,
 	offsetY?: number,
-	children: React.ReactNode
+	children: React.ReactNode,
+	style?: CSSProperties,
 };
 
 const OuterFloatingContainer = (styled.div<FloatingContainerProps>`
-	${props => props.x ? "left: " + props.x + "px;" : ''}
-	${props => props.y ? "top: " + props.y + "px;" : ''}
-	position: absolute;
+	${props => typeof props.x === 'number' ? "left: " + props.x + "px;" : ''}
+	${props => typeof props.y === 'number' ? "top: " + props.y + "px;" : ''}
+	position: fixed;
+	height: 0;
 `);
 
 const InnerFloatingContainer = (styled.div<FloatingContainerProps>`
-	${props => props.offsetX ? "left: " + props.offsetX + "px;" : ''}
-	${props => props.offsetY ? "top: " + props.offsetY + "px;" : ''}
+	${props => typeof props.offsetX === 'number' ? "left: " + props.offsetX + "px;" : ''}
+	${props => typeof props.offsetY === 'number' ? "top: " + props.offsetY + "px;" : ''}
 	position: relative;
+	height: 0;
 `);
 
 
 export function FloatingContainer(props: FloatingContainerProps) {
-	return <OuterFloatingContainer {...props}>
+	return <OuterFloatingContainer {...props} style={props.style}>
 		<InnerFloatingContainer {...props}>
 			{props.children}
 		</InnerFloatingContainer>

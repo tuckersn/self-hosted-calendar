@@ -173,9 +173,15 @@ export function HomeLoggedIn() {
 		</HalfOfContainer>
 		<HalfOfContainer>
 			<HalfPane style={{
-				overflowY: "scroll"
+				overflowY: "hidden"
 			}}>
-				<DailyCalendar height={2000} blockStyle={{
+				<DailyCalendar timeStampGrouping={4} height={2000} containerStyle={{
+					position: "relative",
+					top: "0",
+					bottom: "0",
+					left: "0",
+					right: "0",
+				}} blockStyle={{
 					borderBottom: "1px solid #343434"
 				}} events={{
 					"ZZZ": {
@@ -223,31 +229,31 @@ export function HomeLoggedIn() {
 					"AAAC": {
 						id: "AAAC",
 						start: setMinutes(setHours(new Date(), 3), 0),
-						end: setMinutes(setHours(new Date(), 5), 0),
+						end: setMinutes(setHours(new Date(), 7), 0),
 						title: "Hello World Title 3",
 						description: "This would be a description of the event."
 					},
 					"BBB": {
 						id: "BBB",
 						start: setMinutes(setHours(new Date(), 4), 1),
-						end: setMinutes(setHours(new Date(), 5), 0),
+						end: setMinutes(setHours(new Date(), 8), 0),
 						title: "Hello World Title 4",
 						description: "This would be a description of the event."
 					},
-					"CCC": {
-						id: "CCC",
-						start: setMinutes(setHours(new Date(), 4), 1),
-						end: setMinutes(setHours(new Date(), 5), 0),
-						title: "Hello World Title 5",
-						description: "This would be a description of the event."
-					},
-					"DDD": {
-						id: "DDD",
-						start: setMinutes(setHours(new Date(), 4), 1),
-						end: setMinutes(setHours(new Date(), 5), 0),
-						title: "Hello World Title 6",
-						description: "This would be a description of the event."
-					},
+					// "CCC": {
+					// 	id: "CCC",
+					// 	start: setMinutes(setHours(new Date(), 4), 1),
+					// 	end: setMinutes(setHours(new Date(), 5), 0),
+					// 	title: "Hello World Title 5",
+					// 	description: "This would be a description of the event."
+					// },
+					// "DDD": {
+					// 	id: "DDD",
+					// 	start: setMinutes(setHours(new Date(), 4), 1),
+					// 	end: setMinutes(setHours(new Date(), 5), 0),
+					// 	title: "Hello World Title 6",
+					// 	description: "This would be a description of the event."
+					// },
 					"EEE": {
 						id: "EEE",
 						start: setMinutes(setHours(new Date(), 4), 1),
@@ -260,6 +266,20 @@ export function HomeLoggedIn() {
 						start: setMinutes(setHours(new Date(), 5), 1),
 						end: setMinutes(setHours(new Date(), 7), 0),
 						title: "Hello World Title 8",
+						description: "This would be a description of the event."
+					},
+					"FFG": {
+						id: "FFG",
+						start: setMinutes(setHours(new Date(), 5), 1),
+						end: setMinutes(setHours(new Date(), 7), 0),
+						title: "Hello World Title 9",
+						description: "This would be a description of the event."
+					},
+					"FFGG": {
+						id: "FFGG",
+						start: setMinutes(setHours(new Date(), 5), 1),
+						end: setMinutes(setHours(new Date(), 7), 0),
+						title: "Hello World Title 10",
 						description: "This would be a description of the event."
 					}
 					
