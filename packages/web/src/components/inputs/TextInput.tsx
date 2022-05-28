@@ -15,7 +15,7 @@ export const TEXT_INPUT_DEFAULT_STYLE: CSSProperties = {
 
 export interface TextInputProps {
 	// Must return the new value of the input field (ex: event.target.value)
-	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => Promisable<string>;
+	onChange?: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => Promisable<void>;
 	onValueChange?: (value: string) => Promisable<void>;
 	onEnter?: (event: React.KeyboardEvent<HTMLDivElement>) => void;
 	style?: CSSProperties;
@@ -44,9 +44,11 @@ export function TextInput({
 	}, [styleOverride]);
 
 	useEffect(() => {
-		if(onValueChange)
-			onValueChange(value);
-	}, [value, onValueChange]);
+		if(initialValue && initialValue !== value) {
+			setValue(initialValue);
+		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [initialValue, initialValue])
 
 	return <div style={{
 		paddingTop: "4px",
@@ -56,12 +58,12 @@ export function TextInput({
 			type={type || 'text'}
 			label={label}
 			value={value}
-			onChange={(event) => {
-				setValue(event.target.value);
-			}}
 			onKeyDown={(event) => {
 				if(event.key === 'Enter' && onEnter)
 					onEnter(event);
+			}}
+			onChange={(event) => {
+				onChange && onChange(event);
 			}}
 			InputLabelProps={{
 				shrink

@@ -9,6 +9,8 @@ export interface PopupProps {
 	children?: React.ReactNode;
 	active: boolean;
 	setActive?: (active: boolean) => void;
+
+	closeOnClickOutside?: boolean;
 }
 
 const PopupContainer = (styled.div<PopupProps>`
@@ -33,11 +35,13 @@ const PopupInnerContainer = (styled.div<PopupProps>`
 `);
 
 export function Popup(props: PopupProps) {
-	const { children } = props;
+	const { children, closeOnClickOutside } = props;
 	return <FloatingContainer x={0} y={0} style={{zIndex: 999999}}>
 		<PopupContainer {...props} onClick={() => {
-			if (props.setActive) {
-				props.setActive(false);
+			if(closeOnClickOutside) {
+				if (props.setActive) {
+					props.setActive(false);
+				}
 			}
 		}}>
 			<PopupInnerContainer {...props} style={props.innerStyle} onClick={(e) => {

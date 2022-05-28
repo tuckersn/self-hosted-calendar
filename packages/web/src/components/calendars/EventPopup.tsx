@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useState } from "react";
 import styled from "styled-components";
 import { ButtonToggle } from "../inputs/ButtonToggle";
@@ -55,6 +55,11 @@ export function EventPopup(props: EventPopupProps) {
 
 	const [title, setTitle] = useState(event ? event.title : "");
 
+	useEffect(() => {
+		if (event) {
+			setTitle(event.title);
+		}
+	}, [setTitle, event, event?.title]);
 
 
 	return (
@@ -66,8 +71,8 @@ export function EventPopup(props: EventPopupProps) {
 							Editing {title}
 						</EventPopupTitle>
 						
-						<TextInput label="Title" value={title} onValueChange={(v) => {
-							setTitle(v);
+						<TextInput label="Title" value={title} onChange={(e) => {
+							setTitle(e.target.value);
 						}}></TextInput>
 						{/* <TextInput label="Description" value={description} onValueChange={(v) => {
 							setDescription(v);
@@ -85,21 +90,32 @@ export function EventPopup(props: EventPopupProps) {
 						<div style={{
 							fontSize: "14px",
 							color: "grey",
-						}}>Event id: {event.id}</div>
+						}}>
+							Event id: {event.id}
+						</div>
+
+
 						<div style={{
 							display: "flex",
 							width: "100%"
 						}}>
-							<Button variant="outlined">
+							<Button variant="outlined" onClick={() => {
+								setActive(false);
+							}}>
 								Close
 							</Button>
-							<Button variant="outlined">
+
+							<Button variant="outlined" onClick={() => {
+								setActive(false);
+							}}>
 								Revert
 							</Button>
 							<Button style={{
 								alignSelf: "flex-end",
 								marginLeft: "auto"
-							}} variant="contained">
+							}} variant="contained" onClick={() => {
+								setActive(false);
+							}}>
 								Save
 							</Button>
 						</div>
@@ -112,6 +128,15 @@ export function EventPopup(props: EventPopupProps) {
 							fontSize: "14px",
 							color: "grey",
 						}}>Event id: {event.id}</div>
+						<Button variant="contained" style={{
+							position: "absolute",
+							right: "8px",
+							bottom: "8px"
+						}} onClick={() => {
+							setActive(false);
+						}}>
+							Close
+						</Button>
 					</React.Fragment>)
 				}
 				<div style={{
