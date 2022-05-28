@@ -1,23 +1,28 @@
+import { InputLabelProps, TextField, TextFieldProps } from "@mui/material";
 import React, { CSSProperties, useEffect, useState } from "react"
+import { ValueOf } from "type-fest";
 import { Promisable } from "type-fest/source/promisable";
 import { COLORS } from "../../common/style";
 
 export const TEXT_INPUT_DEFAULT_STYLE: CSSProperties = {
-	border: "2px solid white",
-	color: "white",
-	background: "rgba(255,255,255,0.1)",
-	paddingLeft: "8px",
-	paddingRight: "8px",
-	paddingBottom: "1px"
+	// border: "2px solid white",
+	// color: "white",
+	// background: "rgba(255,255,255,0.1)",
+	// paddingLeft: "8px",
+	// paddingRight: "8px",
+	// paddingBottom: "1px"
 }
 
 export interface TextInputProps {
 	// Must return the new value of the input field (ex: event.target.value)
 	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => Promisable<string>;
 	onValueChange?: (value: string) => Promisable<void>;
-	onEnter?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+	onEnter?: (event: React.KeyboardEvent<HTMLDivElement>) => void;
 	style?: CSSProperties;
 	value?: string;
+	label?: string;
+	type?: TextFieldProps['type'];
+	shrink?: InputLabelProps['shrink'];
 }
 
 export function TextInput({
@@ -25,7 +30,10 @@ export function TextInput({
 	onChange,
 	onEnter,
 	style: styleOverride,
-	value: initialValue
+	value: initialValue,
+	label,
+	type,
+	shrink
 }: TextInputProps) {
 
 	const [value, setValue] = useState(initialValue || "");
@@ -40,24 +48,23 @@ export function TextInput({
 			onValueChange(value);
 	}, [value, onValueChange]);
 
-	return <div style={style}>
-		<input style={{
-			border: "none",
-			background: "transparent",
-			color: COLORS.primary,
-			width: "100%",
-			height: "100%",
-			padding: "0px",
-			margin: "0px"
-		}} value={value} onKeyDown={(event) => {
-			if(onEnter)
-				onEnter(event);
-		}} onChange={async (event) => {
-			if(onChange !== undefined) {
-				setValue(await onChange(event));
-			} else {
+	return <div style={{
+		padding: "4px"
+	}}>
+		<TextField
+			type={type || 'text'}
+			label={label}
+			value={value}
+			onChange={(event) => {
 				setValue(event.target.value);
-			}
-		}} type="text" />
-	</div>;
+			}}
+			onKeyDown={(event) => {
+				if(event.key === 'Enter' && onEnter)
+					onEnter(event);
+			}}
+			InputLabelProps={{
+				shrink
+			}}
+		/>
+	</div>
 }

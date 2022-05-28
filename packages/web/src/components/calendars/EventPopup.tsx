@@ -65,7 +65,7 @@ export function EventPopup(props: EventPopupProps) {
 					right: 0
 				}}>
 					<ButtonToggle small active={editMode} setActive={setEditMode}>
-						<MdEdit/>
+						<MdEdit size={18}/>
 					</ButtonToggle>
 				</div>
 			</EventPopupContainer>

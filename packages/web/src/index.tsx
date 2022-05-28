@@ -23,6 +23,33 @@ import { nanoid } from '@reduxjs/toolkit';
 import { CalendarPage } from './pages/calendar/CalendarPage';
 import { UISamplesPage } from './pages/debug/UISamplesPage';
 
+import { createTheme } from "@mui/material/styles";
+import { ThemeOptions } from "@mui/material/styles/createTheme";
+import { ThemeProvider } from '@mui/material';
+
+export const themeOptions = createTheme({
+	palette: {
+		mode: "dark",
+		primary: {
+			main: '#aa6c33',
+			dark: '#8da8c7',
+		},
+		secondary: {
+			main: '#184eb1',
+		},
+		background: {
+			paper: '#201e1e',
+			default: '#121010',
+		},
+		error: {
+			main: '#ce2e1f',
+		},
+	},
+	typography: {
+		fontFamily: 'Open Sans',
+	},
+});
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
@@ -30,49 +57,51 @@ root.render(
 	(() => {
 		const appKey = nanoid();
 		return <Provider store={store}>
-			<BrowserRouter>
-				<Routes>
-					<Route path="/" element={<App key={appKey}/>}>
-						
-						{/* Dashboard */}
-						<Route index element={<HomePage/>}/>
-						
-						{/* Password & OAuth login */}
-						<Route path="login">
-							<Route index element={<LoginPage/>}/>
-							<Route path="register" element={<LoginRegisterPage/>}/>
+			<ThemeProvider theme={themeOptions}>
+				<BrowserRouter>
+					<Routes>
+						<Route path="/" element={<App key={appKey}/>}>
+							
+							{/* Dashboard */}
+							<Route index element={<HomePage/>}/>
+							
+							{/* Password & OAuth login */}
+							<Route path="login">
+								<Route index element={<LoginPage/>}/>
+								<Route path="register" element={<LoginRegisterPage/>}/>
+							</Route>
+							
+							{/* User's account info */}
+							<Route path="me" element={<AccountInfoPage/>}/>
+
+							<Route path="calendar" element={<CalendarPage/>}/>
+
+							<Route path="board" element={<BoardPage/>}>
+								{/* List of user's boards */}
+								<Route index element={<div/>}/>
+								{/* Specific boards */}
+								<Route path=":boardId" element={<div/>}/>
+								{/* Board creation form */}
+								<Route path="new" element={<div/>}/>
+							</Route>
+
+							<Route path="admin" element={<AdminPage/>}>
+								<Route index element={<AdminDashboardPage/>}/>
+								<Route path="users" element={<UserAdminPage/>}/>
+								<Route path="database" element={<DatabaseAdminPage/>}/>
+							</Route>
+
+							<Route path="debug">
+								<Route path="samples" element={<UISamplesPage/>}/>
+							</Route>
+
+							<Route path="error" element={<ErrorPage/>}/>
+							<Route path="*" element={<ErrorPage errorCode={404} errorMessage={"Page not found."}/>}/>
+				
 						</Route>
-						
-						{/* User's account info */}
-						<Route path="me" element={<AccountInfoPage/>}/>
-
-						<Route path="calendar" element={<CalendarPage/>}/>
-
-						<Route path="board" element={<BoardPage/>}>
-							{/* List of user's boards */}
-							<Route index element={<div/>}/>
-							{/* Specific boards */}
-							<Route path=":boardId" element={<div/>}/>
-							{/* Board creation form */}
-							<Route path="new" element={<div/>}/>
-						</Route>
-
-						<Route path="admin" element={<AdminPage/>}>
-							<Route index element={<AdminDashboardPage/>}/>
-							<Route path="users" element={<UserAdminPage/>}/>
-							<Route path="database" element={<DatabaseAdminPage/>}/>
-						</Route>
-
-						<Route path="debug">
-							<Route path="samples" element={<UISamplesPage/>}/>
-						</Route>
-
-						<Route path="error" element={<ErrorPage/>}/>
-						<Route path="*" element={<ErrorPage errorCode={404} errorMessage={"Page not found."}/>}/>
-			
-					</Route>
-				</Routes>
-			</BrowserRouter>
+					</Routes>
+				</BrowserRouter>
+			</ThemeProvider>
 		</Provider>
 	})()
 );

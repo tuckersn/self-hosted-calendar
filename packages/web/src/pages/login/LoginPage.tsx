@@ -23,35 +23,60 @@ const Container = (styled.div`
 	align-items: center;
 	text-align: center;
 	justify-content: center;
-
+	background-color: ${COLORS.backgroundSlightlyDark};
 
 `);
 
 const InnerContainer = (styled.div`
-	width: 600px;
-	height: 300px;
+	width: 800px;
+	height: 450px;
 	border: 1px solid white;
+	border-radius: 20px;
+	padding: 32px;
 	display: flex;
+	background-color: ${COLORS.background};
 `);
 
 
 const InputField = (styled.div`
 	display: flex;
-`);
-const InputFieldLeft = (styled.div`
-	flex: 50%;
-	flex-align: center;
-	text-align: center;
 	justify-content: center;
 	align-items: center;
-	flex-direction: column;
-	width: "auto";
-`);
-const InputFieldRight = (styled.div`
-	flex: 50%;
-	flex-align: left;
 `);
 
+
+async function submitLogin(username: string, password: string, updateUser: (user: JWT) => void, navigate: (path: string) => void) {
+	const payload = {
+		username,
+		password
+	}
+
+	const result = await fetch(`${process.env.REACT_APP_SERVER_URL}/login`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify(payload)
+	});
+
+	const json = await result.json();
+
+	//TODO: error popup
+	if(result.status !== 200) {
+		console.error("Error logging in:", result, "BODY:", json);
+		return;
+	}
+
+	// Assumes correct response from server.
+	const jwt = jwtDecode(json.token);
+	localStorage.setItem("jwt", json.token);
+	localStorage.setItem("username", jwt.username);
+	console.log("JWT:", jwt);
+	updateUser(jwt);
+
+	//TODO: popup telling them to login
+	navigate("/");
+}
 
 export function LoginPage() {
 
@@ -73,57 +98,24 @@ export function LoginPage() {
 			}}>
 				<h2>Sign In</h2>
 				<InputField style={{paddingRight: "32px"}}>
-					<InputFieldLeft>
-						Username
-					</InputFieldLeft>
-					<InputFieldRight>
-						<TextInput value={username} onValueChange={setUsername}/>
-					</InputFieldRight>
+					
+					<TextInput label="Username" value={username} onValueChange={setUsername}/>
+		
 				</InputField>
 				<InputField style={{paddingRight: "32px"}}>
-					<InputFieldLeft>
-						Password
-					</InputFieldLeft>
-					<InputFieldRight>
-						<TextInput value={password} onValueChange={setPassword}/>
-					</InputFieldRight>
+
+					<TextInput label="Password" type="password" value={password} onValueChange={setPassword} onEnter={() => {
+						submitLogin(username, password, updateUser, navigate);
+					}}/>
+			
 				</InputField>
 				<br/>
 				<InputField>
 					<Button style={{
 						minWidth: "100px",
 						margin: "auto"
-					}} onClick={async () => {
-						const payload = {
-							username,
-							password
-						}
-		
-						const result = await fetch(`${process.env.REACT_APP_SERVER_URL}/login`, {
-							method: "POST",
-							headers: {
-								"Content-Type": "application/json"
-							},
-							body: JSON.stringify(payload)
-						});
-
-						const json = await result.json();
-		
-						//TODO: error popup
-						if(result.status !== 200) {
-							console.error("Error logging in:", result, "BODY:", json);
-							return;
-						}
-
-						// Assumes correct response from server.
-						const jwt = jwtDecode(json.token);
-						localStorage.setItem("jwt", json.token);
-						localStorage.setItem("username", jwt.username);
-						console.log("JWT:", jwt);
-						updateUser(jwt);
-
-						//TODO: popup telling them to login
-						navigate("/");
+					}} onClick={() => {
+						submitLogin(username, password, updateUser, navigate);
 					}}>
 						Submit
 					</Button>
