@@ -49,7 +49,8 @@ export function TextInput({
 	}, [value, onValueChange]);
 
 	return <div style={{
-		padding: "4px"
+		paddingTop: "4px",
+		paddingBottom: "2px"
 	}}>
 		<TextField
 			type={type || 'text'}

@@ -64,7 +64,16 @@ async function submitLogin(username: string, password: string, updateUser: (user
 	//TODO: error popup
 	if(result.status !== 200) {
 		console.error("Error logging in:", result, "BODY:", json);
-		return;
+		if(result.status === 401) {
+			return {
+				success: false,
+				error: "Invalid username or password"
+			}
+		}
+		return {
+			success: false,
+			message: "Unknown error has occurred."
+		};
 	}
 
 	// Assumes correct response from server.
@@ -76,6 +85,10 @@ async function submitLogin(username: string, password: string, updateUser: (user
 
 	//TODO: popup telling them to login
 	navigate("/");
+	return {
+		success: true,
+		message: "Successfully logged in"
+	}
 }
 
 export function LoginPage() {
@@ -84,6 +97,7 @@ export function LoginPage() {
 
 	const [username, setUsername] = useState(localStorage.getItem("username") || "");
 	const [password, setPassword] = useState("");
+	const [error, setError] = useState("");
 
 	const [user, updateUser] = useUser();
 
@@ -104,18 +118,27 @@ export function LoginPage() {
 				</InputField>
 				<InputField style={{paddingRight: "32px"}}>
 
-					<TextInput label="Password" type="password" value={password} onValueChange={setPassword} onEnter={() => {
-						submitLogin(username, password, updateUser, navigate);
+					<TextInput label="Password" type="password" value={password} onValueChange={setPassword} onEnter={async () => {
+						const res = await submitLogin(username, password, updateUser, navigate);
+						if(!res.success) {
+							setError(res.error || "Unknown error has occurred.");
+						}
 					}}/>
 			
 				</InputField>
 				<br/>
+				{
+					error && <div style={{color: "red"}}>{error}</div>
+				}
 				<InputField>
 					<Button style={{
 						minWidth: "100px",
 						margin: "auto"
-					}} onClick={() => {
-						submitLogin(username, password, updateUser, navigate);
+					}} onClick={async () => {
+						const res = await submitLogin(username, password, updateUser, navigate);
+						if(!res.success) {
+							setError(res.error || "Unknown error has occurred.");
+						}
 					}}>
 						Submit
 					</Button>
