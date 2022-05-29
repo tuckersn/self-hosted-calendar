@@ -1,12 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { createEditor, Node, Transforms, BaseEditor, Descendant, Element, Editor, RangeInterface, Range, Path } from "slate";
+import { MdColorLens, MdFormatBold, MdFormatItalic, MdFormatUnderlined } from "react-icons/md";
+import { createEditor, Node, Transforms, BaseEditor, Descendant, Element, Editor, RangeInterface, Range, Path, Text } from "slate";
 import { HistoryEditor, withHistory } from "slate-history";
 import { Editable, ReactEditor, Slate, withReact, RenderElementProps, useSlateStatic, RenderLeafProps} from "slate-react";
+import { Transform } from "stream";
 
 import styled, { css } from "styled-components";
 import { ThemedStyledFunction } from "styled-components";
 
 import { COLORS, STYLE_VALUES } from "../../common/style";
+import { Button } from "./Button";
 import { ButtonToggle } from "./ButtonToggle";
 
 
@@ -18,10 +21,11 @@ export interface TextEditorProps {
 }
 
 const TextEditorContainer = styled.div<TextEditorProps>`
-
-	
-	background-color: ${props => props.theme.background};
+	background: ${COLORS.backgroundDark};
 	color: white;
+	
+	border: 2px solid darkgray;
+	border-radius: ${STYLE_VALUES.borderRadius}px;
 
 	display: flex;
 	flex-direction: column;
@@ -31,15 +35,22 @@ const TextEditorContainer = styled.div<TextEditorProps>`
 const TextEditorToolbar = styled.div`
 	flex: 0;
 	display: flex;
+	border-bottom: 1px solid darkgray;
+	padding: 4px;
 
+	div {
+		margin-left: 8px;
+	}
+
+	div:first-child  {
+		margin-left: 0px;
+	}
 `;
 
 const TextEditorContentOuterContainer = styled.div`
 	overflow-y: scroll;
 	flex: 1;
-	border: 2px solid darkgray;
-	background: ${COLORS.backgroundDark};
-	border-top: none;
+	background: ${COLORS.backgroundSlightlyDark};
 	border-radius: 0 0 ${STYLE_VALUES.borderRadius}px ${STYLE_VALUES.borderRadius}px;
 `;
 
@@ -100,7 +111,12 @@ export type CodeElement = {
 
 export type CustomElement = ParagraphElement | HeadingOneElement | HeadingTwoElement | HeadingThreeElement | HeadingFourElement | HeadingFiveElement | CodeElement;
 
-export type FormattedText = { text: string; bold?: true }
+export type FormattedText = {
+	text: string;
+	bold?: true;
+	italic?: true;
+	underline?: true;
+}
 
 export type CustomText = FormattedText
  
@@ -125,11 +141,21 @@ const DefaultComponent = styled.p`
 	${slateComponentStyle}
 `;
 const CodeComponent = styled.code``;
-const HeadingOneComponent = styled.h1``;
-const HeadingTwoComponent = styled.h2``;
-const HeadingThreeComponent = styled.h3``;
-const HeadingFourComponent = styled.h4``;
-const HeadingFiveComponent = styled.h5``;
+const HeadingOneComponent = styled.h1`
+	font-weight: normal;
+`;
+const HeadingTwoComponent = styled.h2`
+	font-weight: normal;
+`;
+const HeadingThreeComponent = styled.h3`
+	font-weight: normal;
+`;
+const HeadingFourComponent = styled.h4`
+	font-weight: normal;
+`;
+const HeadingFiveComponent = styled.h5`
+	font-weight: normal;
+`;
 
 const renderElement = (props: RenderElementProps) => {
 	const element = props.element as any;
@@ -160,13 +186,13 @@ const Leaf = ({ attributes, children, leaf } : RenderLeafProps) => {
 	// 	children = <code>{children}</code>
 	// }
 	
-	// if (leaf.italic) {
-	// 	children = <em>{children}</em>
-	// }
+	if (leaf.italic) {
+		children = <em>{children}</em>
+	}
 	
-	// if (leaf.underline) {
-	// 	children = <u>{children}</u>
-	// }
+	if (leaf.underline) {
+		children = <u>{children}</u>
+	}
 	
 	return <span {...attributes}>{children}</span>
 }
@@ -180,14 +206,143 @@ const Leaf = ({ attributes, children, leaf } : RenderLeafProps) => {
 	},
   ]
 
+function toggleBold(editor: Editor) {
+	const trueMatches = Array.from(Editor.nodes(editor, {
+		match: n => {
+			if(Text.isText(n)) {
+				return n.bold === true;
+			}
+			return false;
+		}
+	}))
+	const falseMatches = Array.from(Editor.nodes(editor, {
+		match: n => {
+			if(Text.isText(n)) {
+				return n.bold !== true;
+			}
+			return false;
+		}
+	}))
 
+	for(const [node, path] of trueMatches) {
+		Transforms.setNodes(
+			editor,
+			{ bold: undefined },
+			// Apply it to text nodes, and split the text node up if the
+			// selection is overlapping only part of it.
+			{
+				at: path
+			}
+		);
+	}
+
+	for(const [node, path] of falseMatches) {
+		Transforms.setNodes(
+			editor,
+			{ bold: true },
+			// Apply it to text nodes, and split the text node up if the
+			// selection is overlapping only part of it.
+			{
+				at: path
+			}
+		);
+	}
+}
+
+function toggleItalic(editor: Editor) {
+	const trueMatches = Array.from(Editor.nodes(editor, {
+		match: n => {
+			if(Text.isText(n)) {
+				return n.italic === true;
+			}
+			return false;
+		}
+	}))
+	const falseMatches = Array.from(Editor.nodes(editor, {
+		match: n => {
+			if(Text.isText(n)) {
+				return n.italic !== true;
+			}
+			return false;
+		}
+	}))
+
+	for(const [node, path] of trueMatches) {
+		Transforms.setNodes(
+			editor,
+			{ italic: undefined },
+			// Apply it to text nodes, and split the text node up if the
+			// selection is overlapping only part of it.
+			{
+				at: path
+			}
+		);
+	}
+
+	for(const [node, path] of falseMatches) {
+		Transforms.setNodes(
+			editor,
+			{ italic: true },
+			// Apply it to text nodes, and split the text node up if the
+			// selection is overlapping only part of it.
+			{
+				at: path
+			}
+		);
+	}
+}
+
+function toggleUnderline(editor: Editor) {
+	const trueMatches = Array.from(Editor.nodes(editor, {
+		match: n => {
+			if(Text.isText(n)) {
+				return n.underline === true;
+			}
+			return false;
+		}
+	}))
+	const falseMatches = Array.from(Editor.nodes(editor, {
+		match: n => {
+			if(Text.isText(n)) {
+				return n.underline !== true;
+			}
+			return false;
+		}
+	}))
+
+	for(const [node, path] of trueMatches) {
+		Transforms.setNodes(
+			editor,
+			{ underline: undefined },
+			// Apply it to text nodes, and split the text node up if the
+			// selection is overlapping only part of it.
+			{
+				at: path
+			}
+		);
+	}
+
+	for(const [node, path] of falseMatches) {
+		Transforms.setNodes(
+			editor,
+			{ underline: true },
+			// Apply it to text nodes, and split the text node up if the
+			// selection is overlapping only part of it.
+			{
+				at: path
+			}
+		);
+	}
+}
 
 export function TextEditor(props: TextEditorProps) {
 	const editor: CustomEditor = useMemo(() => withHistory(withReact(createEditor() as ReactEditor)), [])
-	const renderLeaf = useCallback((props: RenderLeafProps) => <Leaf {...props} />, []);
 	const [value, setValue] = useState<any[]>([
 		{ type: "paragraph", children: [{ text: "hello world" }] }
 	]);
+	
+	const renderLeaf = useCallback((props: RenderLeafProps) => <Leaf {...props} />, []);
+
 
 	useEffect(() => {
 		console.log("UPDATE", slateComponentStyle, slateComponentStyle + '');
@@ -202,59 +357,47 @@ export function TextEditor(props: TextEditorProps) {
 			}}>
 					
 				<TextEditorToolbar>
-				<ButtonToggle small active={true} onClick={() => {
-						const [match] = Editor.nodes(editor, {
-							match: n => {
-								if(Element.isElement(n)) {
-									return n.type === 'code';
-								}
-								return false;
-							}
-						})
+					<Button small onClick={() => {
+						toggleBold(editor);
+					}}>
+						<MdFormatBold size={20}/>
+					</Button>
 
-						
-					}}>Bold</ButtonToggle>
+					<Button small onClick={() => {
+						toggleItalic(editor);
+					}}>
+						<MdFormatItalic size={20}/>
+					</Button>
 
-					<ButtonToggle small active={true} onClick={() => {
-						const { selection } = editor;
-						if(!selection) return;
+					<Button small onClick={() => {
+						toggleUnderline(editor);
+					}}>
+						<MdFormatUnderlined size={20}/>
+					</Button>
 
-						// const { selection } = editor;
-						// if(!selection) return;
+					<Button small onClick={() => {
 						// const [match] = Editor.nodes(editor, {
-					
-						// 	at: Editor.unhangRange(editor, editor.selection as any),
 						// 	match: n => {
-						// 		if(Element.isElement(n)) {
-									
+						// 		if(Text.isText(n)) {
+						// 			return n.bold === true;
 						// 		}
-						// 		return !Editor.isEditor(n);
+						// 		return false;
 						// 	}
 						// })
+						// console.log("MATCH:", match);
+						// Transforms.setNodes(
+						// 	editor,
+						// 	{ bold: match ? undefined : true },
+						// 	// Apply it to text nodes, and split the text node up if the
+						// 	// selection is overlapping only part of it.
+						// 	{ match: n => Text.isText(n), split: true }
+						// );
 						
-						const [match] = Editor.nodes(editor, {
-					
-							at: Editor.unhangRange(editor, editor.selection as any),
-							match: n => {
-								if(Element.isElement(n)) {
-									
-								}
-								return !Editor.isEditor(n);
-							}
-						})
+					}}>
+						<MdColorLens size={20}/>
+					</Button>
 
-						console.log("SELECTED:", selection, Path.isPath(selection.anchor.path));
-
-						Transforms.setNodes(
-							editor,
-							{ type: 'headingOne' },
-							{ match: n => Editor.isBlock(editor, n) }
-						)
-					
-						
-					}}>Red</ButtonToggle>
-
-					<ButtonToggle small active={true} onClick={() => {
+					<Button small onClick={() => {
 						const [match] = Editor.nodes(editor, {
 							match: n => {
 								if(Element.isElement(n)) {
@@ -268,9 +411,14 @@ export function TextEditor(props: TextEditorProps) {
 							{ type: match ? 'paragraph' : 'headingOne' },
 							{ match: n => Editor.isBlock(editor, n) }
 						)
-					}}>H1</ButtonToggle>
+					}} style={{
+						width: "30px",
+						fontSize: "14px"
+					}}>
+						H1
+					</Button>
 
-					<ButtonToggle small active={true} onClick={() => {
+					<Button small onClick={() => {
 						const [match] = Editor.nodes(editor, {
 							match: n => {
 								if(Element.isElement(n)) {
@@ -284,9 +432,14 @@ export function TextEditor(props: TextEditorProps) {
 							{ type: match ? 'paragraph' : 'headingTwo' },
 							{ match: n => Editor.isBlock(editor, n) }
 						)
-					}}>H2</ButtonToggle>
+					}} style={{
+						width: "30px",
+						fontSize: "14px"
+					}}>
+						H2
+					</Button>
 					
-					<ButtonToggle small active={true} onClick={() => {
+					<Button small onClick={() => {
 						const [match] = Editor.nodes(editor, {
 							match: n => {
 								if(Element.isElement(n)) {
@@ -300,9 +453,14 @@ export function TextEditor(props: TextEditorProps) {
 							{ type: match ? 'paragraph' : 'headingThree' },
 							{ match: n => Editor.isBlock(editor, n) }
 						)
-					}}>H3</ButtonToggle>
+					}} style={{
+						width: "30px",
+						fontSize: "14px"
+					}}>
+						H3
+					</Button>
 					
-					{/* <ButtonToggle small active={true} onClick={() => {
+					{/* <Button small onClick={() => {
 						const [match] = Editor.nodes(editor, {
 							match: n => {
 								if(Element.isElement(n)) {
@@ -316,9 +474,9 @@ export function TextEditor(props: TextEditorProps) {
 							{ type: match ? 'paragraph' : 'headingFour' } as any,
 							{ match: n => Editor.isBlock(editor, n) }
 						)
-					}}>H4</ButtonToggle>
+					}}>H4</Button>
 					
-					<ButtonToggle small active={true} onClick={() => {
+					<Button small onClick={() => {
 						const [match] = Editor.nodes(editor, {
 							match: n => {
 								if(Element.isElement(n)) {
@@ -332,7 +490,7 @@ export function TextEditor(props: TextEditorProps) {
 							{ type: match ? 'paragraph' : 'headingFive' } as any,
 							{ match: n => Editor.isBlock(editor, n) }
 						)
-					}}>H5</ButtonToggle> */}
+					}}>H5</Button> */}
 
 					{/* <MarkButton format="bold" icon="format_bold" />
 					<MarkButton format="italic" icon="format_italic" />
@@ -385,7 +543,11 @@ export function TextEditor(props: TextEditorProps) {
 									} else if (event.key === '`' && event.ctrlKey) {
 										setElement('code');
 									} else if(event.key === 'b' && event.ctrlKey) {
-										console.log("EVENT:", event);
+										toggleBold(editor);
+									} else if(event.key === 'i' && event.ctrlKey) {
+										toggleItalic(editor);
+									} else if(event.key === 'u' && event.ctrlKey) {
+										toggleUnderline(editor);
 									}
 							}}/>
 						</TextEditorContentContainer>

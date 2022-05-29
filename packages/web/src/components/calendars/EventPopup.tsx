@@ -84,6 +84,7 @@ export function EventPopup(props: EventPopupProps) {
 							border: "1px solid white",
 							padding: "8px",
 							marginTop: "8px",
+							height: "100px"
 						}}>
 							Time picker would go here: {event.start.toLocaleDateString()} - {event.end.toLocaleDateString()}
 						</div>
