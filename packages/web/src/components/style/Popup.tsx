@@ -30,8 +30,11 @@ const PopupInnerContainer = (styled.div<PopupProps>`
 	border-radius: ${STYLE_VALUES.borderRadius}px;
 	background-color: ${COLORS.background};
 	padding: 12px;
-	height: 600px;
-	width: 800px;
+	
+	height: 90%;
+	width: 90%;
+	max-height: 750px;
+	max-width: 750px;
 `);
 
 export function Popup(props: PopupProps) {

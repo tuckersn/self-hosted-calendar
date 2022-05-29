@@ -1,16 +1,18 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { PhotoshopPicker, SketchPicker } from "react-color";
 import { MdColorLens, MdFormatBold, MdFormatItalic, MdFormatUnderlined } from "react-icons/md";
 import { createEditor, Node, Transforms, BaseEditor, Descendant, Element, Editor, RangeInterface, Range, Path, Text } from "slate";
 import { HistoryEditor, withHistory } from "slate-history";
 import { Editable, ReactEditor, Slate, withReact, RenderElementProps, useSlateStatic, RenderLeafProps} from "slate-react";
 import { Transform } from "stream";
-
 import styled, { css } from "styled-components";
 import { ThemedStyledFunction } from "styled-components";
 
 import { COLORS, STYLE_VALUES } from "../../common/style";
+import { FloatingContainer } from "../style";
 import { Button } from "./Button";
 import { ButtonToggle } from "./ButtonToggle";
+
 
 
 export interface TextEditorProps {
@@ -116,6 +118,7 @@ export type FormattedText = {
 	bold?: true;
 	italic?: true;
 	underline?: true;
+	color?: string;
 }
 
 export type CustomText = FormattedText
@@ -178,13 +181,12 @@ const renderElement = (props: RenderElementProps) => {
 }
 
 const Leaf = ({ attributes, children, leaf } : RenderLeafProps) => {
+	
+
+	
 	if (leaf.bold) {
 		children = <strong>{children}</strong>
 	}
-	
-	// if (leaf.code) {
-	// 	children = <code>{children}</code>
-	// }
 	
 	if (leaf.italic) {
 		children = <em>{children}</em>
@@ -194,7 +196,9 @@ const Leaf = ({ attributes, children, leaf } : RenderLeafProps) => {
 		children = <u>{children}</u>
 	}
 	
-	return <span {...attributes}>{children}</span>
+	return <span style={{
+		color: leaf.color
+	}} {...attributes}>{children}</span>
 }
 
 
@@ -335,6 +339,30 @@ function toggleUnderline(editor: Editor) {
 	}
 }
 
+
+function applyColor(editor: Editor, color: string) {
+	const falseMatches = Array.from(Editor.nodes(editor, {
+		match: n => {
+			if(Text.isText(n)) {
+				return n.color !== color;
+			}
+			return false;
+		}
+	}));
+
+	for(const [node, path] of falseMatches) {
+		Transforms.setNodes(
+			editor,
+			{ color },
+			// Apply it to text nodes, and split the text node up if the
+			// selection is overlapping only part of it.
+			{
+				at: path
+			}
+		);
+	}
+}
+
 function serialize(node: Node) {
 	if(Text.isText(node)) {
 		return {
@@ -366,7 +394,8 @@ export function TextEditor(props: TextEditorProps) {
 	const [value, setValue] = useState<any[]>([
 		{ type: "paragraph", children: [{ text: "hello world" }] }
 	]);
-	
+	const [selectedColor, setSelectedColor] = useState<string>("#FFF");
+	const [colorPickerOpen, setColorPickerOpen] = useState<boolean>(false);
 	const renderLeaf = useCallback((props: RenderLeafProps) => <Leaf {...props} />, []);
 
 
@@ -403,25 +432,9 @@ export function TextEditor(props: TextEditorProps) {
 					</Button>
 
 					<Button small onClick={() => {
-						// const [match] = Editor.nodes(editor, {
-						// 	match: n => {
-						// 		if(Text.isText(n)) {
-						// 			return n.bold === true;
-						// 		}
-						// 		return false;
-						// 	}
-						// })
-						// console.log("MATCH:", match);
-						// Transforms.setNodes(
-						// 	editor,
-						// 	{ bold: match ? undefined : true },
-						// 	// Apply it to text nodes, and split the text node up if the
-						// 	// selection is overlapping only part of it.
-						// 	{ match: n => Text.isText(n), split: true }
-						// );
-						
+						setColorPickerOpen(!colorPickerOpen);
 					}}>
-						<MdColorLens size={20}/>
+						<MdColorLens color={selectedColor} size={20}/>						
 					</Button>
 
 					<Button small onClick={() => {
@@ -582,5 +595,25 @@ export function TextEditor(props: TextEditorProps) {
 					</div>
 				</TextEditorContentOuterContainer>
 		</Slate>
+		{
+			colorPickerOpen && (
+				<FloatingContainer offsetX={150}>
+					<SketchPicker 
+						onChangeComplete={(color) => {
+							setSelectedColor(color.hex);
+						}}
+						color={selectedColor}
+					/>
+					<Button style={{
+						marginTop: '4px'
+					}} onClick={() => {
+						applyColor(editor, selectedColor);
+						setColorPickerOpen(false);
+					}}>
+						Apply
+					</Button>
+				</FloatingContainer>
+			)
+		}
 	</TextEditorContainer>;
 }
