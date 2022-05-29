@@ -1,9 +1,12 @@
-import { useMemo, useState } from "react";
-import { createEditor, Node, Transforms, Editor, BaseEditor, Descendant, Element } from "slate";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { createEditor, Node, Transforms, BaseEditor, Descendant, Element, Editor, RangeInterface, Range, Path } from "slate";
 import { HistoryEditor, withHistory } from "slate-history";
-import { Editable, ReactEditor, Slate, withReact, RenderElementProps } from "slate-react";
-import styled from "styled-components";
-import { STYLE_VALUES } from "../../common/style";
+import { Editable, ReactEditor, Slate, withReact, RenderElementProps, useSlateStatic, RenderLeafProps} from "slate-react";
+
+import styled, { css } from "styled-components";
+import { ThemedStyledFunction } from "styled-components";
+
+import { COLORS, STYLE_VALUES } from "../../common/style";
 import { ButtonToggle } from "./ButtonToggle";
 
 
@@ -34,7 +37,8 @@ const TextEditorToolbar = styled.div`
 const TextEditorContentOuterContainer = styled.div`
 	overflow-y: scroll;
 	flex: 1;
-	border: 2px solid white;
+	border: 2px solid darkgray;
+	background: ${COLORS.backgroundDark};
 	border-top: none;
 	border-radius: 0 0 ${STYLE_VALUES.borderRadius}px ${STYLE_VALUES.borderRadius}px;
 `;
@@ -50,42 +54,51 @@ const TextEditorContentContainer = styled.div<TextEditorProps>`
  */
 export type CustomEditor = BaseEditor & ReactEditor & HistoryEditor
 
+export interface SlateComponentProps {
+	color?: string;
+}
+
 export type ParagraphElement = {
 	type: 'paragraph'
 	children: CustomText[]
-}
+} & SlateComponentProps; 
  
 export type HeadingOneElement = {
 	type: 'headingOne'
 	level: number
 	children: CustomText[]
-}
+} & SlateComponentProps;
 
 export type HeadingTwoElement = {
 	type: 'headingTwo'
 	level: number
 	children: CustomText[]
-}
+} & SlateComponentProps;
 
 export type HeadingThreeElement = {
 	type: 'headingThree'
 	level: number
 	children: CustomText[]
-}
+} & SlateComponentProps;
 
 export type HeadingFourElement = {
 	type: 'headingFour'
 	level: number
 	children: CustomText[]
-}
+} & SlateComponentProps;
 
 export type HeadingFiveElement = {
 	type: 'headingFive'
 	level: number
 	children: CustomText[]
-}
+} & SlateComponentProps;
 
-export type CustomElement = ParagraphElement | HeadingOneElement | HeadingTwoElement | HeadingThreeElement | HeadingFourElement | HeadingFiveElement;
+export type CodeElement = {
+	type: 'code'
+	children: CustomText[]
+} & SlateComponentProps;
+
+export type CustomElement = ParagraphElement | HeadingOneElement | HeadingTwoElement | HeadingThreeElement | HeadingFourElement | HeadingFiveElement | CodeElement;
 
 export type FormattedText = { text: string; bold?: true }
 
@@ -99,8 +112,19 @@ declare module 'slate' {
    }
  }
 
-const DefaultElement = styled.p``;
-const CodeElement = styled.code``;
+
+
+const slateComponentStyle = (css<SlateComponentProps>`
+	color: ${props => {
+		console.log("COLOR:", props.color);
+		return props.color || 'white';
+	}};
+`);
+
+const DefaultComponent = styled.p`
+	${slateComponentStyle}
+`;
+const CodeComponent = styled.code``;
 const HeadingOneComponent = styled.h1``;
 const HeadingTwoComponent = styled.h2``;
 const HeadingThreeComponent = styled.h3``;
@@ -121,25 +145,33 @@ const renderElement = (props: RenderElementProps) => {
 		case 'headingFive':
 			return <HeadingFiveComponent {...props}/>
 		case 'code':
-			return <CodeElement {...props} />
+			return <CodeComponent {...props} />
 		default:
-			return <DefaultElement {...props} />
+			return <DefaultComponent {...props} />
 	}
 }
 
-const renderMark = (props: any, editor: any, next: any) => {
-	const { children, mark, attributes } = props
-	switch (mark.type) {
-	  case 'bold':
-		return <strong {...attributes}>{children}</strong>
-	  case 'italic':
-		return <em {...attributes}>{children}</em>
-	  case 'underline':
-		return <u {...attributes}>{children}</u>
-	  default:
-		return next()
+const Leaf = ({ attributes, children, leaf } : RenderLeafProps) => {
+	if (leaf.bold) {
+		children = <strong>{children}</strong>
 	}
-  }
+	
+	// if (leaf.code) {
+	// 	children = <code>{children}</code>
+	// }
+	
+	// if (leaf.italic) {
+	// 	children = <em>{children}</em>
+	// }
+	
+	// if (leaf.underline) {
+	// 	children = <u>{children}</u>
+	// }
+	
+	return <span {...attributes}>{children}</span>
+}
+
+
 
   const initialValue: Descendant[] = [
 	{
@@ -149,11 +181,17 @@ const renderMark = (props: any, editor: any, next: any) => {
   ]
 
 
+
 export function TextEditor(props: TextEditorProps) {
 	const editor: CustomEditor = useMemo(() => withHistory(withReact(createEditor() as ReactEditor)), [])
+	const renderLeaf = useCallback((props: RenderLeafProps) => <Leaf {...props} />, []);
 	const [value, setValue] = useState<any[]>([
 		{ type: "paragraph", children: [{ text: "hello world" }] }
 	]);
+
+	useEffect(() => {
+		console.log("UPDATE", slateComponentStyle, slateComponentStyle + '');
+	}, []);
 
 	return <TextEditorContainer {...props} style={props.outerStyle}>
 		<Slate
@@ -164,18 +202,57 @@ export function TextEditor(props: TextEditorProps) {
 			}}>
 					
 				<TextEditorToolbar>
-					<ButtonToggle small active={true} onClick={() => {
+				<ButtonToggle small active={true} onClick={() => {
 						const [match] = Editor.nodes(editor, {
 							match: n => {
-								const node = n as any;
-								console.log("N:", n);
-								// return n.type === 'code';
-								return node.type === 'code';
+								if(Element.isElement(n)) {
+									return n.type === 'code';
+								}
+								return false;
 							}
 						})
 
 						
 					}}>Bold</ButtonToggle>
+
+					<ButtonToggle small active={true} onClick={() => {
+						const { selection } = editor;
+						if(!selection) return;
+
+						// const { selection } = editor;
+						// if(!selection) return;
+						// const [match] = Editor.nodes(editor, {
+					
+						// 	at: Editor.unhangRange(editor, editor.selection as any),
+						// 	match: n => {
+						// 		if(Element.isElement(n)) {
+									
+						// 		}
+						// 		return !Editor.isEditor(n);
+						// 	}
+						// })
+						
+						const [match] = Editor.nodes(editor, {
+					
+							at: Editor.unhangRange(editor, editor.selection as any),
+							match: n => {
+								if(Element.isElement(n)) {
+									
+								}
+								return !Editor.isEditor(n);
+							}
+						})
+
+						console.log("SELECTED:", selection, Path.isPath(selection.anchor.path));
+
+						Transforms.setNodes(
+							editor,
+							{ type: 'headingOne' },
+							{ match: n => Editor.isBlock(editor, n) }
+						)
+					
+						
+					}}>Red</ButtonToggle>
 
 					<ButtonToggle small active={true} onClick={() => {
 						const [match] = Editor.nodes(editor, {
@@ -188,7 +265,7 @@ export function TextEditor(props: TextEditorProps) {
 						})
 						Transforms.setNodes(
 							editor,
-							{ type: match ? 'paragraph' : 'headingOne' } as any,
+							{ type: match ? 'paragraph' : 'headingOne' },
 							{ match: n => Editor.isBlock(editor, n) }
 						)
 					}}>H1</ButtonToggle>
@@ -204,7 +281,7 @@ export function TextEditor(props: TextEditorProps) {
 						})
 						Transforms.setNodes(
 							editor,
-							{ type: match ? 'paragraph' : 'headingTwo' } as any,
+							{ type: match ? 'paragraph' : 'headingTwo' },
 							{ match: n => Editor.isBlock(editor, n) }
 						)
 					}}>H2</ButtonToggle>
@@ -220,7 +297,7 @@ export function TextEditor(props: TextEditorProps) {
 						})
 						Transforms.setNodes(
 							editor,
-							{ type: match ? 'paragraph' : 'headingThree' } as any,
+							{ type: match ? 'paragraph' : 'headingThree' },
 							{ match: n => Editor.isBlock(editor, n) }
 						)
 					}}>H3</ButtonToggle>
@@ -277,24 +354,38 @@ export function TextEditor(props: TextEditorProps) {
 					}}>
 						<TextEditorContentContainer>
 							<Editable
+								renderLeaf={renderLeaf}
 								renderElement={renderElement}
 								onKeyDown={event => {
-									if (event.key === '`' && event.ctrlKey) {
+
+									function setElement(elementType: CustomElement['type']) {
 										event.preventDefault()
 										
 										const [match] = Editor.nodes(editor, {
-											match: n => {
-												const node = n as any;
-												console.log("N:", n);
-												// return n.type === 'code';
-												return node.type === 'code';
+											match: (n) => {
+												if(Element.isElement(n)) {
+													return n.type === elementType;
+												}
+												return false;
 											}
 										})
 										Transforms.setNodes(
 											editor,
-											{ type: match ? 'paragraph' : 'code' } as any,
+											{ type: match ? 'paragraph' : elementType } as any,
 											{ match: n => Editor.isBlock(editor, n) }
 										)
+									}
+
+									if (event.key === '1' && event.ctrlKey) {
+										setElement('headingOne');
+									} else if (event.key === '2' && event.ctrlKey) {
+										setElement('headingTwo');
+									} else if (event.key === '3' && event.ctrlKey) {
+										setElement('headingThree');
+									} else if (event.key === '`' && event.ctrlKey) {
+										setElement('code');
+									} else if(event.key === 'b' && event.ctrlKey) {
+										console.log("EVENT:", event);
 									}
 							}}/>
 						</TextEditorContentContainer>
