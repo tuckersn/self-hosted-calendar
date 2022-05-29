@@ -115,7 +115,7 @@ export function EventPopup(props: EventPopupProps) {
 								alignSelf: "flex-end",
 								marginLeft: "auto"
 							}} variant="contained" onClick={() => {
-								setActive(false);
+								
 							}}>
 								Save
 							</Button>

@@ -335,6 +335,32 @@ function toggleUnderline(editor: Editor) {
 	}
 }
 
+function serialize(node: Node) {
+	if(Text.isText(node)) {
+		return {
+			nodeType: "text-node",
+			bold: node.bold,
+			italic: node.italic,
+			underline: node.underline,
+			text: node.text
+		};
+	}
+	const children: any[] = node.children.map((n) => serialize(n));
+
+	if(Element.isElement(node)) {
+		return {
+			nodeType: "element-node",
+			type: node.type,
+			children: children
+		};
+	}
+	
+	return {
+		nodeType: "unknown-node",
+		children
+	}
+}
+
 export function TextEditor(props: TextEditorProps) {
 	const editor: CustomEditor = useMemo(() => withHistory(withReact(createEditor() as ReactEditor)), [])
 	const [value, setValue] = useState<any[]>([
@@ -346,7 +372,8 @@ export function TextEditor(props: TextEditorProps) {
 
 	useEffect(() => {
 		console.log("UPDATE", slateComponentStyle, slateComponentStyle + '');
-	}, []);
+		console.log("EDITOR", editor, JSON.stringify(serialize(editor), null, 4));
+	});
 
 	return <TextEditorContainer {...props} style={props.outerStyle}>
 		<Slate
@@ -512,6 +539,7 @@ export function TextEditor(props: TextEditorProps) {
 					}}>
 						<TextEditorContentContainer>
 							<Editable
+								
 								renderLeaf={renderLeaf}
 								renderElement={renderElement}
 								onKeyDown={event => {
