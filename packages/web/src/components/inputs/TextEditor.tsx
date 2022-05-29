@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { PhotoshopPicker, SketchPicker } from "react-color";
+import { ColorResult, PhotoshopPicker, SketchPicker } from "react-color";
 import { MdColorLens, MdFormatBold, MdFormatItalic, MdFormatUnderlined } from "react-icons/md";
 import { createEditor, Node, Transforms, BaseEditor, Descendant, Element, Editor, RangeInterface, Range, Path, Text } from "slate";
 import { HistoryEditor, withHistory } from "slate-history";
@@ -9,17 +9,27 @@ import styled, { css } from "styled-components";
 import { ThemedStyledFunction } from "styled-components";
 
 import { COLORS, STYLE_VALUES } from "../../common/style";
+import { SlateEditor } from "../../shared/slate";
+import { CustomEditor, CustomElement, CustomText, LeafComponent, renderElement } from "../../shared/slate/slateEditor";
 import { FloatingContainer } from "../style";
 import { Button } from "./Button";
 import { ButtonToggle } from "./ButtonToggle";
 
 
-
+declare module 'slate' {
+	interface CustomTypes {
+		Editor: CustomEditor
+		Element: CustomElement
+		Text: CustomText
+   }
+ }
+ 
 export interface TextEditorProps {
 	outerStyle?: React.CSSProperties;
 	innerStyle?: React.CSSProperties;
 	value?: string;
 	onValue?: (value: string) => void;
+	onColor?: (color: ColorResult) => ColorResult | void;
 }
 
 const TextEditorContainer = styled.div<TextEditorProps>`
@@ -60,348 +70,22 @@ const TextEditorContentContainer = styled.div<TextEditorProps>`
 	padding: 16px;
 `;
 
-/**
- * 
- *  SLATE EDITOR 
- * 
- */
-export type CustomEditor = BaseEditor & ReactEditor & HistoryEditor
-
-export interface SlateComponentProps {
-	color?: string;
-}
-
-export type ParagraphElement = {
-	type: 'paragraph'
-	children: CustomText[]
-} & SlateComponentProps; 
- 
-export type HeadingOneElement = {
-	type: 'headingOne'
-	level: number
-	children: CustomText[]
-} & SlateComponentProps;
-
-export type HeadingTwoElement = {
-	type: 'headingTwo'
-	level: number
-	children: CustomText[]
-} & SlateComponentProps;
-
-export type HeadingThreeElement = {
-	type: 'headingThree'
-	level: number
-	children: CustomText[]
-} & SlateComponentProps;
-
-export type HeadingFourElement = {
-	type: 'headingFour'
-	level: number
-	children: CustomText[]
-} & SlateComponentProps;
-
-export type HeadingFiveElement = {
-	type: 'headingFive'
-	level: number
-	children: CustomText[]
-} & SlateComponentProps;
-
-export type CodeElement = {
-	type: 'code'
-	children: CustomText[]
-} & SlateComponentProps;
-
-export type CustomElement = ParagraphElement | HeadingOneElement | HeadingTwoElement | HeadingThreeElement | HeadingFourElement | HeadingFiveElement | CodeElement;
-
-export type FormattedText = {
-	text: string;
-	bold?: true;
-	italic?: true;
-	underline?: true;
-	color?: string;
-}
-
-export type CustomText = FormattedText
- 
-declare module 'slate' {
-	interface CustomTypes {
-		Editor: CustomEditor
-		Element: CustomElement
-		Text: CustomText
-   }
- }
-
-
-
-const slateComponentStyle = (css<SlateComponentProps>`
-	color: ${props => {
-		console.log("COLOR:", props.color);
-		return props.color || 'white';
-	}};
-`);
-
-const DefaultComponent = styled.p`
-	${slateComponentStyle}
-`;
-const CodeComponent = styled.code``;
-const HeadingOneComponent = styled.h1`
-	font-weight: normal;
-`;
-const HeadingTwoComponent = styled.h2`
-	font-weight: normal;
-`;
-const HeadingThreeComponent = styled.h3`
-	font-weight: normal;
-`;
-const HeadingFourComponent = styled.h4`
-	font-weight: normal;
-`;
-const HeadingFiveComponent = styled.h5`
-	font-weight: normal;
-`;
-
-const renderElement = (props: RenderElementProps) => {
-	const element = props.element as any;
-	switch (element.type) {
-		case 'headingOne':
-			return <HeadingOneComponent {...props}/>
-		case 'headingTwo':
-			return <HeadingTwoComponent {...props}/>
-		case 'headingThree':
-			return <HeadingThreeComponent {...props}/>
-		case 'headingFour':
-			return <HeadingFourComponent {...props}/>
-		case 'headingFive':
-			return <HeadingFiveComponent {...props}/>
-		case 'code':
-			return <CodeComponent {...props} />
-		default:
-			return <DefaultComponent {...props} />
-	}
-}
-
-const Leaf = ({ attributes, children, leaf } : RenderLeafProps) => {
-	
-
-	
-	if (leaf.bold) {
-		children = <strong>{children}</strong>
-	}
-	
-	if (leaf.italic) {
-		children = <em>{children}</em>
-	}
-	
-	if (leaf.underline) {
-		children = <u>{children}</u>
-	}
-	
-	return <span style={{
-		color: leaf.color
-	}} {...attributes}>{children}</span>
-}
-
-
-
-  const initialValue: Descendant[] = [
-	{
-	  type: 'paragraph',
-	  children: [{ text: 'A line of text in a paragraph.' }],
-	},
-  ]
-
-function toggleBold(editor: Editor) {
-	const trueMatches = Array.from(Editor.nodes(editor, {
-		match: n => {
-			if(Text.isText(n)) {
-				return n.bold === true;
-			}
-			return false;
-		}
-	}))
-	const falseMatches = Array.from(Editor.nodes(editor, {
-		match: n => {
-			if(Text.isText(n)) {
-				return n.bold !== true;
-			}
-			return false;
-		}
-	}))
-
-	for(const [node, path] of trueMatches) {
-		Transforms.setNodes(
-			editor,
-			{ bold: undefined },
-			// Apply it to text nodes, and split the text node up if the
-			// selection is overlapping only part of it.
-			{
-				at: path
-			}
-		);
-	}
-
-	for(const [node, path] of falseMatches) {
-		Transforms.setNodes(
-			editor,
-			{ bold: true },
-			// Apply it to text nodes, and split the text node up if the
-			// selection is overlapping only part of it.
-			{
-				at: path
-			}
-		);
-	}
-}
-
-function toggleItalic(editor: Editor) {
-	const trueMatches = Array.from(Editor.nodes(editor, {
-		match: n => {
-			if(Text.isText(n)) {
-				return n.italic === true;
-			}
-			return false;
-		}
-	}))
-	const falseMatches = Array.from(Editor.nodes(editor, {
-		match: n => {
-			if(Text.isText(n)) {
-				return n.italic !== true;
-			}
-			return false;
-		}
-	}))
-
-	for(const [node, path] of trueMatches) {
-		Transforms.setNodes(
-			editor,
-			{ italic: undefined },
-			// Apply it to text nodes, and split the text node up if the
-			// selection is overlapping only part of it.
-			{
-				at: path
-			}
-		);
-	}
-
-	for(const [node, path] of falseMatches) {
-		Transforms.setNodes(
-			editor,
-			{ italic: true },
-			// Apply it to text nodes, and split the text node up if the
-			// selection is overlapping only part of it.
-			{
-				at: path
-			}
-		);
-	}
-}
-
-function toggleUnderline(editor: Editor) {
-	const trueMatches = Array.from(Editor.nodes(editor, {
-		match: n => {
-			if(Text.isText(n)) {
-				return n.underline === true;
-			}
-			return false;
-		}
-	}))
-	const falseMatches = Array.from(Editor.nodes(editor, {
-		match: n => {
-			if(Text.isText(n)) {
-				return n.underline !== true;
-			}
-			return false;
-		}
-	}))
-
-	for(const [node, path] of trueMatches) {
-		Transforms.setNodes(
-			editor,
-			{ underline: undefined },
-			// Apply it to text nodes, and split the text node up if the
-			// selection is overlapping only part of it.
-			{
-				at: path
-			}
-		);
-	}
-
-	for(const [node, path] of falseMatches) {
-		Transforms.setNodes(
-			editor,
-			{ underline: true },
-			// Apply it to text nodes, and split the text node up if the
-			// selection is overlapping only part of it.
-			{
-				at: path
-			}
-		);
-	}
-}
-
-
-function applyColor(editor: Editor, color: string) {
-	const falseMatches = Array.from(Editor.nodes(editor, {
-		match: n => {
-			if(Text.isText(n)) {
-				return n.color !== color;
-			}
-			return false;
-		}
-	}));
-
-	for(const [node, path] of falseMatches) {
-		Transforms.setNodes(
-			editor,
-			{ color },
-			// Apply it to text nodes, and split the text node up if the
-			// selection is overlapping only part of it.
-			{
-				at: path
-			}
-		);
-	}
-}
-
-function serialize(node: Node) {
-	if(Text.isText(node)) {
-		return {
-			nodeType: "text-node",
-			bold: node.bold,
-			italic: node.italic,
-			underline: node.underline,
-			text: node.text
-		};
-	}
-	const children: any[] = node.children.map((n) => serialize(n));
-
-	if(Element.isElement(node)) {
-		return {
-			nodeType: "element-node",
-			type: node.type,
-			children: children
-		};
-	}
-	
-	return {
-		nodeType: "unknown-node",
-		children
-	}
-}
 
 export function TextEditor(props: TextEditorProps) {
+	const { onColor } = props;
+
 	const editor: CustomEditor = useMemo(() => withHistory(withReact(createEditor() as ReactEditor)), [])
 	const [value, setValue] = useState<any[]>([
 		{ type: "paragraph", children: [{ text: "hello world" }] }
 	]);
 	const [selectedColor, setSelectedColor] = useState<string>("#FFF");
 	const [colorPickerOpen, setColorPickerOpen] = useState<boolean>(false);
-	const renderLeaf = useCallback((props: RenderLeafProps) => <Leaf {...props} />, []);
+	const renderLeaf = useCallback((props: RenderLeafProps) => <LeafComponent {...props} />, []);
 
 
 	useEffect(() => {
-		console.log("UPDATE", slateComponentStyle, slateComponentStyle + '');
-		console.log("EDITOR", editor, JSON.stringify(serialize(editor), null, 4));
+		console.log("UPDATE", SlateEditor.slateComponentStyle, SlateEditor.slateComponentStyle + '');
+		console.log("EDITOR", editor, JSON.stringify(SlateEditor.serialize(editor), null, 4));
 	});
 
 	return <TextEditorContainer {...props} style={props.outerStyle}>
@@ -414,19 +98,19 @@ export function TextEditor(props: TextEditorProps) {
 					
 				<TextEditorToolbar>
 					<Button small onClick={() => {
-						toggleBold(editor);
+						SlateEditor.toggleBold(editor);
 					}}>
 						<MdFormatBold size={20}/>
 					</Button>
 
 					<Button small onClick={() => {
-						toggleItalic(editor);
+						SlateEditor.toggleItalic(editor);
 					}}>
 						<MdFormatItalic size={20}/>
 					</Button>
 
 					<Button small onClick={() => {
-						toggleUnderline(editor);
+						SlateEditor.toggleUnderline(editor);
 					}}>
 						<MdFormatUnderlined size={20}/>
 					</Button>
@@ -556,39 +240,31 @@ export function TextEditor(props: TextEditorProps) {
 								renderLeaf={renderLeaf}
 								renderElement={renderElement}
 								onKeyDown={event => {
-
-									function setElement(elementType: CustomElement['type']) {
-										event.preventDefault()
-										
-										const [match] = Editor.nodes(editor, {
-											match: (n) => {
-												if(Element.isElement(n)) {
-													return n.type === elementType;
-												}
-												return false;
-											}
-										})
-										Transforms.setNodes(
-											editor,
-											{ type: match ? 'paragraph' : elementType } as any,
-											{ match: n => Editor.isBlock(editor, n) }
-										)
+									function cb(cb: () => void) {
+										cb();
+										event.preventDefault();
 									}
 
 									if (event.key === '1' && event.ctrlKey) {
-										setElement('headingOne');
+										cb(() => {
+											SlateEditor.setElement(editor, 'headingOne');
+										});
 									} else if (event.key === '2' && event.ctrlKey) {
-										setElement('headingTwo');
+										cb(() => {
+											SlateEditor.setElement(editor, 'headingTwo');
+										});
 									} else if (event.key === '3' && event.ctrlKey) {
-										setElement('headingThree');
+										cb(() => {
+											SlateEditor.setElement(editor, 'headingThree');
+										});
 									} else if (event.key === '`' && event.ctrlKey) {
-										setElement('code');
+										SlateEditor.setElement(editor, 'code');
 									} else if(event.key === 'b' && event.ctrlKey) {
-										toggleBold(editor);
+										SlateEditor.toggleBold(editor);
 									} else if(event.key === 'i' && event.ctrlKey) {
-										toggleItalic(editor);
+										SlateEditor.toggleItalic(editor);
 									} else if(event.key === 'u' && event.ctrlKey) {
-										toggleUnderline(editor);
+										SlateEditor.toggleUnderline(editor);
 									}
 							}}/>
 						</TextEditorContentContainer>
@@ -599,15 +275,19 @@ export function TextEditor(props: TextEditorProps) {
 			colorPickerOpen && (
 				<FloatingContainer offsetX={150}>
 					<SketchPicker 
-						onChangeComplete={(color) => {
+						onChange={(color) => {
+							if(onColor) {
+								color = onColor(color) || color;
+							}
+							SlateEditor.applyColor(editor, selectedColor);
 							setSelectedColor(color.hex);
 						}}
 						color={selectedColor}
 					/>
-					<Button style={{
+					<Button small style={{
 						marginTop: '4px'
 					}} onClick={() => {
-						applyColor(editor, selectedColor);
+						SlateEditor.applyColor(editor, selectedColor);
 						setColorPickerOpen(false);
 					}}>
 						Apply
