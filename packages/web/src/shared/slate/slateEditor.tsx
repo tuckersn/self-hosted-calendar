@@ -1,3 +1,4 @@
+import { SlateEditorNode, SlateElement, SlateNode, SlateNodeType, SlateTextNode } from "@internal/schema/dist/serialization";
 import { BaseEditor, Descendant, Editor, Transforms, Element, Text, Node } from "slate";
 import { HistoryEditor } from "slate-history";
 import { ReactEditor, RenderElementProps, RenderLeafProps } from "slate-react";
@@ -8,73 +9,19 @@ import styled, { css } from "styled-components";
  *  SLATE EDITOR 
  * 
  */
-export type CustomEditor = BaseEditor & ReactEditor & HistoryEditor
+export type CustomEditor = BaseEditor & ReactEditor & HistoryEditor;
 
-export interface SlateComponentProps {
-	color?: string;
-}
-
-export type ParagraphElement = {
-	type: 'paragraph'
-	children: CustomText[]
-} & SlateComponentProps; 
-
-export type HeadingOneElement = {
-	type: 'headingOne'
-	level: number
-	children: CustomText[]
-} & SlateComponentProps;
-
-export type HeadingTwoElement = {
-	type: 'headingTwo'
-	level: number
-	children: CustomText[]
-} & SlateComponentProps;
-
-export type HeadingThreeElement = {
-	type: 'headingThree'
-	level: number
-	children: CustomText[]
-} & SlateComponentProps;
-
-export type HeadingFourElement = {
-	type: 'headingFour'
-	level: number
-	children: CustomText[]
-} & SlateComponentProps;
-
-export type HeadingFiveElement = {
-	type: 'headingFive'
-	level: number
-	children: CustomText[]
-} & SlateComponentProps;
-
-export type CodeElement = {
-	type: 'code'
-	children: CustomText[]
-} & SlateComponentProps;
-
-export type CustomElement = ParagraphElement | HeadingOneElement | HeadingTwoElement | HeadingThreeElement | HeadingFourElement | HeadingFiveElement | CodeElement;
-
-export type FormattedText = {
-	text: string;
-	bold?: true;
-	italic?: true;
-	underline?: true;
-	color?: string;
-}
-
-export type CustomText = FormattedText
+export type CustomText = SlateTextNode;
 
 
+// export const slateComponentStyle = (css<SlateComponentProps>`
+// 	color: ${props => {
+// 		console.log("COLOR:", props.color);
+// 		return props.color || 'white';
+// 	}};
+// `);
 
-
-
-export const slateComponentStyle = (css<SlateComponentProps>`
-	color: ${props => {
-		console.log("COLOR:", props.color);
-		return props.color || 'white';
-	}};
+export const slateComponentStyle = (css`
 `);
 
 export const DefaultComponent = styled.p`
@@ -98,22 +45,16 @@ export const HeadingFiveComponent = styled.h5`
 `;
  
 export const renderElement = (props: RenderElementProps) => {
-	 const element = props.element as any;
-	 switch (element.type) {
-		 case 'headingOne':
-			 return <HeadingOneComponent {...props}/>
-		 case 'headingTwo':
-			 return <HeadingTwoComponent {...props}/>
-		 case 'headingThree':
-			 return <HeadingThreeComponent {...props}/>
-		 case 'headingFour':
-			 return <HeadingFourComponent {...props}/>
-		 case 'headingFive':
-			 return <HeadingFiveComponent {...props}/>
-		 case 'code':
-			 return <CodeComponent {...props} />
-		 default:
-			 return <DefaultComponent {...props} />
+	 const element = props.element as SlateElement;
+	 switch (element.elementType) {
+		case 'h1':
+			return <HeadingOneComponent {...props}/>
+		case 'h2':
+			return <HeadingTwoComponent {...props}/>
+		case 'h3':
+			return <HeadingThreeComponent {...props}/>
+		default:
+			return <DefaultComponent {...props} />
 	 }
  }
  
@@ -142,8 +83,12 @@ export const LeafComponent = ({ attributes, children, leaf } : RenderLeafProps) 
 
 export const initialValue: Descendant[] = [
 	{
-	type: 'paragraph',
-	children: [{ text: 'A line of text in a paragraph.' }],
+		type: SlateNodeType.ELEMENT,
+		elementType: 'p',
+		children: [{
+			type: SlateNodeType.TEXT,
+			text: 'A line of text in a paragraph.'
+		}],
 	},
 ]
  
@@ -234,14 +179,18 @@ export function toggleItalic(editor: Editor) {
  }
  
 export function toggleUnderline(editor: Editor) {
+	console.log(editor);
 	 const trueMatches = Array.from(Editor.nodes(editor, {
 		 match: n => {
+			console.log("N:", n);
 			 if(Text.isText(n)) {
+				 console.log("NT:", n);
 				 return n.underline === true;
 			 }
 			 return false;
 		 }
 	 }))
+	 console.log("TRUE MATCHES:", trueMatches);
 	 const falseMatches = Array.from(Editor.nodes(editor, {
 		 match: n => {
 			 if(Text.isText(n)) {
@@ -250,29 +199,29 @@ export function toggleUnderline(editor: Editor) {
 			 return false;
 		 }
 	 }))
- 
+	 console.log("FALSE:", falseMatches);
 	 for(const [node, path] of trueMatches) {
-		 Transforms.setNodes(
-			 editor,
-			 { underline: undefined },
-			 // Apply it to text nodes, and split the text node up if the
-			 // selection is overlapping only part of it.
-			 {
-				 at: path
-			 }
-		 );
+		Transforms.setNodes(
+			editor,
+			{ underline: undefined },
+			// Apply it to text nodes, and split the text node up if the
+			// selection is overlapping only part of it.
+			{
+				at: path
+			}
+		);
 	 }
  
 	 for(const [node, path] of falseMatches) {
-		 Transforms.setNodes(
-			 editor,
-			 { underline: true },
-			 // Apply it to text nodes, and split the text node up if the
-			 // selection is overlapping only part of it.
-			 {
-				 at: path
-			 }
-		 );
+		Transforms.setNodes(
+			editor,
+			{ underline: true },
+			// Apply it to text nodes, and split the text node up if the
+			// selection is overlapping only part of it.
+			{
+				at: path
+			}
+		);
 	 }
  }
  
@@ -300,47 +249,47 @@ export function applyColor(editor: Editor, color: string) {
 	 }
  }
  
-export function serialize(node: Node) {
+export function serialize(node: SlateNode): SlateNode {
 	 if(Text.isText(node)) {
-		 return {
-			 nodeType: "text-node",
-			 bold: node.bold,
-			 italic: node.italic,
-			 underline: node.underline,
-			 text: node.text
-		 };
+		return {
+			type: SlateNodeType.TEXT,
+			bold: node.bold,
+			italic: node.italic,
+			underline: node.underline,
+			text: node.text
+		};
 	 }
-	 const children: any[] = node.children.map((n) => serialize(n));
+	 const children: any[] = node.children?.map((n) => serialize(n));
  
 	 if(Element.isElement(node)) {
-		 return {
-			 nodeType: "element-node",
-			 type: node.type,
-			 children: children
-		 };
+		return {
+			type: SlateNodeType.ELEMENT,
+			elementType: node.elementType,
+			children: children
+		};
 	 }
 	 
 	 return {
-		 nodeType: "unknown-node",
-		 children
+		type: SlateNodeType.UNKNOWN,
+		children
 	 }
  }
 
 
-export function setElement(editor: Editor, elementType: CustomElement['type']) {
+export function setElement(editor: Editor, elementType: SlateElement['elementType']) {
 	
 	
 	const [match] = Editor.nodes(editor, {
 		match: (n) => {
 			if(Element.isElement(n)) {
-				return n.type === elementType;
+				return n.elementType === elementType;
 			}
 			return false;
 		}
 	})
 	Transforms.setNodes(
 		editor,
-		{ type: match ? 'paragraph' : elementType } as any,
+		{ elementType: match ? 'p' : elementType },
 		{ match: n => Editor.isBlock(editor, n) }
 	)
 }

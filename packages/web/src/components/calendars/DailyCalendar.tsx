@@ -316,9 +316,17 @@ export function DailyCalendarComponent(props: DailyCalendarProps) {
 									height: eventPositions[k].height,
 									width: (width) * eventPositions[k].width + "px"
 								}}>
-									<EventTitle>
-										{events[k].title}
-									</EventTitle>
+									<div style={{
+										display: "flex"
+									}}>
+										<EventTitle>
+											{events[k].title}
+										</EventTitle>
+										<div>
+											
+										</div>
+									</div>
+									
 									<EventDescription>
 										{events[k].description}
 									</EventDescription>

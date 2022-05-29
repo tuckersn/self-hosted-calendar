@@ -8,9 +8,11 @@ import { Transform } from "stream";
 import styled, { css } from "styled-components";
 import { ThemedStyledFunction } from "styled-components";
 
+import { SlateElement, SlateNode, SlateNodeType, SlateEditorNode } from "@internal/schema/dist/serialization";
+
 import { COLORS, STYLE_VALUES } from "../../common/style";
 import { SlateEditor } from "../../shared/slate";
-import { CustomEditor, CustomElement, CustomText, LeafComponent, renderElement } from "../../shared/slate/slateEditor";
+import { CustomEditor, CustomText, initialValue, LeafComponent, renderElement } from "../../shared/slate/slateEditor";
 import { FloatingContainer } from "../style";
 import { Button } from "./Button";
 import { ButtonToggle } from "./ButtonToggle";
@@ -18,8 +20,8 @@ import { ButtonToggle } from "./ButtonToggle";
 
 declare module 'slate' {
 	interface CustomTypes {
-		Editor: CustomEditor
-		Element: CustomElement
+		Editor: CustomEditor;
+		Element: SlateElement
 		Text: CustomText
    }
  }
@@ -71,13 +73,19 @@ const TextEditorContentContainer = styled.div<TextEditorProps>`
 `;
 
 
+function editorToEditorNode(editor: CustomEditor): SlateNode {
+	return {
+		...editor,
+		type: SlateNodeType.EDITOR,
+		children: editor.children as unknown as SlateNode[]
+	}
+}
+
 export function TextEditor(props: TextEditorProps) {
 	const { onColor } = props;
 
-	const editor: CustomEditor = useMemo(() => withHistory(withReact(createEditor() as ReactEditor)), [])
-	const [value, setValue] = useState<any[]>([
-		{ type: "paragraph", children: [{ text: "hello world" }] }
-	]);
+	const editor: CustomEditor = useMemo(() => withHistory(withReact(createEditor() as ReactEditor)), []);
+	const [value, setValue] = useState<Descendant[]>(initialValue);
 	const [selectedColor, setSelectedColor] = useState<string>("#FFF");
 	const [colorPickerOpen, setColorPickerOpen] = useState<boolean>(false);
 	const renderLeaf = useCallback((props: RenderLeafProps) => <LeafComponent {...props} />, []);
@@ -85,7 +93,7 @@ export function TextEditor(props: TextEditorProps) {
 
 	useEffect(() => {
 		console.log("UPDATE", SlateEditor.slateComponentStyle, SlateEditor.slateComponentStyle + '');
-		console.log("EDITOR", editor, JSON.stringify(SlateEditor.serialize(editor), null, 4));
+		console.log("EDITOR", editor, JSON.stringify(SlateEditor.serialize(editorToEditorNode(editor)), null, 4));
 	});
 
 	return <TextEditorContainer {...props} style={props.outerStyle}>
@@ -125,14 +133,14 @@ export function TextEditor(props: TextEditorProps) {
 						const [match] = Editor.nodes(editor, {
 							match: n => {
 								if(Element.isElement(n)) {
-									return n.type === 'headingOne';
+									return n.elementType === 'h1';
 								}
 								return false;
 							}
 						})
 						Transforms.setNodes(
 							editor,
-							{ type: match ? 'paragraph' : 'headingOne' },
+							{ elementType: match ? 'p' : 'h1' },
 							{ match: n => Editor.isBlock(editor, n) }
 						)
 					}} style={{
@@ -146,14 +154,14 @@ export function TextEditor(props: TextEditorProps) {
 						const [match] = Editor.nodes(editor, {
 							match: n => {
 								if(Element.isElement(n)) {
-									return n.type === 'headingTwo';
+									return n.elementType === 'h2';
 								}
 								return false;
 							}
 						})
 						Transforms.setNodes(
 							editor,
-							{ type: match ? 'paragraph' : 'headingTwo' },
+							{ elementType: match ? 'p' : 'h2' },
 							{ match: n => Editor.isBlock(editor, n) }
 						)
 					}} style={{
@@ -164,17 +172,18 @@ export function TextEditor(props: TextEditorProps) {
 					</Button>
 					
 					<Button small onClick={() => {
+						console.log("E:", editor);
 						const [match] = Editor.nodes(editor, {
 							match: n => {
 								if(Element.isElement(n)) {
-									return n.type === 'headingThree';
+									return n.elementType === 'h3';
 								}
 								return false;
 							}
 						})
 						Transforms.setNodes(
 							editor,
-							{ type: match ? 'paragraph' : 'headingThree' },
+							{ elementType: match ? 'p' : 'h3' },
 							{ match: n => Editor.isBlock(editor, n) }
 						)
 					}} style={{
@@ -183,52 +192,6 @@ export function TextEditor(props: TextEditorProps) {
 					}}>
 						H3
 					</Button>
-					
-					{/* <Button small onClick={() => {
-						const [match] = Editor.nodes(editor, {
-							match: n => {
-								if(Element.isElement(n)) {
-									return n.type === 'headingFour';
-								}
-								return false;
-							}
-						})
-						Transforms.setNodes(
-							editor,
-							{ type: match ? 'paragraph' : 'headingFour' } as any,
-							{ match: n => Editor.isBlock(editor, n) }
-						)
-					}}>H4</Button>
-					
-					<Button small onClick={() => {
-						const [match] = Editor.nodes(editor, {
-							match: n => {
-								if(Element.isElement(n)) {
-									return n.type === 'headingFive';
-								}
-								return false;
-							}
-						})
-						Transforms.setNodes(
-							editor,
-							{ type: match ? 'paragraph' : 'headingFive' } as any,
-							{ match: n => Editor.isBlock(editor, n) }
-						)
-					}}>H5</Button> */}
-
-					{/* <MarkButton format="bold" icon="format_bold" />
-					<MarkButton format="italic" icon="format_italic" />
-					<MarkButton format="underline" icon="format_underlined" />
-					<MarkButton format="code" icon="code" />
-					<BlockButton format="heading-one" icon="looks_one" />
-					<BlockButton format="heading-two" icon="looks_two" />
-					<BlockButton format="block-quote" icon="format_quote" />
-					<BlockButton format="numbered-list" icon="format_list_numbered" />
-					<BlockButton format="bulleted-list" icon="format_list_bulleted" />
-					<BlockButton format="left" icon="format_align_left" />
-					<BlockButton format="center" icon="format_align_center" />
-					<BlockButton format="right" icon="format_align_right" />
-					<BlockButton format="justify" icon="format_align_justify" /> */}
 				</TextEditorToolbar>
 				<TextEditorContentOuterContainer>
 					<div style={{
@@ -247,18 +210,18 @@ export function TextEditor(props: TextEditorProps) {
 
 									if (event.key === '1' && event.ctrlKey) {
 										cb(() => {
-											SlateEditor.setElement(editor, 'headingOne');
+											SlateEditor.setElement(editor, 'h1');
 										});
 									} else if (event.key === '2' && event.ctrlKey) {
 										cb(() => {
-											SlateEditor.setElement(editor, 'headingTwo');
+											SlateEditor.setElement(editor, 'h2');
 										});
 									} else if (event.key === '3' && event.ctrlKey) {
 										cb(() => {
-											SlateEditor.setElement(editor, 'headingThree');
+											SlateEditor.setElement(editor, 'h3');
 										});
-									} else if (event.key === '`' && event.ctrlKey) {
-										SlateEditor.setElement(editor, 'code');
+									} else if (event.key === 'p' && event.ctrlKey) {
+										SlateEditor.setElement(editor, 'p');
 									} else if(event.key === 'b' && event.ctrlKey) {
 										SlateEditor.toggleBold(editor);
 									} else if(event.key === 'i' && event.ctrlKey) {
