@@ -13,7 +13,7 @@ import {
   } from "react-router-dom";
 import styled from 'styled-components';
 import { VscMenu } from "react-icons/vsc";
-import { MdLogout, MdMenu } from "react-icons/md"
+import { MdAdd, MdLogout, MdMenu, MdSearch } from "react-icons/md"
 
 import { useUser } from './common/hooks/useUser';
 import { setUser } from './common/store/userSlice';
@@ -22,7 +22,7 @@ import { Toggle } from './components/inputs/Toggle';
 import { CornerMenu } from './components/menus/CornerMenu';
 import { DropDown } from './components/inputs/DropDown';
 import { FloatingContainer } from './components/style';
-import { COLORS, NAV_BAR_HEIGHT } from './common/style';
+import { COLORS, CSS_PRESETS, NAV_BAR_HEIGHT, STYLE_VALUES } from './common/style';
 import { useTitle } from './common/hooks/useTitle';
 import {Helmet} from "react-helmet";
 
@@ -124,6 +124,16 @@ const TitleBarButtonIcon = (styled.div`
 `);
 
 
+const TitleBarSearchContainer = (styled.div`
+	width: 100%;
+	border-top: 2px solid white;
+	border-bottom: 2px solid white;
+	background-color: ${COLORS.backgroundDark};
+	overflow: hidden;
+	white-space: nowrap;
+`);
+
+
 const Content = styled.div`
 	flex: 1;
 	height: calc(100vh - ${NAV_BAR_HEIGHT}px);
@@ -189,10 +199,23 @@ function App() {
 						<div style={{
 								flex: "1",
 								width: "auto",
-								border: "1px solid cyan",
-								textAlign: "center"
+								textAlign: "center",
+								display: "flex",
+								
 							}}>
+							<Button small style={{
+								borderRadius: `${STYLE_VALUES.borderRadius}px 0px 0px ${STYLE_VALUES.borderRadius}px`,
+							}}>
+								<MdAdd size={18}/>
+							</Button>
+							<TitleBarSearchContainer>
 								search/command bar here
+							</TitleBarSearchContainer>
+							<Button small style={{
+								borderRadius: `0px ${STYLE_VALUES.borderRadius}px ${STYLE_VALUES.borderRadius}px 0px`,
+							}}>
+								<MdSearch size={18}/>
+							</Button>
 						</div> : <div></div>
 					}
 				</TitleBarCenter>			

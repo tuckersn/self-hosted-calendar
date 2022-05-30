@@ -13,9 +13,10 @@ import { Button } from "../inputs/Button";
 import { MdEdit } from "react-icons/md";
 import { ButtonToggle } from "../inputs/ButtonToggle";
 import { TextInput } from "../inputs/TextInput";
-import { EventPopup } from "./EventPopup";
+import { EventEditPopup } from "./EventEditPopup";
 import { EventPosition, Event } from "../../shared/calendar/event";
 import { serialize } from "../../shared/slate/slateEditor";
+import { SlateNodeRender } from "../../shared/slate/SlateNodeRender";
 
 export const FIFTEEN_MINUTE_SEGMENTS_IN_A_DAY = 24 * (60/15);
 export const FIFTEEN_MINUTES_IN_A_DAY = 24 * (60/15);
@@ -329,7 +330,8 @@ export function DailyCalendarComponent(props: DailyCalendarProps) {
 									</div>
 									
 									<EventDescription>
-										{JSON.stringify(serialize(events[k].description), null, 4)}
+										{/* {JSON.stringify(serialize(events[k].description), null, 4)} */}
+										<SlateNodeRender node={events[k].description}/>
 									</EventDescription>
 								</EventContainer>
 							</div>;
@@ -355,7 +357,7 @@ export function DailyCalendarComponent(props: DailyCalendarProps) {
 				
 			</DailyCalendarInnerContainer>
 		</DailyCalendarOuterContainer>
-		<EventPopup event={popupEvent} active={popupActive} setActive={setPopupActive}/>
+		<EventEditPopup event={popupEvent} active={popupActive} setActive={setPopupActive}/>
 	</React.Fragment>
 }
 

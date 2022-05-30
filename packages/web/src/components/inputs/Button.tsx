@@ -57,7 +57,7 @@ export const Button: React.FC<ButtonProps> = (props) => {
 	return <ButtonContainer {...props} onClick={(event) => {
 			if(onClick)
 				onClick(event);
-	}} style={style}>
+	}}>
 		{children}
 	</ButtonContainer>;
 }

@@ -14,13 +14,13 @@ import { Button } from "@mui/material";
 import { apiRequest } from "../../common/api/api-request";
 import { slateNodeFromStr } from "@internal/schema/dist/serialization";
 
-export interface EventPopupProps {
+export interface EventCreatePopupProps {
 	event: Event | null;
 	active: boolean;
 	setActive: (active: boolean) => void;
 }
 
-const EventPopupContainer = styled.div`
+const EventCreateContainer = styled.div`
 	flex: 1;
 	display: flex;
 	flex-direction: column;
@@ -37,21 +37,21 @@ const EventPopupContainer = styled.div`
 	}
 `;
 
-const EventPopupTitle = styled.div`
+const EventCreateTitle = styled.div`
 	font-size: 24px;
 	font-weight: bold;
 	color: white;
 	overflow: hidden;
 `;
 
-const EventPopupDescription = styled.div`
+const EventCreateDescription = styled.div`
 	font-size: 18px;
 	color: white;
 	overflow: hidden;
 `;
 
 
-export function EventPopup(props: EventPopupProps) {
+export function EventCreatePopup(props: EventCreatePopupProps) {
 	const { active, setActive, event } = props;
 	const [editMode, setEditMode] = useState(false);
 
@@ -68,12 +68,12 @@ export function EventPopup(props: EventPopupProps) {
 
 	return (
 		<Popup active={active} setActive={setActive}>
-			<EventPopupContainer>
+			<EventCreateContainer>
 				{ 
 					event === null ? null :	(editMode ? (<React.Fragment>
-						<EventPopupTitle>
+						<EventCreateTitle>
 							Editing {title}
-						</EventPopupTitle>
+						</EventCreateTitle>
 						
 						<TextInput label="Title" value={title} onChange={(e) => {
 							setTitle(e.target.value);
@@ -155,8 +155,8 @@ export function EventPopup(props: EventPopupProps) {
 						</div>
 					</React.Fragment>) : 
 					<React.Fragment>
-						<EventPopupTitle>{event.title}</EventPopupTitle>
-						<EventPopupDescription>TODO SLATE PROCESSED VALUE</EventPopupDescription>
+						<EventCreateTitle>{event.title}</EventCreateTitle>
+						<EventCreateDescription>TODO SLATE PROCESSED VALUE</EventCreateDescription>
 						<div>{event.start.toLocaleDateString()} to {event.end.toLocaleDateString()}</div>
 						<div style={{
 							fontSize: "14px",
@@ -183,7 +183,7 @@ export function EventPopup(props: EventPopupProps) {
 						<MdEdit size={18}/>
 					</ButtonToggle>
 				</div>
-			</EventPopupContainer>
+			</EventCreateContainer>
 		</Popup>
 	);
 }
