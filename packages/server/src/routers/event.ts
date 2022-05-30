@@ -1,3 +1,4 @@
+import { Database } from "@internal/database/dist";
 import { Router } from "express";
 import { authenticationMiddleware } from "../middleware";
 import { generalErrorHandlingMiddleware } from "../middleware/exceptionWrappers";
@@ -20,17 +21,50 @@ eventRouter.post("/", generalErrorHandlingMiddleware(async (req, res) => {
 	console.log(JSON.stringify(body.description, null, 4));
 	console.log(JSON.stringify(slateSanitize(body.description), null, 4));
 
-	res.status(200).send("RES");
+	const result = await Database.event.insert({
+		description: slateSanitize(body.description),
+		name: body.name,
+		startDate: body.startDate,
+		endDate: body.endDate,
+		location: body.location,
+		uuid: body.uuid
+	});
+
+	res.status(200).json(result);
 }));
 
 // Update a new event
-eventRouter.post("/:id", generalErrorHandlingMiddleware(async (req, res) => {
+eventRouter.post("/:uiid", generalErrorHandlingMiddleware(async (req, res) => {
 	const { body } = req;
 
-	console.log(body.description);
-	console.log(JSON.stringify(slateSanitize(body.description), null, 4));
+	// console.log(body.description);
+	// console.log(JSON.stringify(slateSanitize(body.description), null, 4));
 
-	res.status(200).send("RES");
+	if(req.params.uiid === undefined) {
+		res.status(400).send("Missing uiid");;
+		return;
+	}
+
+	const uuid = req.params.uiid;
+	const eventRecord = await Database.event.getByUUID(uuid);
+
+	if(eventRecord === null) {
+		res.status(404).send("Event not found");
+		return;
+	}
+
+	//TODO: verification
+	
+	const result = await Database.event.updateById({
+		id: eventRecord.id,
+		name: body.name || eventRecord.name,
+		description: body.description || eventRecord.description,
+		startTime: body.startDate || eventRecord.startDate,
+		endTime: body.endDate || eventRecord.endDate,
+		location: body.location || eventRecord.location
+	} as any);
+
+	res.status(200).json(result);
 }));
 
 // Delete an event by id

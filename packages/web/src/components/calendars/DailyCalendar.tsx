@@ -15,6 +15,7 @@ import { ButtonToggle } from "../inputs/ButtonToggle";
 import { TextInput } from "../inputs/TextInput";
 import { EventPopup } from "./EventPopup";
 import { EventPosition, Event } from "../../shared/calendar/event";
+import { serialize } from "../../shared/slate/slateEditor";
 
 export const FIFTEEN_MINUTE_SEGMENTS_IN_A_DAY = 24 * (60/15);
 export const FIFTEEN_MINUTES_IN_A_DAY = 24 * (60/15);
@@ -328,7 +329,7 @@ export function DailyCalendarComponent(props: DailyCalendarProps) {
 									</div>
 									
 									<EventDescription>
-										{events[k].description}
+										{JSON.stringify(serialize(events[k].description), null, 4)}
 									</EventDescription>
 								</EventContainer>
 							</div>;

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Promisable } from "type-fest";
+import { JWT } from "../jwt";
 import { UserRecord } from "../user";
 import { UserApiKeyRecord } from "../user-api-key";
 
@@ -19,6 +20,11 @@ export interface ResLocals {
 	 * During use of the web application this will be undefined.
 	 */
 	apiKey?: UserApiKeyRecord;
+
+	/**
+	 * Decoded JWT token of the user.
+	 */
+	jwtData?: JWT;
 	/**
 	 * ***Supplied by authenticationMiddleware in server package***
 	 * 

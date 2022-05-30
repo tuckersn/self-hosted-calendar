@@ -11,6 +11,7 @@ import { useTitle } from "../../../common/hooks/useTitle";
 import { useEffect } from "react";
 import { NotificationBox, NotificationBoxProps } from "../../../components/NotificationBox";
 import { addHours, setHours, setMinutes } from "date-fns";
+import { slateNodeFromStr } from "@internal/schema/dist/serialization";
 
 const PADDING = "1vh";
 
@@ -189,56 +190,56 @@ export function HomeLoggedIn() {
 						start: setMinutes(setHours(new Date(), 0), 0),
 						end: setMinutes(setHours(new Date(), 10), 0),
 						title: "ZZZZZZZZZZZZZZZZZ",
-						description: "This would be a description of the event."
+						description: slateNodeFromStr("This would be a description of the event.")
 					},
 					"XXX": {
 						id: "XXX",
 						start: setMinutes(setHours(new Date(), 1), 0),
 						end: setMinutes(setHours(new Date(), 4), 0),
 						title: "XXXXX",
-						description: "This would be a description of the event."
+						description: slateNodeFromStr("This would be a description of the event.")
 					},
 					"ABC": {
 						id: "ABC",
 						start: new Date(Date.now()),
 						end: addHours(new Date(Date.now()), 1),
 						title: "Hello World Title 1",
-						description: "This would be a description of the event."
+						description: slateNodeFromStr("This would be a description of the event.")
 					},
 					"XYZ": {
 						id: "XYZ",
 						start: setMinutes(setHours(new Date(), 2), 0),
 						end: setMinutes(setHours(new Date(), 4), 0),
 						title: "Hello World Title 2",
-						description: "This would be a description of the event."
+						description: slateNodeFromStr("This would be a description of the event.")
 					},
 					"AAA": {
 						id: "AAA",
 						start: setMinutes(setHours(new Date(), 4), 0),
 						end: setMinutes(setHours(new Date(), 5), 0),
 						title: "Hello World Title 3",
-						description: "This would be a description of the event."
+						description: slateNodeFromStr("This would be a description of the event.")
 					},
 					"AAAB": {
 						id: "AAAB",
 						start: setMinutes(setHours(new Date(), 3), 0),
 						end: setMinutes(setHours(new Date(), 5), 0),
 						title: "Hello World Title 3",
-						description: "This would be a description of the event."
+						description: slateNodeFromStr("This would be a description of the event.")
 					},
 					"AAAC": {
 						id: "AAAC",
 						start: setMinutes(setHours(new Date(), 3), 0),
 						end: setMinutes(setHours(new Date(), 7), 0),
 						title: "Hello World Title 3",
-						description: "This would be a description of the event."
+						description: slateNodeFromStr("This would be a description of the event.")
 					},
 					"BBB": {
 						id: "BBB",
 						start: setMinutes(setHours(new Date(), 4), 1),
 						end: setMinutes(setHours(new Date(), 8), 0),
 						title: "Hello World Title 4",
-						description: "This would be a description of the event."
+						description: slateNodeFromStr("This would be a description of the event.")
 					},
 					// "CCC": {
 					// 	id: "CCC",
@@ -259,28 +260,28 @@ export function HomeLoggedIn() {
 						start: setMinutes(setHours(new Date(), 4), 1),
 						end: setMinutes(setHours(new Date(), 7), 0),
 						title: "Hello World Title 7",
-						description: "This would be a description of the event."
+						description: slateNodeFromStr("This would be a description of the event.")
 					},
 					"FFF": {
 						id: "FFF",
 						start: setMinutes(setHours(new Date(), 5), 1),
 						end: setMinutes(setHours(new Date(), 7), 0),
 						title: "Hello World Title 8",
-						description: "This would be a description of the event."
+						description: slateNodeFromStr("This would be a description of the event.")
 					},
 					"FFG": {
 						id: "FFG",
 						start: setMinutes(setHours(new Date(), 5), 1),
 						end: setMinutes(setHours(new Date(), 7), 0),
 						title: "Hello World Title 9",
-						description: "This would be a description of the event."
+						description: slateNodeFromStr("This would be a description of the event.")
 					},
 					"FFGG": {
 						id: "FFGG",
 						start: setMinutes(setHours(new Date(), 5), 1),
 						end: setMinutes(setHours(new Date(), 7), 0),
 						title: "Hello World Title 10",
-						description: "This would be a description of the event."
+						description: slateNodeFromStr("This would be a description of the event.")
 					}
 					
 				}}/>

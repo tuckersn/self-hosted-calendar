@@ -4,8 +4,11 @@ import { UserQueryFunctions, UserLoginQueryFunctions, BoardQueryFunctions, Board
 import { Promisable, ReadonlyDeep } from "type-fest";
 import { Database } from "../database";
 import { Sequelize, QueryTypes } from "sequelize";
+
 import { userQueryFunctions } from "./user";
+import { eventQueryFunctions } from "./event";
 import { userApiKeyQueryFunctions } from "./userApikey";
+
 
 export async function PostgresDatabase(): Promise<Database> {
 	if(process.env.PG_HOST === undefined) {
@@ -108,20 +111,7 @@ export async function PostgresDatabase(): Promise<Database> {
 				throw new Error("Method not implemented.");
 			}
 		},
-		event: {
-			getById: async (id: number) => {
-				throw new Error("Method not implemented.");
-			},
-			insert: async (eventRecord: EventRecordInsertFields) => {
-				throw new Error("Method not implemented.");
-			},
-			update: async (eventRecord: EventRecord) => {
-				throw new Error("Method not implemented.");
-			},
-			delete: async (id: number) => {
-				throw new Error("Method not implemented.");
-			}
-		},
+		event: eventQueryFunctions(connection),
 		eventAttendee: {
 			getById: async (id: number) => {
 				throw new Error("Method not implemented.");

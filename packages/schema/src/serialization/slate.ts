@@ -84,6 +84,7 @@ export type SlateElement = SlateElementHeadingOneNode | SlateElementHeadingTwoNo
  */
 export type SlateNode = SlateTextNode | SlateEditorNode | SlateUnknownNode | SlateElement;
 
+export type SlateElementOrText = SlateElement | SlateTextNode;
 
 
 
@@ -97,4 +98,17 @@ export type SlateSanitizationError = {
 	slateSanitizationError: "INVALID ATTRIBUTE";
 	node: SlateNode;
 	attribute: string;
+}
+
+
+
+export function slateNodeFromStr(str: string) {
+	return {
+		type: SlateNodeType.ELEMENT,
+		elementType: 'p',
+		children: [{
+			type: SlateNodeType.TEXT,
+			text: str
+		} as SlateTextNode],
+	} as SlateElementParagraphNode;
 }

@@ -1,10 +1,11 @@
+import { SlateNode } from "@internal/schema/dist/serialization";
 
 export interface Event {
 	id: string,
 	start: Date,
 	end: Date,
 	title: string,
-	description: string
+	description: SlateNode
 };
 
 export interface EventPosition {

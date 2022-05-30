@@ -1,6 +1,9 @@
+import { verify } from "jsonwebtoken";
+
 import { MiddlewareFunction } from "@internal/schema/dist/wrappers/rest-endpoint";
 import { Database } from "@internal/database/dist";
-import { UserType } from "@internal/schema/dist";
+import { JWT, jwtDecode, UserType } from "@internal/schema/dist";
+
 import { verifyHash } from "../security";
 
 export const authenticationMiddleware: MiddlewareFunction = async (req, res, next) => {
@@ -34,7 +37,31 @@ export const authenticationMiddleware: MiddlewareFunction = async (req, res, nex
 		const [authType, authToken] = authorization.split(" ");
 		
 		if (authType === "Bearer") {
-			//TODO: JWT
+			
+			const tokenStr = authToken;
+			let token: JWT;
+			try {
+				//TODO: verify
+				token = verify(tokenStr, process.env.JWT_SECRET!) as any;
+			} catch (e) {
+				res.status(401).json({
+					error: "Invalid JWT token"
+				});
+				return;
+			}
+
+			//TODO: verify expiration and such
+
+			const userRecord = await Database.user.getByUUID(token.userId);
+			if(userRecord === null) {
+				res.status(500).json({
+					error: "User not found for this api key. This should never happen."
+				});
+				return;
+			}
+			res.locals.jwtData = token;
+			res.locals.user = userRecord;
+			return next();
 		} else if (authType === "ApiKey") {
 
 			const [prefix,keyName, keyPass] = authToken.split("-");

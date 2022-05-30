@@ -122,10 +122,16 @@ export async function SqliteDatabase(): Promise<Database> {
 			getById: async (id: number) => {
 				throw new Error("Method not implemented.");
 			},
+			getByUUID: async (uuid: string) => {
+				throw new Error("Method not implemented.");
+			},
 			insert: async (eventRecord: EventRecordInsertFields) => {
 				throw new Error("Method not implemented.");
 			},
-			update: async (eventRecord: EventRecord) => {
+			updateById: async (eventRecord: EventRecord) => {
+				throw new Error("Method not implemented.");
+			},
+			updateByUUID: async (eventRecord: EventRecord) => {
 				throw new Error("Method not implemented.");
 			},
 			delete: async (id: number) => {

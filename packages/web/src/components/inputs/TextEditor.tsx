@@ -29,8 +29,8 @@ declare module 'slate' {
 export interface TextEditorProps {
 	outerStyle?: React.CSSProperties;
 	innerStyle?: React.CSSProperties;
-	value?: string;
-	onValue?: (value: string) => void;
+	value?: Descendant[];
+	valueCb?: (value: Descendant[]) => void;
 	onColor?: (color: ColorResult) => ColorResult | void;
 }
 
@@ -85,7 +85,7 @@ export function TextEditor(props: TextEditorProps) {
 	const { onColor } = props;
 
 	const editor: CustomEditor = useMemo(() => withHistory(withReact(createEditor() as ReactEditor)), []);
-	const [value, setValue] = useState<Descendant[]>(initialValue);
+	const [value, setValue] = useState<Descendant[]>(props.value || initialValue);
 	const [selectedColor, setSelectedColor] = useState<string>("#FFF");
 	const [colorPickerOpen, setColorPickerOpen] = useState<boolean>(false);
 	const renderLeaf = useCallback((props: RenderLeafProps) => <LeafComponent {...props} />, []);
@@ -94,6 +94,13 @@ export function TextEditor(props: TextEditorProps) {
 	useEffect(() => {
 		console.log("EDITOR", editor, JSON.stringify(SlateEditor.serialize(editorToEditorNode(editor)), null, 4));
 	});
+
+	useEffect(() => {
+		console.log("VALUE:", value);
+		if(props.valueCb)
+			props.valueCb(value);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [value]);
 
 	return <TextEditorContainer {...props} style={props.outerStyle}>
 		<Slate

@@ -3,6 +3,7 @@
 		"noselect",
 		"pnpm",
 		"Promisable",
-		"Todos"
+		"Todos",
+		"uiid"
 	]
 }

@@ -12,6 +12,7 @@ import { createEditor, Descendant } from "slate";
 import { TextEditor } from "../inputs/TextEditor";
 import { Button } from "@mui/material";
 import { apiRequest } from "../../common/api/api-request";
+import { slateNodeFromStr } from "@internal/schema/dist/serialization";
 
 export interface EventPopupProps {
 	event: Event | null;
@@ -55,6 +56,8 @@ export function EventPopup(props: EventPopupProps) {
 	const [editMode, setEditMode] = useState(false);
 
 	const [title, setTitle] = useState(event ? event.title : "");
+	const [description, setDescription] = useState(event ? event.description : slateNodeFromStr(""));
+	const [errorText, setErrorText] = useState("");
 
 	useEffect(() => {
 		if (event) {
@@ -78,7 +81,9 @@ export function EventPopup(props: EventPopupProps) {
 						{/* <TextInput label="Description" value={description} onValueChange={(v) => {
 							setDescription(v);
 						}}></TextInput> */}
-						<TextEditor outerStyle={{
+						<TextEditor value={[description] as any} valueCb={(e) => {
+							setDescription(e[0]);
+						}} outerStyle={{
 							flex: 1
 						}}/>
 						<div style={{
@@ -101,6 +106,7 @@ export function EventPopup(props: EventPopupProps) {
 							display: "flex",
 							width: "100%"
 						}}>
+
 							<Button variant="outlined" onClick={() => {
 								setActive(false);
 							}}>
@@ -112,20 +118,37 @@ export function EventPopup(props: EventPopupProps) {
 							}}>
 								Revert
 							</Button>
+							<p style={{
+								color: "red",
+								fontSize: "14px",
+								alignSelf: "flex-end",
+								marginLeft: "auto"
+							}}>
+								{errorText}
+							</p>
 							<Button style={{
 								alignSelf: "flex-end",
 								marginLeft: "auto"
 							}} variant="contained" onClick={async () => {
 								//TODO: sanitization of URL
-								console.log("REQ:", await apiRequest("POST", `/api/event/${event.id}`, {
+							
+								const res = await apiRequest("POST", `/api/event/${event.id}`, {
 									body: {
 										id: event.id,
 										title: title,
-										description: event.description,
+										description: description,
 										start: event.start,
 										end: event.end
 									}
-								}));
+								}).catch((e) => {
+									console.log("E:", e);	
+								});
+
+								if(res && res.status === 404) {
+									setErrorText("Event not found");
+								} else {
+									setActive(false);
+								}
 							}}>
 								Save
 							</Button>
@@ -133,7 +156,7 @@ export function EventPopup(props: EventPopupProps) {
 					</React.Fragment>) : 
 					<React.Fragment>
 						<EventPopupTitle>{event.title}</EventPopupTitle>
-						<EventPopupDescription>{event.description}</EventPopupDescription>
+						<EventPopupDescription>TODO SLATE PROCESSED VALUE</EventPopupDescription>
 						<div>{event.start.toLocaleDateString()} to {event.end.toLocaleDateString()}</div>
 						<div style={{
 							fontSize: "14px",
@@ -155,6 +178,7 @@ export function EventPopup(props: EventPopupProps) {
 					top: 0,
 					right: 0
 				}}>
+					
 					<ButtonToggle small active={editMode} setActive={setEditMode}>
 						<MdEdit size={18}/>
 					</ButtonToggle>
