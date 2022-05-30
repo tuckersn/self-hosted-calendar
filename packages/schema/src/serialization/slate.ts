@@ -83,3 +83,18 @@ export type SlateElement = SlateElementHeadingOneNode | SlateElementHeadingTwoNo
  * Combined node, can use nodeType and type to determine specific type.
  */
 export type SlateNode = SlateTextNode | SlateEditorNode | SlateUnknownNode | SlateElement;
+
+
+
+
+export type SlateSanitizationError = {
+	slateSanitizationError: "UNKNOWN_NODE_TYPE";
+	node: SlateNode;
+} | {
+	slateSanitizationError: "UNKNOWN_ELEMENT_TYPE";
+	node: SlateElementNode;
+} | {
+	slateSanitizationError: "INVALID ATTRIBUTE";
+	node: SlateNode;
+	attribute: string;
+}

@@ -30,25 +30,18 @@ export function TextInput({
 	onChange,
 	onEnter,
 	style: styleOverride,
-	value: initialValue,
+	value,
 	label,
 	type,
 	shrink
 }: TextInputProps) {
 
-	const [value, setValue] = useState(initialValue || "");
 	const [style, setStyle] = useState<CSSProperties>(Object.assign(TEXT_INPUT_DEFAULT_STYLE, styleOverride));
 
 	useEffect(() => {
 		setStyle(Object.assign(TEXT_INPUT_DEFAULT_STYLE, styleOverride));
 	}, [styleOverride]);
 
-	useEffect(() => {
-		if(initialValue && initialValue !== value) {
-			setValue(initialValue);
-		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [initialValue, initialValue])
 
 	return <div style={{
 		paddingTop: "4px",

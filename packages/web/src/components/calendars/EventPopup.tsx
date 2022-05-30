@@ -11,6 +11,7 @@ import { withHistory } from "slate-history";
 import { createEditor, Descendant } from "slate";
 import { TextEditor } from "../inputs/TextEditor";
 import { Button } from "@mui/material";
+import { apiRequest } from "../../common/api/api-request";
 
 export interface EventPopupProps {
 	event: Event | null;
@@ -114,8 +115,17 @@ export function EventPopup(props: EventPopupProps) {
 							<Button style={{
 								alignSelf: "flex-end",
 								marginLeft: "auto"
-							}} variant="contained" onClick={() => {
-								
+							}} variant="contained" onClick={async () => {
+								//TODO: sanitization of URL
+								console.log("REQ:", await apiRequest("POST", `/api/event/${event.id}`, {
+									body: {
+										id: event.id,
+										title: title,
+										description: event.description,
+										start: event.start,
+										end: event.end
+									}
+								}));
 							}}>
 								Save
 							</Button>

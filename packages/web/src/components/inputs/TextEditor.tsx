@@ -92,7 +92,6 @@ export function TextEditor(props: TextEditorProps) {
 
 
 	useEffect(() => {
-		console.log("UPDATE", SlateEditor.slateComponentStyle, SlateEditor.slateComponentStyle + '');
 		console.log("EDITOR", editor, JSON.stringify(SlateEditor.serialize(editorToEditorNode(editor)), null, 4));
 	});
 

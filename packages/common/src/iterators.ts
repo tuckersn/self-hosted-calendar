@@ -5,3 +5,4 @@ export function forLoop<RETURN_VALUE>(iterations: number, cb: (index: number) =>
 	}
 	return returnValues;
 }
+

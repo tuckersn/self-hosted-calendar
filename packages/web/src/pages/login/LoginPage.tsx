@@ -113,12 +113,15 @@ export function LoginPage() {
 				<h2>Sign In</h2>
 				<InputField style={{paddingRight: "32px"}}>
 					
-					<TextInput label="Username" value={username} onValueChange={setUsername}/>
+					<TextInput label="Username" value={username} onChange={(e) => {
+						return setUsername(e.target.value);
+					}}/>
 		
 				</InputField>
 				<InputField style={{paddingRight: "32px"}}>
-
-					<TextInput label="Password" type="password" value={password} onValueChange={setPassword} onEnter={async () => {
+					<TextInput type="password" label="Password" value={password} onChange={(e) => {
+						return setPassword(e.target.value);
+					}} onEnter={async () => {
 						const res = await submitLogin(username, password, updateUser, navigate);
 						if(!res.success) {
 							setError(res.error || "Unknown error has occurred.");
