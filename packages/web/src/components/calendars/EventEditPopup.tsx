@@ -13,6 +13,7 @@ import { TextEditor } from "../inputs/TextEditor";
 import { Button } from "@mui/material";
 import { apiRequest } from "../../common/api/api-request";
 import { slateNodeFromStr } from "@internal/schema/dist/serialization";
+import { SlateNodeRender } from "../../shared/slate/SlateNodeRender";
 
 export interface EventEditPopupProps {
 	event: Event | null;
@@ -157,8 +158,12 @@ export function EventEditPopup(props: EventEditPopupProps) {
 						</div>
 					</React.Fragment>) : 
 					<React.Fragment>
-						<EventEditPopupTitle>{event.title}</EventEditPopupTitle>
-						<EventEditPopupDescription>TODO SLATE PROCESSED VALUE</EventEditPopupDescription>
+						<EventEditPopupTitle>
+							{event.title}
+						</EventEditPopupTitle>
+						<EventEditPopupDescription>
+							<SlateNodeRender node={event.description}/>
+						</EventEditPopupDescription>
 						<div>{event.start.toLocaleDateString()} to {event.end.toLocaleDateString()}</div>
 						<div style={{
 							fontSize: "14px",

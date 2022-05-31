@@ -12,10 +12,9 @@ import { createEditor, Descendant } from "slate";
 import { TextEditor } from "../inputs/TextEditor";
 import { Button } from "@mui/material";
 import { apiRequest } from "../../common/api/api-request";
-import { slateNodeFromStr } from "@internal/schema/dist/serialization";
+import { SlateEditorNode, SlateNode, slateNodeFromStr, SlateNodeType } from "@internal/schema/dist/serialization";
 
 export interface EventCreatePopupProps {
-	event: Event | null;
 	active: boolean;
 	setActive: (active: boolean) => void;
 }
@@ -52,127 +51,101 @@ const EventCreateDescription = styled.div`
 
 
 export function EventCreatePopup(props: EventCreatePopupProps) {
-	const { active, setActive, event } = props;
+	const { active, setActive } = props;
 	const [editMode, setEditMode] = useState(false);
 
-	const [title, setTitle] = useState(event ? event.title : "");
-	const [description, setDescription] = useState(event ? event.description : slateNodeFromStr(""));
+	const [title, setTitle] = useState("");
+	const [description, setDescription] = useState<SlateEditorNode>({
+		type: SlateNodeType.EDITOR,
+		children: [slateNodeFromStr("")]
+	});
 	const [errorText, setErrorText] = useState("");
+	const [startDate, setStartDate] = useState(new Date());
+	const [endDate, setEndDate] = useState(new Date());
 
-	useEffect(() => {
-		if (event) {
-			setTitle(event.title);
-		}
-	}, [setTitle, event, event?.title]);
 
 
 	return (
 		<Popup active={active} setActive={setActive}>
 			<EventCreateContainer>
-				{ 
-					event === null ? null :	(editMode ? (<React.Fragment>
-						<EventCreateTitle>
-							Editing {title}
-						</EventCreateTitle>
-						
-						<TextInput label="Title" value={title} onChange={(e) => {
-							setTitle(e.target.value);
-						}}></TextInput>
-						{/* <TextInput label="Description" value={description} onValueChange={(v) => {
-							setDescription(v);
-						}}></TextInput> */}
-						<TextEditor value={[description] as any} valueCb={(e) => {
-							setDescription(e[0]);
-						}} outerStyle={{
-							flex: 1
-						}}/>
-						<div style={{
-							border: "1px solid white",
-							padding: "8px",
-							marginTop: "8px",
-							height: "100px"
-						}}>
-							Time picker would go here: {event.start.toLocaleDateString()} - {event.end.toLocaleDateString()}
-						</div>
-						<div style={{
-							fontSize: "14px",
-							color: "grey",
-						}}>
-							Event id: {event.id}
-						</div>
+				<EventCreateTitle>
+					Editing {title}
+				</EventCreateTitle>
+				
+				<TextInput label="Title" value={title} onChange={(e) => {
+					setTitle(e.target.value);
+				}}></TextInput>
+				{/* <TextInput label="Description" value={description} onValueChange={(v) => {
+					setDescription(v);
+				}}></TextInput> */}
+				<TextEditor value={[description] as any} valueCb={(e) => {
+					setDescription({
+						type: SlateNodeType.EDITOR,
+						children: e
+					});
+				}} outerStyle={{
+					flex: 1
+				}}/>
+				<div style={{
+					border: "1px solid white",
+					padding: "8px",
+					marginTop: "8px",
+					height: "100px"
+				}}>
+					Time picker would go here: {startDate.toLocaleDateString()} - {endDate.toLocaleDateString()}
+				</div>
 
 
-						<div style={{
-							display: "flex",
-							width: "100%"
-						}}>
+				<div style={{
+					display: "flex",
+					width: "100%"
+				}}>
 
-							<Button variant="outlined" onClick={() => {
-								setActive(false);
-							}}>
-								Close
-							</Button>
+					<Button variant="outlined" onClick={() => {
+						setActive(false);
+					}}>
+						Close
+					</Button>
 
-							<Button variant="outlined" onClick={() => {
-								setActive(false);
-							}}>
-								Revert
-							</Button>
-							<p style={{
-								color: "red",
-								fontSize: "14px",
-								alignSelf: "flex-end",
-								marginLeft: "auto"
-							}}>
-								{errorText}
-							</p>
-							<Button style={{
-								alignSelf: "flex-end",
-								marginLeft: "auto"
-							}} variant="contained" onClick={async () => {
-								//TODO: sanitization of URL
-							
-								const res = await apiRequest("POST", `/api/event/${event.id}`, {
-									body: {
-										id: event.id,
-										title: title,
-										description: description,
-										start: event.start,
-										end: event.end
-									}
-								}).catch((e) => {
-									console.log("E:", e);	
-								});
+					<Button variant="outlined" onClick={() => {
+						setActive(false);
+					}}>
+						Revert
+					</Button>
+					<p style={{
+						color: "red",
+						fontSize: "14px",
+						alignSelf: "flex-end",
+						marginLeft: "auto"
+					}}>
+						{errorText}
+					</p>
+					<Button style={{
+						alignSelf: "flex-end",
+						marginLeft: "auto"
+					}} variant="contained" onClick={async () => {
+						//TODO: sanitization of URL
+					
+						const res = await apiRequest("POST", `/api/event`, {
+							body: {
+								title: title,
+								description: description,
+								start: startDate,
+								end: endDate
+							}
+						}).catch((e) => {
+							console.log("E:", e);	
+						});
 
-								if(res && res.status === 404) {
-									setErrorText("Event not found");
-								} else {
-									setActive(false);
-								}
-							}}>
-								Save
-							</Button>
-						</div>
-					</React.Fragment>) : 
-					<React.Fragment>
-						<EventCreateTitle>{event.title}</EventCreateTitle>
-						<EventCreateDescription>TODO SLATE PROCESSED VALUE</EventCreateDescription>
-						<div>{event.start.toLocaleDateString()} to {event.end.toLocaleDateString()}</div>
-						<div style={{
-							fontSize: "14px",
-							color: "grey",
-						}}>Event id: {event.id}</div>
-						<Button variant="contained" style={{
-							position: "absolute",
-							right: "8px",
-							bottom: "8px"
-						}} onClick={() => {
+						if(res && res.status === 404) {
+							setErrorText("Event not found");
+						} else {
 							setActive(false);
-						}}>
-							Close
-						</Button>
-					</React.Fragment>)
-				}
+						}
+					}}>
+						Save
+					</Button>
+				</div>
 				<div style={{
 					position: "absolute",
 					top: 0,

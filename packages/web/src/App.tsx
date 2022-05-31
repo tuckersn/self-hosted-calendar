@@ -25,6 +25,7 @@ import { FloatingContainer } from './components/style';
 import { COLORS, CSS_PRESETS, NAV_BAR_HEIGHT, STYLE_VALUES } from './common/style';
 import { useTitle } from './common/hooks/useTitle';
 import {Helmet} from "react-helmet";
+import { NewMenu } from './components/menus/NewMenu';
 
 
 
@@ -147,8 +148,9 @@ function App() {
 	const navigate = useNavigate();
 	const [user, setUser] = useUser();
 	const location = useLocation();
-
 	const [title, setTitle] = useTitle()
+
+	const [newMenuOpen, setNewMenuOpen] = React.useState(false);
 
 	useEffect(() => {
 		console.log(`[NAVIGATED]: ${location.pathname}`);
@@ -204,9 +206,14 @@ function App() {
 								
 							}}>
 							<Button small style={{
-								borderRadius: `${STYLE_VALUES.borderRadius}px 0px 0px ${STYLE_VALUES.borderRadius}px`,
+								borderRadius: `${STYLE_VALUES.borderRadius}px 0px 0px ${newMenuOpen ? 0 : STYLE_VALUES.borderRadius}px`,
 							}}>
-								<MdAdd size={18}/>
+								<MdAdd onClick={() => {
+									setNewMenuOpen(!newMenuOpen);
+								}} size={18}/>
+								<FloatingContainer offsetX={36} offsetY={21}>
+									<NewMenu active={newMenuOpen} setActive={setNewMenuOpen}/>
+								</FloatingContainer>
 							</Button>
 							<TitleBarSearchContainer>
 								search/command bar here

@@ -265,8 +265,6 @@ export function DailyCalendarComponent(props: DailyCalendarProps) {
 				event
 			}
 		}
-		console.log("POS:", JSON.stringify(positions, null, 4), size.width);
-		console.log("SLOTS:", slots);
 		setEventPositions(positions);
 
 	}, [setEventPositions, events, fifteenMinuteHeight, size.width, eventsKeyArray]);

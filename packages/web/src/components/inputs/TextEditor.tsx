@@ -8,7 +8,7 @@ import { Transform } from "stream";
 import styled, { css } from "styled-components";
 import { ThemedStyledFunction } from "styled-components";
 
-import { SlateElement, SlateNode, SlateNodeType, SlateEditorNode } from "@internal/schema/dist/serialization";
+import { SlateElement, SlateNode, SlateNodeType, SlateEditorNode, SlateTextNode } from "@internal/schema/dist/serialization";
 
 import { COLORS, STYLE_VALUES } from "../../common/style";
 import { SlateEditor } from "../../shared/slate";
@@ -30,7 +30,7 @@ export interface TextEditorProps {
 	outerStyle?: React.CSSProperties;
 	innerStyle?: React.CSSProperties;
 	value?: Descendant[];
-	valueCb?: (value: Descendant[]) => void;
+	valueCb?: (value: (SlateElement | SlateTextNode)[]) => void;
 	onColor?: (color: ColorResult) => ColorResult | void;
 }
 
@@ -90,13 +90,7 @@ export function TextEditor(props: TextEditorProps) {
 	const [colorPickerOpen, setColorPickerOpen] = useState<boolean>(false);
 	const renderLeaf = useCallback((props: RenderLeafProps) => <LeafComponent {...props} />, []);
 
-
 	useEffect(() => {
-		console.log("EDITOR", editor, JSON.stringify(SlateEditor.serialize(editorToEditorNode(editor)), null, 4));
-	});
-
-	useEffect(() => {
-		console.log("VALUE:", value);
 		if(props.valueCb)
 			props.valueCb(value);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
