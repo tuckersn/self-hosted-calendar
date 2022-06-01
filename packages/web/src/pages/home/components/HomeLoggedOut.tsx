@@ -11,7 +11,7 @@ const Container = (styled.div`
 
 export function HomeLoggedOut() {
 
-	return <ArticleLayout title="Home">
+	return <ArticleLayout pageTitle="Home">
 		<Container>
 			<h1>
 				Welcome to Calendar!

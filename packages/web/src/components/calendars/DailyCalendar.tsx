@@ -13,7 +13,7 @@ import { Button } from "../inputs/Button";
 import { MdEdit } from "react-icons/md";
 import { ButtonToggle } from "../inputs/ButtonToggle";
 import { TextInput } from "../inputs/TextInput";
-import { EventEditPopup } from "./EventEditPopup";
+import { EventEditPopup } from "./event/EventEditPopup";
 import { EventPosition, Event } from "../../shared/calendar/event";
 import { serialize } from "../../shared/slate/slateEditor";
 import { SlateNodeRender } from "../../shared/slate/SlateNodeRender";

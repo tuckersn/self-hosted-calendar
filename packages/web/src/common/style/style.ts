@@ -34,7 +34,7 @@ export const COLORS = {
 	highLight: "#418ab0",
 
 
-
+	backgroundExtremelyDark: "rgb(3, 3, 3)",
 	backgroundDark: "rgb(7, 7, 7)",
 	backgroundSlightlyDark: "rgb(15,15,15)",
 	background: "rgb(20, 20, 20)",

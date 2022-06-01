@@ -35,7 +35,7 @@ export function AccountInfoPage() {
 	});
 	
 
-	return <ArticleLayout fill title="Account Info">
+	return <ArticleLayout fill pageTitle="Account Info">
 		<Container>
 			<h1>Hello {user?.displayName}</h1>
 			<div style={{

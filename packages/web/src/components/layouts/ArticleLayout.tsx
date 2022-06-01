@@ -1,5 +1,6 @@
 import styled, { CSSProperties } from "styled-components";
 import { NAV_BAR_HEIGHT } from "../../common/style";
+import { Header } from "./Header";
 
 interface ContainerProps {
 	fill?: boolean;
@@ -19,17 +20,10 @@ const InnerContainer = styled.div<ContainerProps>`
 	padding-top: 32px;
 `;
 
-const Header = styled.div`
-	display: flex;
-	flex-direction: row;
-	flex: 0;
-	margin: 0;
-	padding: 0;
-	height: min-content;
-`;
+
 
 export interface ArticleLayoutProps {
-	title: string;
+	pageTitle: string;
 	children: React.ReactNode;
 	style?: CSSProperties;
 	innerStyle?: CSSProperties;
@@ -38,7 +32,7 @@ export interface ArticleLayoutProps {
 }
 
 export function ArticleLayout({
-	title,
+	pageTitle,
 	children,
 	style,
 	innerStyle,
@@ -48,9 +42,8 @@ export function ArticleLayout({
 
 	return <Container fill={fill} style={style}>
 		<InnerContainer fill={fill} style={innerStyle}>
-			<Header style={headerStyle}>
-				<p style={{color: "grey"}}>BreadCrumbsHere/</p>
-				<p>{title}</p>
+			<Header>
+				{pageTitle}
 			</Header>
 			{children}
 		</InnerContainer>

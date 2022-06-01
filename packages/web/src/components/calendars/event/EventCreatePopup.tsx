@@ -1,17 +1,17 @@
 import React, { useEffect, useMemo } from "react";
 import { useState } from "react";
 import styled from "styled-components";
-import { ButtonToggle } from "../inputs/ButtonToggle";
-import { TextInput } from "../inputs/TextInput";
-import { Popup } from "../style/Popup";
-import { Event } from "../../shared/calendar/event";
+import { ButtonToggle } from "../../inputs/ButtonToggle";
+import { TextInput } from "../../inputs/TextInput";
+import { Popup } from "../../style/Popup";
+import { Event } from "../../../shared/calendar/event";
 import { MdEdit } from "react-icons/md";
 import { Editable, ReactEditor, Slate, withReact } from "slate-react";
 import { withHistory } from "slate-history";
 import { createEditor, Descendant } from "slate";
-import { TextEditor } from "../inputs/TextEditor";
+import { TextEditor } from "../../inputs/TextEditor";
 import { Button } from "@mui/material";
-import { apiRequest } from "../../common/api/api-request";
+import { apiRequest } from "../../../common/api/api-request";
 import { SlateEditorNode, SlateNode, slateNodeFromStr, SlateNodeType } from "@internal/schema/dist/serialization";
 
 export interface EventCreatePopupProps {

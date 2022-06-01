@@ -15,7 +15,7 @@ export function LoginRegisterPage() {
 	const [email, setEmail] = useState("");
 	const [displayName, setDisplayName] = useState("");
 
-	return <ArticleLayout title={"Registration"}>
+	return <ArticleLayout pageTitle={"Registration"}>
 
 		<h1>
 			Registration
