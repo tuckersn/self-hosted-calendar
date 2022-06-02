@@ -1,5 +1,24 @@
 
-import { UserQueryFunctions, UserLoginQueryFunctions, BoardQueryFunctions, BoardMembershipQueryFunctions, EventQueryFunctions, EventAttendeeQueryFunctions, TodoItemQueryFunctions, UserRecordInsertFields, UserRecord, UserLoginRecordInsertFields, BoardRecord, BoardRecordInsertFields, EventRecordInsertFields, EventRecord, BoardMembershipRecordInsertFields, EventAttendeeRecordInsertFields,TodoItemRecord, TodoItemRecordInsertFields  } from "@internal/schema/dist/index";
+import {
+	UserQueryFunctions,
+	UserLoginQueryFunctions,
+	TaskBoardQueryFunctions,
+	TaskBoardMembershipQueryFunctions,
+	EventQueryFunctions,
+	EventAttendeeQueryFunctions,
+	TodoItemQueryFunctions,
+	UserRecordInsertFields,
+	UserRecord,
+	UserLoginRecordInsertFields,
+	TaskBoardRecord,
+	TaskBoardRecordInsertFields,
+	EventRecordInsertFields,
+	EventRecord,
+	TaskBoardMembershipRecordInsertFields,
+	EventAttendeeRecordInsertFields,
+	TodoItemRecord,
+	TodoItemRecordInsertFields
+} from "@internal/schema/dist/index";
 
 import { Promisable, ReadonlyDeep } from "type-fest";
 import { Database } from "../database";
@@ -75,10 +94,10 @@ export async function PostgresDatabase(): Promise<Database> {
 			getById: async (id: number) => {
 				throw new Error("Method not implemented.");
 			},
-			insert: async (boardRecord: BoardRecordInsertFields) => {
+			insert: async (boardRecord: TaskBoardRecordInsertFields) => {
 				throw new Error("Method not implemented.");
 			},
-			update: async (boardRecord: BoardRecord) => {
+			update: async (boardRecord: TaskBoardRecord) => {
 				throw new Error("Method not implemented.");
 			},
 			delete: async (id: number) => {
@@ -104,7 +123,7 @@ export async function PostgresDatabase(): Promise<Database> {
 			delete: async (boardId: number) => {
 				throw new Error("Method not implemented.");
 			},
-			insert: async (boardMembershipRecord: BoardMembershipRecordInsertFields) => {
+			insert: async (boardMembershipRecord: TaskBoardMembershipRecordInsertFields) => {
 				throw new Error("Method not implemented.");
 			},
 			getMembersOrderedByJoinedDate: async (boardId: number) => {
