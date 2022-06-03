@@ -1,4 +1,4 @@
-import { MdAccountCircle, MdCalendarToday, MdDataExploration, MdHttp, MdIntegrationInstructions, MdSettings, MdTask } from "react-icons/md";
+import { MdAccountCircle, MdCalendarToday, MdDataExploration, MdEvent, MdHttp, MdIntegrationInstructions, MdSettings, MdTask, MdTaskAlt, MdViewModule } from "react-icons/md";
 import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { DiDatabase } from "react-icons/di";
@@ -95,10 +95,32 @@ export function AdminPage() {
 			</SidebarItem>
 
 			<SidebarItem onClick={() => {
+				navigate("/admin/events");
+			}}>
+				<SidebarItemIconContainer>
+					<MdEvent size={30}/>
+				</SidebarItemIconContainer>
+				<SidebarItemTitle>
+					Events
+				</SidebarItemTitle>
+			</SidebarItem>
+
+			<SidebarItem onClick={() => {
+				navigate("/admin/tasklists");
+			}}>
+				<SidebarItemIconContainer>
+					<MdViewModule size={30}/>
+				</SidebarItemIconContainer>
+				<SidebarItemTitle>
+					Task Boards
+				</SidebarItemTitle>
+			</SidebarItem>
+
+			<SidebarItem onClick={() => {
 				navigate("/admin/tasks");
 			}}>
 				<SidebarItemIconContainer>
-					<MdTask size={30}/>
+					<MdTaskAlt size={30}/>
 				</SidebarItemIconContainer>
 				<SidebarItemTitle>
 					Tasks

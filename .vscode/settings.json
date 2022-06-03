@@ -3,6 +3,8 @@
 		"noselect",
 		"pnpm",
 		"Promisable",
+		"taskboards",
+		"tasklists",
 		"Todos",
 		"uiid"
 	]

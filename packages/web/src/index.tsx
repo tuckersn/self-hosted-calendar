@@ -30,6 +30,8 @@ import { TaskAdminPage } from './pages/admin/pages/TaskAdminPage';
 import { WebhookAdminPage } from './pages/admin/pages/WebhooksAdminPage';
 import { SettingsAdminPage } from './pages/admin/pages/SettingsAdminpage';
 import { CalendarAdminPage } from './pages/admin/pages/CalendarAdminPage';
+import { TaskBoardAdminPage } from './pages/admin/pages/TaskBoardAdminPage';
+import { EventAdminPage } from './pages/admin/pages/EventAdminPage';
 
 export const themeOptions = createTheme({
 	palette: {
@@ -93,6 +95,8 @@ root.render(
 								<Route index element={<AdminDashboardPage/>}/>
 								<Route path="users" element={<UserAdminPage/>}/>
 								<Route path="calendars" element={<CalendarAdminPage/>}/>
+								<Route path="events" element={<EventAdminPage/>}/>
+								<Route path="task-boards" element={<TaskBoardAdminPage/>}/>
 								<Route path="tasks" element={<TaskAdminPage/>}/>
 								<Route path="webhooks" element={<WebhookAdminPage/>}/>
 								<Route path="databases" element={<DatabaseAdminPage/>}/>
