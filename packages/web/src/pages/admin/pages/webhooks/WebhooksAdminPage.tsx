@@ -1,5 +1,5 @@
-import { Header } from "../../../components/layouts/Header";
-import { adminPageCrumbs } from "../AdminPage";
+import { Header } from "../../../../components/layouts/Header";
+import { adminPageCrumbs } from "../../AdminPage";
 
 export function WebhookAdminPage() {
 

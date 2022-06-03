@@ -16,9 +16,9 @@ import { LoginRegisterPage } from './pages/login/LoginRegisterPage';
 import { Provider } from 'react-redux';
 import { store } from './common/store/store';
 import { AdminPage } from './pages/admin/AdminPage';
-import { AdminDashboardPage } from './pages/admin/pages/AdminDashboard';
-import { UserAdminPage } from './pages/admin/pages/UserAdminPage';
-import { DatabaseAdminPage } from './pages/admin/pages/DatabaseAdminPage';
+import { AdminDashboardPage } from './pages/admin/pages/dashboard/AdminDashboard';
+import { UserAdminPage } from './pages/admin/pages/user/UserAdminPage';
+import { DatabaseAdminPage } from './pages/admin/pages/database/DatabaseAdminPage';
 import { nanoid } from '@reduxjs/toolkit';
 import { CalendarPage } from './pages/calendar/CalendarPage';
 import { UISamplesPage } from './pages/debug/UISamplesPage';
@@ -26,12 +26,12 @@ import { UISamplesPage } from './pages/debug/UISamplesPage';
 import { createTheme } from "@mui/material/styles";
 import { ThemeOptions } from "@mui/material/styles/createTheme";
 import { ThemeProvider } from '@mui/material';
-import { TaskAdminPage } from './pages/admin/pages/TaskAdminPage';
-import { WebhookAdminPage } from './pages/admin/pages/WebhooksAdminPage';
-import { SettingsAdminPage } from './pages/admin/pages/SettingsAdminpage';
-import { CalendarAdminPage } from './pages/admin/pages/CalendarAdminPage';
-import { TaskBoardAdminPage } from './pages/admin/pages/TaskBoardAdminPage';
-import { EventAdminPage } from './pages/admin/pages/EventAdminPage';
+import { TaskAdminPage } from './pages/admin/pages/task/TaskAdminPage';
+import { WebhookAdminPage } from './pages/admin/pages/webhooks/WebhooksAdminPage';
+import { SettingsAdminPage } from './pages/admin/pages/settings/SettingsAdminpage';
+import { CalendarAdminPage } from './pages/admin/pages/calendar/CalendarAdminPage';
+import { TaskBoardAdminPage } from './pages/admin/pages/task-boards/TaskBoardAdminPage';
+import { EventAdminPage } from './pages/admin/pages/event/EventAdminPage';
 
 export const themeOptions = createTheme({
 	palette: {

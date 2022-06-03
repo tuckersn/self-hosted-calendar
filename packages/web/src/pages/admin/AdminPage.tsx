@@ -106,7 +106,7 @@ export function AdminPage() {
 			</SidebarItem>
 
 			<SidebarItem onClick={() => {
-				navigate("/admin/tasklists");
+				navigate("/admin/task-boards");
 			}}>
 				<SidebarItemIconContainer>
 					<MdViewModule size={30}/>

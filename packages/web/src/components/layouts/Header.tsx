@@ -54,6 +54,7 @@ export function Header({ children, style, crumbs: propsCrumbs } : HeaderProps) {
 		{
 			crumbs.map((crumb, index) => {
 				return <Crumb
+					key={crumb.url + index}
 					onClick={() => {
 						navigate(crumb.url);
 					}}>

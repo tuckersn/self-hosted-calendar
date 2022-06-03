@@ -40,6 +40,7 @@ export const COLORS = {
 	backgroundSlightlyDark: "rgb(15,15,15)",
 	background: "rgb(20, 20, 20)",
 	backgroundLight: "rgb(45, 45, 45)",
+	backgroundSlightlyLight: "rgb(60, 60, 60)",
 	backgroundVeryLight: "rgb(75, 75, 75)",
 	backgroundExtremelyLight: "rgb(115 115, 115)",
 	/** Transparent layer of white */

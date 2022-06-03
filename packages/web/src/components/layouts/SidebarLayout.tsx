@@ -15,6 +15,8 @@ const SidebarContainer = styled.div`
 `;
 const ChildrenContainer = styled.div`
 	padding: 32px;
+	width: 100%;
+	height: 100%;
 `;
 
 
