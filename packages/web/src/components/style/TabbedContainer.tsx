@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import styled from "styled-components";
+import styled, { css, FlattenSimpleInterpolation } from "styled-components";
 import { COLORS } from "../../common/style";
 
 export interface TabbedContainerProps {
@@ -13,7 +13,9 @@ export interface TabbedContainerProps {
 		}
 	};
 	setSelectedTab?: (tabKey: string) => void;
+	containerStyle?: FlattenSimpleInterpolation;
 }
+
 
 
 const OuterContainer = styled.div<TabbedContainerProps>`
@@ -22,6 +24,7 @@ const OuterContainer = styled.div<TabbedContainerProps>`
 	width: 100%;
 	height: 100%;
 	border: 1px solid white;
+	${props => props.containerStyle}
 `;
 
 const NavContainer = styled.div<TabbedContainerProps>`
@@ -41,7 +44,8 @@ const NavItem = styled.div<TabbedContainerProps & { active: boolean }>`
 	
 	flex: 1;
 	height: 100%;
-	font-size: 18px;
+
+	font-size: 14px;
 	text-align: center;
 	background-color: ${COLORS.backgroundDark};
 

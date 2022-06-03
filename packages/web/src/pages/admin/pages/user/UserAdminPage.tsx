@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Header } from "../../../../components/layouts/Header";
 import { TabbedContainer } from "../../../../components/style/TabbedContainer";
 import { adminPageCrumbs } from "../../AdminPage";
@@ -8,10 +8,14 @@ const Container = styled.div`
 	display: flex;
 	flex-direction: row;
 	width: 100%;
+	height: 100%;
 `;
 
 const HalfOfContainer = styled.div`
 	flex: 1;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
 `;
 
 export function UserAdminPage() {
@@ -25,7 +29,9 @@ export function UserAdminPage() {
 			</Header>
 			<h1>User Admin Page</h1>
 			
-			<TabbedContainer tabs={{
+			<TabbedContainer containerStyle={css`
+				flex: 1;
+			`} tabs={{
 				"Details": {
 					label: "Details",
 					content: <div>
