@@ -32,6 +32,7 @@ export const COLORS = {
 	hover: "#00a8ff",
 
 	highLight: "#418ab0",
+	highLightBright: "#45b4ed",
 
 
 	backgroundExtremelyDark: "rgb(3, 3, 3)",

@@ -1,6 +1,6 @@
 import styled, { CSSProperties } from "styled-components";
 import { NAV_BAR_HEIGHT } from "../../common/style";
-import { Header } from "./Header";
+import { Header, HeaderProps } from "./Header";
 
 interface ContainerProps {
 	fill?: boolean;
@@ -29,6 +29,7 @@ export interface ArticleLayoutProps {
 	innerStyle?: CSSProperties;
 	headerStyle?: CSSProperties;
 	fill?: boolean;
+	crumbs?: HeaderProps["crumbs"];
 }
 
 export function ArticleLayout({
@@ -37,16 +38,17 @@ export function ArticleLayout({
 	style,
 	innerStyle,
 	headerStyle,
+	crumbs,
 	fill
 } : ArticleLayoutProps) {
 
 	return <Container fill={fill} style={style}>
 		<InnerContainer fill={fill} style={innerStyle}>
-			<Header>
+			<Header crumbs={crumbs || []}>
 				{pageTitle}
 			</Header>
 			{children}
 		</InnerContainer>
-	</Container>;
+	</Container>
 
 }

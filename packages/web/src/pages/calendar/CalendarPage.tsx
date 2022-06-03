@@ -59,7 +59,7 @@ export function CalendarPage() {
 			display: "flex",
 			flexDirection: "column"
 		}}>
-			<Header>
+			<Header crumbs={[]}>
 				<p>Calendar</p>
 			</Header>
 

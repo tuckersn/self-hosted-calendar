@@ -16,9 +16,9 @@ import { LoginRegisterPage } from './pages/login/LoginRegisterPage';
 import { Provider } from 'react-redux';
 import { store } from './common/store/store';
 import { AdminPage } from './pages/admin/AdminPage';
-import { AdminDashboardPage } from './pages/admin/components/AdminDashboard';
-import { UserAdminPage } from './pages/admin/components/UserAdminPage';
-import { DatabaseAdminPage } from './pages/admin/components/DatabaseAdminPage';
+import { AdminDashboardPage } from './pages/admin/pages/AdminDashboard';
+import { UserAdminPage } from './pages/admin/pages/UserAdminPage';
+import { DatabaseAdminPage } from './pages/admin/pages/DatabaseAdminPage';
 import { nanoid } from '@reduxjs/toolkit';
 import { CalendarPage } from './pages/calendar/CalendarPage';
 import { UISamplesPage } from './pages/debug/UISamplesPage';
@@ -26,6 +26,10 @@ import { UISamplesPage } from './pages/debug/UISamplesPage';
 import { createTheme } from "@mui/material/styles";
 import { ThemeOptions } from "@mui/material/styles/createTheme";
 import { ThemeProvider } from '@mui/material';
+import { TaskAdminPage } from './pages/admin/pages/TaskAdminPage';
+import { WebhookAdminPage } from './pages/admin/pages/WebhooksAdminPage';
+import { SettingsAdminPage } from './pages/admin/pages/SettingsAdminpage';
+import { CalendarAdminPage } from './pages/admin/pages/CalendarAdminPage';
 
 export const themeOptions = createTheme({
 	palette: {
@@ -88,7 +92,11 @@ root.render(
 							<Route path="admin" element={<AdminPage/>}>
 								<Route index element={<AdminDashboardPage/>}/>
 								<Route path="users" element={<UserAdminPage/>}/>
-								<Route path="database" element={<DatabaseAdminPage/>}/>
+								<Route path="calendars" element={<CalendarAdminPage/>}/>
+								<Route path="tasks" element={<TaskAdminPage/>}/>
+								<Route path="webhooks" element={<WebhookAdminPage/>}/>
+								<Route path="databases" element={<DatabaseAdminPage/>}/>
+								<Route path="settings" element={<SettingsAdminPage/>}/>
 							</Route>
 
 							<Route path="debug">

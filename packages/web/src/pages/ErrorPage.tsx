@@ -1,5 +1,6 @@
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
+import { ArticleLayout } from "../components/layouts/ArticleLayout";
 
 
 const ErrorContainer = (styled.div`
@@ -26,8 +27,11 @@ export function ErrorPage({
 	errorCode = errorCode || state?.errorCode || -1;
 	errorMessage = errorMessage || state?.errorMessage || "unknown";
 
-	return <ErrorContainer>
-		<h1>Oh no!</h1>
-		<h3>Error code: {errorCode}<br/>Error message: {errorMessage}</h3>
-	</ErrorContainer>;
+	return <ArticleLayout pageTitle="Error">
+		<ErrorContainer>
+			<h1>Oh no!</h1>
+			<h3>Error code: {errorCode}<br/>Error message: {errorMessage}</h3>
+		</ErrorContainer>
+	</ArticleLayout>
+
 }

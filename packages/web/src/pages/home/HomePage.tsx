@@ -4,8 +4,8 @@ import styled from "styled-components";
 import { COLORS } from "../../common/style";
 import { ArticleLayout } from "../../components/layouts/ArticleLayout";
 import { useUser } from "../../common/hooks/useUser";
-import { HomeLoggedIn } from "./components/HomeLoggedIn";
-import { HomeLoggedOut } from "./components/HomeLoggedOut";
+import { HomeLoggedIn } from "./pages/HomeLoggedIn";
+import { HomeLoggedOut } from "./pages/HomeLoggedOut";
 
 
 

@@ -147,7 +147,7 @@ export function HomeLoggedIn() {
 				border: "0",
 				boxShadow: "none"
 			}}>
-				<ArticleLayout pageTitle="Home" innerStyle={{
+				<ArticleLayout pageTitle="" innerStyle={{
 					width: "100%",
 					maxWidth: "100%",
 					padding: 0
