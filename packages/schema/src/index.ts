@@ -11,4 +11,4 @@ export * from "./task-board-membership";
 export * from "./task-item";
 export * from "./jwt";
 
-export { ResLocals, MiddlewareFunction, RouteFunction } from "./wrappers/rest-endpoint";
+export { RestEndpoint, RestEndpointFunction, ResLocals, MiddlewareFunction, RouteFunction } from "./wrappers/rest-endpoint";

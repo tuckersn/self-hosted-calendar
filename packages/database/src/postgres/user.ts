@@ -12,6 +12,21 @@ export interface PostgresUserRecord {
 	password_salt: string;
 	user_type: UserType;
 	created: Date;
+	enabled: boolean;
+}
+
+export function postgresRecordToStandardRecord(record: PostgresUserRecord): UserRecord {
+	return {
+		id: record.id,
+		uuid: record.uuid,
+		username: record.username,
+		email: record.email,
+		created: record.created,
+		displayName: record.display_name,
+		userType: record.user_type,
+		passwordHash: record.password_hash,
+		enabled: record.enabled,
+	}
 }
 
 
@@ -31,16 +46,7 @@ export function userQueryFunctions(connection: Sequelize): UserQueryFunctions {
 		if(record === undefined)
 			return null;
 
-		return {
-			id: record.id,
-			uuid: record.uuid,
-			username: record.username,
-			email: record.email,
-			created: record.created,
-			displayName: record.display_name,
-			userType: record.user_type,
-			passwordHash: record.password_hash
-		};
+		return postgresRecordToStandardRecord(record);
 	};
 	
 	return {
@@ -60,16 +66,7 @@ export function userQueryFunctions(connection: Sequelize): UserQueryFunctions {
 			if(record === undefined)
 				return null;
 
-			return {
-				id: record.id,
-				uuid: record.uuid,
-				username: record.username,
-				email: record.email,
-				created: record.created,
-				displayName: record.display_name,
-				userType: record.user_type,
-				passwordHash: record.password_hash
-			};
+			return postgresRecordToStandardRecord(record);
 		},
 		getByUsername: async (username: string) => {
 			const record = (await connection!.query(`
@@ -84,16 +81,7 @@ export function userQueryFunctions(connection: Sequelize): UserQueryFunctions {
 			if(record === undefined)
 				return null;
 
-			return {
-				id: record.id,
-				uuid: record.uuid,
-				username: record.username,
-				email: record.email,
-				created: record.created,
-				displayName: record.display_name,
-				userType: record.user_type,
-				passwordHash: record.password_hash
-			};
+			return postgresRecordToStandardRecord(record);
 		},
 		getByUUID: async (uuid: string) => {
 			const record = (await connection!.query(`
@@ -109,16 +97,7 @@ export function userQueryFunctions(connection: Sequelize): UserQueryFunctions {
 			if(record === undefined)
 				return null;
 			
-			return {
-				id: record.id,
-				uuid: record.uuid,
-				username: record.username,
-				email: record.email,
-				created: record.created,
-				displayName: record.display_name,
-				userType: record.user_type,
-				passwordHash: record.password_hash
-			};
+				return postgresRecordToStandardRecord(record);
 		},
 		insert: async (userRecord: UserRecordInsertFields) => {
 
@@ -184,7 +163,8 @@ export function userQueryFunctions(connection: Sequelize): UserQueryFunctions {
 						displayName: userRecord.displayName,
 						passwordHash: userRecord.passwordHash,
 						uuid: userRecord.uuid,
-						userType: userRecord.userType
+						userType: userRecord.userType,
+						enabled: userRecord.enabled
 					},
 					type: QueryTypes.RAW,
 					//@ts-expect-error
@@ -204,7 +184,8 @@ export function userQueryFunctions(connection: Sequelize): UserQueryFunctions {
 				created: result.created,
 				displayName: result.display_name,
 				userType: result.user_type,
-				passwordHash: result.password_hash
+				passwordHash: result.password_hash,
+				enabled: result.enabled
 			};
 		},
 		delete: async (id: number) => {
@@ -217,6 +198,41 @@ export function userQueryFunctions(connection: Sequelize): UserQueryFunctions {
 					type: QueryTypes.DELETE
 				}));
 			return result;
+		},
+		getOverview: async () => {
+			const result = (await connection!.query(`
+				SELECT COUNT(U.id) as account_count, COUNT(UA.id) as admin_count, COUNT(SU.id) as service_count, COUNT(AU.id) as active_count
+				FROM user_ AS U
+				LEFT OUTER JOIN (
+					-- Admin Query
+					SELECT id
+					FROM user_
+					WHERE user_type = 1
+				) AS UA
+				ON U.id = UA.id
+				LEFT OUTER JOIN (
+					-- Service Account Query
+					SELECT id
+					FROM user_
+					WHERE user_type = 2 OR user_type = 3 OR user_type = 4
+				) AS SU
+				ON U.id = SU.id
+				LEFT OUTER JOIN (
+					-- Active Accounts Query
+					SELECT id
+					FROM user_
+					WHERE enabled = true
+				) AS AU
+				ON U.id = AU.id`, {
+					type: QueryTypes.SELECT
+			})) as any;
+
+			return {
+				accountCount: result[0].account_count,
+				adminCount: result[0].admin_count,
+				serviceCount: result[0].service_count,
+				activeCount: result[0].active_count
+			};
 		}
 	};
 };

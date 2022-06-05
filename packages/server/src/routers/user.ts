@@ -1,6 +1,8 @@
 import { Router } from "express";
-import { RouteFunction, userTypeToString } from "@internal/schema/dist";
-import { adminAuthorizationMiddleware, authenticationMiddleware, generalErrorHandlingMiddleware } from "../middleware";
+import { RestEndpointFunction, RouteFunction, userTypeToString, UserRestApi } from "@internal/schema/dist";
+import { adminAuthorizationMiddleware, authenticationMiddleware, generalErrorHandlingMiddleware, generalErrorHandlingWithRestEndpoint } from "../middleware";
+import { Database } from "@internal/database/dist";
+
 
 //
 // User Router
@@ -35,6 +37,16 @@ userRouter.get("/", generalErrorHandlingMiddleware(async (req, res) => {
 //
 const adminUserRouter = Router();
 adminUserRouter.use(adminAuthorizationMiddleware);
+
+/**
+ * This route is for user on the details page
+ * of the user admin panel.
+ */
+adminUserRouter.get("/overview", generalErrorHandlingWithRestEndpoint<UserRestApi.GetUserOverview>((async (req, res) => {
+	const result = await Database.user.getOverview();
+	res.status(200).json(result);
+})));
+
 
 // Get user by id
 adminUserRouter.get("/:id", generalErrorHandlingMiddleware((req, res) => {

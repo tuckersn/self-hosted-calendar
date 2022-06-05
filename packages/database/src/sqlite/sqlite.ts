@@ -1,4 +1,4 @@
-import { UserQueryFunctions, UserLoginQueryFunctions, BoardQueryFunctions, BoardMembershipQueryFunctions, EventQueryFunctions, EventAttendeeQueryFunctions, TodoItemQueryFunctions, UserRecordInsertFields, UserRecord, UserLoginRecordInsertFields, BoardRecord, BoardRecordInsertFields, EventRecordInsertFields, EventRecord, BoardMembershipRecordInsertFields, EventAttendeeRecordInsertFields, TodoItemRecordInsertFields, TodoItemRecord, UserApiKeyRecordInsertFields, UserApiKeyRecord } from "@internal/schema/dist/index";
+import { UserQueryFunctions, UserLoginQueryFunctions, EventQueryFunctions, EventAttendeeQueryFunctions, TodoItemQueryFunctions, UserRecordInsertFields, UserRecord, UserLoginRecordInsertFields, EventRecordInsertFields, EventRecord, EventAttendeeRecordInsertFields, TodoItemRecordInsertFields, TodoItemRecord, UserApiKeyRecordInsertFields, UserApiKeyRecord, TaskBoardRecordInsertFields, TaskBoardRecord, TaskBoardMembershipRecordInsertFields } from "@internal/schema/dist/index";
 import { Promisable, ReadonlyDeep } from "type-fest";
 import { Database } from "../database";
 
@@ -32,6 +32,9 @@ export async function SqliteDatabase(): Promise<Database> {
 				throw new Error("Method not implemented.");
 			},
 			delete: async (id: number) => {
+				throw new Error("Method not implemented.");
+			},
+			getOverview: async () => {
 				throw new Error("Method not implemented.");
 			}
 		},
@@ -82,10 +85,10 @@ export async function SqliteDatabase(): Promise<Database> {
 			getById: async (id: number) => {
 				throw new Error("Method not implemented.");
 			},
-			insert: async (boardRecord: BoardRecordInsertFields) => {
+			insert: async (boardRecord: TaskBoardRecordInsertFields) => {
 				throw new Error("Method not implemented.");
 			},
-			update: async (boardRecord: BoardRecord) => {
+			update: async (boardRecord: TaskBoardRecord) => {
 				throw new Error("Method not implemented.");
 			},
 			delete: async (id: number) => {
@@ -111,7 +114,7 @@ export async function SqliteDatabase(): Promise<Database> {
 			delete: async (boardId: number) => {
 				throw new Error("Method not implemented.");
 			},
-			insert: async (boardMembershipRecord: BoardMembershipRecordInsertFields) => {
+			insert: async (boardMembershipRecord: TaskBoardMembershipRecordInsertFields) => {
 				throw new Error("Method not implemented.");
 			},
 			getMembersOrderedByJoinedDate: async (boardId: number) => {

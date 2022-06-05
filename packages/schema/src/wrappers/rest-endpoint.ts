@@ -43,8 +43,16 @@ export type RestEndpoint<REQ_PARAMS extends {[key: string]: string}, REQ_BODY ex
 	ResponseBody: RES_BODY,
 	Request: Request<REQ_PARAMS, REQ_BODY, RES_BODY>;
 	Response: Response<RES_BODY, RES_LOCALS>;
+	ResponseLocals: RES_LOCALS;
 	/**
 	 * Type for the actual function that will be called when the endpoint is called by express.
 	 */
 	Function: (req: Request<REQ_PARAMS, REQ_BODY, RES_BODY>, res: Response<RES_BODY>) => Promisable<void>;
 }
+
+
+export type RestEndpointFunction<ENDPOINT extends RestEndpoint<any, any, any, any>> = 
+	(
+		req: Request<ENDPOINT['Params'], ENDPOINT['RequestBody'], ENDPOINT['ResponseBody']>,
+		res: Response<ENDPOINT['ResponseBody'], ENDPOINT['ResponseLocals']>
+	) => Promisable<void>;

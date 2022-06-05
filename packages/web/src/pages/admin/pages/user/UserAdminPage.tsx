@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import styled, { css } from "styled-components";
 import { useTable } from "react-table";
@@ -7,6 +7,9 @@ import { Header } from "../../../../components/layouts/Header";
 import { TabbedContainer } from "../../../../components/style/TabbedContainer";
 import { adminPageCrumbs } from "../../AdminPage";
 import { COLORS, STYLE_VALUES } from "../../../../common/style";
+import { UserRestApi } from "@internal/schema/dist";
+import { Loading } from "../../../../components/style/LoadingState";
+import { apiRequest } from "../../../../common/api/api-request";
 
 const Container = styled.div`
 	display: flex;
@@ -59,6 +62,17 @@ const TableHead = styled.thead`
 
 export function UserAdminPage() {
 
+
+	const [details, setDetails] = useState<UserRestApi.GetUserOverview['ResponseBody'] | null>(null);
+
+	useEffect(() => {
+		apiRequest("GET", "/api/user/admin/overview").then(async (res) => {
+			if(res.body === null) {
+				throw new Error("Response body is null in overview call");
+			}
+			setDetails(await res.json());
+		});
+	}, []);
 
 	const data = React.useMemo(
 		() => [
@@ -127,6 +141,15 @@ export function UserAdminPage() {
 					label: "Details",
 					content: <div>
 						<h2>Details</h2>
+						<Loading state={details} element={<div>
+							<p>Total accounts: {details?.accountCount}</p>
+							
+							<p>Total admins: {details?.adminCount}</p>
+							
+							<p>Active accounts: {details?.activeCount}</p>
+							
+							<p>Service accounts: {details?.serviceCount}</p>
+						</div>}/>
 					</div>
 				},
 				"User List": {

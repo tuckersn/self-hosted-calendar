@@ -80,6 +80,7 @@ export interface UserRecord {
 	 * Unique to each user.
 	 */
 	 email: string;
+
 	userType: UserType;
 	/**
 	 * What to call the user, this
@@ -90,6 +91,11 @@ export interface UserRecord {
 	 * bcrypt hash
 	 */
 	passwordHash: string | null;
+	/**
+	 * If this is false the user has been disabled.
+	 */
+	enabled: boolean;
+
 	created: Date;
 }
 
@@ -141,6 +147,18 @@ export interface UserQueryFunctions {
 	insert: (userRecord: UserRecordInsertFields) => Promise<UserRecord>;
 	updateById: (id: number, userRecord: Partial<UserRecord>) => Promise<UserRecord>;
 	delete: (id: number) => Promise<void>;
+
+	// Queries for specific uses
+
+	/**
+	 * For use for in dashboards.
+	 */
+	getOverview: () => Promise<{
+		accountCount: number;
+		activeCount: number;
+		adminCount: number;
+		serviceCount: number;
+	}>;
 }
 
 
@@ -179,4 +197,14 @@ export module UserRestApi {
 	export type ChangeUserEmail = RestEndpoint<{}, {
 		password: string;
 	}, ClientUserRecord>;
+
+	/**
+	 * [GET] /users/overview
+	 */
+	export type GetUserOverview = RestEndpoint<{}, undefined, {
+		accountCount: number;
+		activeCount: number;
+		adminCount: number;
+		serviceCount: number;
+	}>;
 }

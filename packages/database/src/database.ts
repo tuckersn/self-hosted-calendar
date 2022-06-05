@@ -1,6 +1,6 @@
 import { Promisable } from "type-fest";
 
-import { BoardMembershipQueryFunctions, BoardQueryFunctions, EventAttendeeQueryFunctions, EventQueryFunctions, TodoItemQueryFunctions, UserApiKeyQueryFunctions, UserLoginQueryFunctions, UserQueryFunctions } from "@internal/schema/dist/index";
+import { TaskBoardMembershipQueryFunctions, TaskBoardQueryFunctions, EventAttendeeQueryFunctions, EventQueryFunctions, TodoItemQueryFunctions, UserApiKeyQueryFunctions, UserLoginQueryFunctions, UserQueryFunctions } from "@internal/schema/dist/index";
 export interface Database {
 	/**
 	 * The name of the database.
@@ -10,8 +10,8 @@ export interface Database {
 	user: UserQueryFunctions;
 	userLogin: UserLoginQueryFunctions;
 	userApiKey: UserApiKeyQueryFunctions;
-	board: BoardQueryFunctions;
-	boardMember: BoardMembershipQueryFunctions;
+	board: TaskBoardQueryFunctions;
+	boardMember: TaskBoardMembershipQueryFunctions;
 	event: EventQueryFunctions;
 	eventAttendee: EventAttendeeQueryFunctions;
 	todoItem: TodoItemQueryFunctions;	
