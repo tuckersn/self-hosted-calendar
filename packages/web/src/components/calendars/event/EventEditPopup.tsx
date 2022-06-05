@@ -10,7 +10,9 @@ import { Editable, ReactEditor, Slate, withReact } from "slate-react";
 import { withHistory } from "slate-history";
 import { createEditor, Descendant } from "slate";
 import { TextEditor } from "../../inputs/TextEditor";
-import { Button } from "@mui/material";
+import { Button, TextField } from "@mui/material";
+
+import { DesktopDateTimePicker } from '@mui/x-date-pickers/DesktopDateTimePicker';
 import { apiRequest } from "../../../common/api/api-request";
 import { slateNodeFromStr } from "@internal/schema/dist/serialization";
 import { SlateNodeRender } from "../../../shared/slate/SlateNodeRender";
@@ -89,13 +91,35 @@ export function EventEditPopup(props: EventEditPopupProps) {
 							flex: 1
 						}}/>
 						<div style={{
-							border: "1px solid white",
 							padding: "8px",
 							marginTop: "8px",
-							height: "100px"
+							height: "100px",
+							display: "flex",
+							flexDirection: "row",
+							justifyContent: "space-evenly",
+							alignItems: "center"
 						}}>
-							Time picker would go here: {event.start.toLocaleDateString()} - {event.end.toLocaleDateString()}
+							<DesktopDateTimePicker
+								label="Start Date"
+								inputFormat="MM/dd/yyyy"
+								value={event.start}
+								onChange={(e) => {
+									console.log("date changed:", e);
+								}}
+								renderInput={(params) => <TextField {...params} />}
+							/>
+
+							<DesktopDateTimePicker
+								label="End Date"
+								inputFormat="MM/dd/yyyy"
+								value={event.start}
+								onChange={(e) => {
+									console.log("date changed:", e);
+								}}
+								renderInput={(params) => <TextField {...params} />}
+							/>
 						</div>
+
 						<div style={{
 							fontSize: "14px",
 							color: "grey",

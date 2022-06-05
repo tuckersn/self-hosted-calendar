@@ -32,6 +32,8 @@ import { SettingsAdminPage } from './pages/admin/pages/settings/SettingsAdminpag
 import { CalendarAdminPage } from './pages/admin/pages/calendar/CalendarAdminPage';
 import { TaskBoardAdminPage } from './pages/admin/pages/task-boards/TaskBoardAdminPage';
 import { EventAdminPage } from './pages/admin/pages/event/EventAdminPage';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 export const themeOptions = createTheme({
 	palette: {
@@ -64,55 +66,57 @@ root.render(
 		const appKey = nanoid();
 		return <Provider store={store}>
 			<ThemeProvider theme={themeOptions}>
-				<BrowserRouter>
-					<Routes>
-						<Route path="/" element={<App key={appKey}/>}>
-							
-							{/* Dashboard */}
-							<Route index element={<HomePage/>}/>
-							
-							{/* Password & OAuth login */}
-							<Route path="login">
-								<Route index element={<LoginPage/>}/>
-								<Route path="register" element={<LoginRegisterPage/>}/>
+				<LocalizationProvider dateAdapter={AdapterDateFns}>
+					<BrowserRouter>
+						<Routes>
+							<Route path="/" element={<App key={appKey}/>}>
+								
+								{/* Dashboard */}
+								<Route index element={<HomePage/>}/>
+								
+								{/* Password & OAuth login */}
+								<Route path="login">
+									<Route index element={<LoginPage/>}/>
+									<Route path="register" element={<LoginRegisterPage/>}/>
+								</Route>
+								
+								{/* User's account info */}
+								<Route path="me" element={<AccountInfoPage/>}/>
+
+								<Route path="calendar" element={<CalendarPage/>}/>
+
+								<Route path="board" element={<BoardPage/>}>
+									{/* List of user's boards */}
+									<Route index element={<div/>}/>
+									{/* Specific boards */}
+									<Route path=":boardId" element={<div/>}/>
+									{/* Board creation form */}
+									<Route path="new" element={<div/>}/>
+								</Route>
+
+								<Route path="admin" element={<AdminPage/>}>
+									<Route index element={<AdminDashboardPage/>}/>
+									<Route path="users" element={<UserAdminPage/>}/>
+									<Route path="calendars" element={<CalendarAdminPage/>}/>
+									<Route path="events" element={<EventAdminPage/>}/>
+									<Route path="task-boards" element={<TaskBoardAdminPage/>}/>
+									<Route path="tasks" element={<TaskAdminPage/>}/>
+									<Route path="webhooks" element={<WebhookAdminPage/>}/>
+									<Route path="databases" element={<DatabaseAdminPage/>}/>
+									<Route path="settings" element={<SettingsAdminPage/>}/>
+								</Route>
+
+								<Route path="debug">
+									<Route path="samples" element={<UISamplesPage/>}/>
+								</Route>
+
+								<Route path="error" element={<ErrorPage/>}/>
+								<Route path="*" element={<ErrorPage errorCode={404} errorMessage={"Page not found."}/>}/>
+					
 							</Route>
-							
-							{/* User's account info */}
-							<Route path="me" element={<AccountInfoPage/>}/>
-
-							<Route path="calendar" element={<CalendarPage/>}/>
-
-							<Route path="board" element={<BoardPage/>}>
-								{/* List of user's boards */}
-								<Route index element={<div/>}/>
-								{/* Specific boards */}
-								<Route path=":boardId" element={<div/>}/>
-								{/* Board creation form */}
-								<Route path="new" element={<div/>}/>
-							</Route>
-
-							<Route path="admin" element={<AdminPage/>}>
-								<Route index element={<AdminDashboardPage/>}/>
-								<Route path="users" element={<UserAdminPage/>}/>
-								<Route path="calendars" element={<CalendarAdminPage/>}/>
-								<Route path="events" element={<EventAdminPage/>}/>
-								<Route path="task-boards" element={<TaskBoardAdminPage/>}/>
-								<Route path="tasks" element={<TaskAdminPage/>}/>
-								<Route path="webhooks" element={<WebhookAdminPage/>}/>
-								<Route path="databases" element={<DatabaseAdminPage/>}/>
-								<Route path="settings" element={<SettingsAdminPage/>}/>
-							</Route>
-
-							<Route path="debug">
-								<Route path="samples" element={<UISamplesPage/>}/>
-							</Route>
-
-							<Route path="error" element={<ErrorPage/>}/>
-							<Route path="*" element={<ErrorPage errorCode={404} errorMessage={"Page not found."}/>}/>
-				
-						</Route>
-					</Routes>
-				</BrowserRouter>
+						</Routes>
+					</BrowserRouter>
+				</LocalizationProvider>
 			</ThemeProvider>
 		</Provider>
 	})()

@@ -12,6 +12,7 @@
 		"@internal/schema": "workspace:^1.0.0",
 		"@internal/ts-config": "workspace:^1.0.0",
 		"@mui/material": "^5.8.1",
+		"@mui/x-date-pickers": "5.0.0-alpha.5",
 		"@reduxjs/toolkit": "^1.8.1",
 		"@testing-library/dom": "^8.13.0",
 		"@testing-library/jest-dom": "^5.16.4",
@@ -30,6 +31,7 @@
 		"react-router-dom": "^6.3.0",
 		"react-scripts": "5.0.1",
 		"react-sizeme": "^3.0.2",
+		"react-table": "^7.8.0",
 		"sass": "^1.51.0",
 		"slate": "^0.80.0",
 		"slate-history": "^0.66.0",
@@ -69,6 +71,7 @@
 	"devDependencies": {
 		"@types/react-color": "^3.0.6",
 		"@types/react-helmet": "^6.1.5",
+		"@types/react-table": "^7.7.12",
 		"@types/styled-components": "^5.1.25"
 	}
 }

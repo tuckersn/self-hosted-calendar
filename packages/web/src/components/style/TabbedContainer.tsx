@@ -14,6 +14,10 @@ export interface TabbedContainerProps {
 	};
 	setSelectedTab?: (tabKey: string) => void;
 	containerStyle?: FlattenSimpleInterpolation;
+	contentStyle?: FlattenSimpleInterpolation;
+	navStyle?: FlattenSimpleInterpolation;
+
+	noBorder?: boolean;
 }
 
 
@@ -23,7 +27,13 @@ const OuterContainer = styled.div<TabbedContainerProps>`
 	flex-direction: column;
 	width: 100%;
 	height: 100%;
-	border: 1px solid white;
+	${props => {
+		if (props.noBorder) {
+			return css`border: 0;`;
+		} else {
+			return css`border: 1px solid white;`;
+		}
+	}}
 	${props => props.containerStyle}
 `;
 
@@ -35,6 +45,7 @@ const NavContainer = styled.div<TabbedContainerProps>`
 	justify-content: center;
 	align-items: center;
 	border-bottom: 1px solid grey;
+	${props => props.navStyle}
 `;
 
 const NavItem = styled.div<TabbedContainerProps & { active: boolean }>`
@@ -66,6 +77,7 @@ const NavItem = styled.div<TabbedContainerProps & { active: boolean }>`
 const ContentContainer = styled.div<TabbedContainerProps>`
 	width: 100%;
 	flex: 1;
+	${props => props.contentStyle}
 `
 
 
