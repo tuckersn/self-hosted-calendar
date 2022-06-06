@@ -71,7 +71,7 @@ export function EventEditPopup(props: EventEditPopupProps) {
 
 
 	return (
-		<Popup active={active} setActive={setActive}>
+		<Popup active={active} setActive={setActive} closeOnClickOutside={!editMode}>
 			<EventEditPopupContainer>
 				{ 
 					event === null ? null :	(editMode ? (<React.Fragment>

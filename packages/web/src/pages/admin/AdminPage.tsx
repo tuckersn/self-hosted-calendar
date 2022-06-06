@@ -9,7 +9,7 @@ import { Header, HeaderProps } from "../../components/layouts/Header";
 import { SidebarLayout } from "../../components/layouts/SidebarLayout";
 
 const TitleBar = styled.div`
-	font-size: 28px;
+	font-size: 24px;
 	text-align: center;
 	padding-top: 8px;
 	padding-bottom: 8px;
@@ -19,6 +19,8 @@ const TitleBar = styled.div`
 		color: ${COLORS.highLightBright};
 	}
 `;
+
+const ICON_SIZE = 28;
 
 const SidebarItem = styled.div`
 	display: flex;
@@ -44,11 +46,11 @@ const SidebarItemIconContainer = styled.div`
 const SidebarItemTitle = styled.div`
 	flex: 80%;
 
-	margin-left: 4px;
-	margin-top: 1px;
+	margin-left: 8px;
+	margin-top: 3px;
 
 	text-align: left;
-	font-size: 20px;
+	font-size: 16px;
 
 	justify-content: center;
 	align-items: center;
@@ -69,14 +71,16 @@ export function AdminPage() {
 			<TitleBar onClick={() => {
 				navigate("/admin");
 			}}>
-				Admin Panel
+				Admin
+				<br/>
+				Panel
 			</TitleBar>
 
 			<SidebarItem onClick={() => {
 				navigate("/admin/users");
 			}}>
 				<SidebarItemIconContainer>
-					<MdAccountCircle size={30}/>
+					<MdAccountCircle size={ICON_SIZE}/>
 				</SidebarItemIconContainer>
 				<SidebarItemTitle>
 					Users
@@ -87,7 +91,7 @@ export function AdminPage() {
 				navigate("/admin/calendars");
 			}}>
 				<SidebarItemIconContainer>
-					<MdCalendarToday size={30}/>
+					<MdCalendarToday size={ICON_SIZE}/>
 				</SidebarItemIconContainer>
 				<SidebarItemTitle>
 					Calendars
@@ -98,7 +102,7 @@ export function AdminPage() {
 				navigate("/admin/events");
 			}}>
 				<SidebarItemIconContainer>
-					<MdEvent size={30}/>
+					<MdEvent size={ICON_SIZE}/>
 				</SidebarItemIconContainer>
 				<SidebarItemTitle>
 					Events
@@ -109,7 +113,7 @@ export function AdminPage() {
 				navigate("/admin/task-boards");
 			}}>
 				<SidebarItemIconContainer>
-					<MdViewModule size={30}/>
+					<MdViewModule size={ICON_SIZE}/>
 				</SidebarItemIconContainer>
 				<SidebarItemTitle>
 					Task Boards
@@ -120,7 +124,7 @@ export function AdminPage() {
 				navigate("/admin/tasks");
 			}}>
 				<SidebarItemIconContainer>
-					<MdTaskAlt size={30}/>
+					<MdTaskAlt size={ICON_SIZE}/>
 				</SidebarItemIconContainer>
 				<SidebarItemTitle>
 					Tasks
@@ -131,7 +135,7 @@ export function AdminPage() {
 				navigate("/admin/webhooks");
 			}}>
 				<SidebarItemIconContainer>
-					<GiFishingHook size={30}/>
+					<GiFishingHook size={ICON_SIZE}/>
 				</SidebarItemIconContainer>
 				<SidebarItemTitle>
 					Webhooks
@@ -142,7 +146,7 @@ export function AdminPage() {
 				navigate("/admin/databases");
 			}}>
 				<SidebarItemIconContainer>
-					<DiDatabase size={30}/>
+					<DiDatabase size={ICON_SIZE}/>
 				</SidebarItemIconContainer>
 				<SidebarItemTitle>
 					Database
@@ -153,7 +157,7 @@ export function AdminPage() {
 				navigate("/admin/settings");
 			}}>
 				<SidebarItemIconContainer>
-					<MdSettings size={30}/>
+					<MdSettings size={ICON_SIZE}/>
 				</SidebarItemIconContainer>
 				<SidebarItemTitle>
 					Settings

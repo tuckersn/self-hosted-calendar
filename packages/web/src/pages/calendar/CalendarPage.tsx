@@ -1,10 +1,13 @@
 import { slateNodeFromStr } from "@internal/schema/dist/serialization";
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { addHours } from "date-fns";
 import React from "react";
 import { MdAdd, MdArrowBack } from "react-icons/md";
 import styled from "styled-components";
 import { COLORS, STYLE_VALUES } from "../../common/style";
 import { DailyCalendar } from "../../components/calendars/DailyCalendar";
+import { MonthlyCalendar } from "../../components/calendars/MonthlyCalendar";
+import { WeeklyCalendar } from "../../components/calendars/WeeklyCalendar";
 import { Button } from "../../components/inputs/Button";
 import { Header } from "../../components/layouts/Header";
 
@@ -32,25 +35,27 @@ const SidebarSectionHeading = (styled.div`
 const SidebarSectionContent = (styled.div`
 	flex: 1;
 	border: 2px solid ${COLORS.border};
-	border-radius: ${STYLE_VALUES.borderRadiusHeavy}px;
+	border-radius: ${STYLE_VALUES.borderRadiusLight}px;
 	background-color: ${COLORS.backgroundExtremelyDark}px;
 `);
 
 const CalendarContainer = (styled.div`
 	border-top: 1px solid ${COLORS.border};
 	border-left: 1px solid ${COLORS.border};
+	overflow-y: auto;
 `);
 
 const Toolbar = (styled.div`
 	display: flex;
 	flex-direction: row;
-	padding-top: 8px;
-	padding-bottom: 8px;
 `);
+
+export type CalendarType = "daily" | "weekly" | "monthly" | "yearly";
 
 export function CalendarPage() {
 
 	const [sideBarPercentage, setSideBarPercentage] = React.useState(20);
+	const [calendarType, setCalendarType] = React.useState<CalendarType>('daily');
 
 	return <CalendarPageContainer>
 		<Sidebar style={{
@@ -64,16 +69,11 @@ export function CalendarPage() {
 			</Header>
 
 			<SidebarSection>
-				<SidebarSectionHeading>
-					Heading
-				</SidebarSectionHeading>
-				<SidebarSectionContent>
-					Content
-				</SidebarSectionContent>
+				Date selection calendar here
 			</SidebarSection>
 			<SidebarSection>
 				<SidebarSectionHeading>
-					Heading
+					Calendars
 				</SidebarSectionHeading>
 				<SidebarSectionContent>
 					Content
@@ -89,9 +89,22 @@ export function CalendarPage() {
 				<div style={{
 					flex: 1
 				}}>
-					<Button small>
-						<MdAdd size={18}/>
-					</Button>
+					<FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+						<InputLabel id="demo-select-small">Calendar Type</InputLabel>
+						<Select
+							labelId="demo-select-small"
+							id="demo-select-small"
+							value={calendarType}
+							label="Calendar Type"
+							onChange={(event: SelectChangeEvent) => {
+								setCalendarType(event.target.value as CalendarType);
+							}}>
+							<MenuItem selected value={'daily'}>Daily</MenuItem>
+							<MenuItem value={'weekly'}>Weekly</MenuItem>
+							<MenuItem value={'monthly'}>Monthly</MenuItem>
+							<MenuItem value={'yearly'}>Yearly</MenuItem>
+						</Select>
+					</FormControl>
 				</div>
 				<div style={{
 					flex: 1,
@@ -106,30 +119,35 @@ export function CalendarPage() {
 				</div>
 				<div style={{
 					flex: 1,
-					textAlign: "right",
+					textAlign: "center",
 					display: "flex",
 					flexDirection: "row",
 					justifyContent: "flex-end",
 					alignContent: "flex-end"
 				}}>
 					<Button small>
-						<MdArrowBack size={18}/>
-					</Button>
-					<Button small>
-						<MdArrowBack size={18}/>
+						<MdAdd size={18}/>
 					</Button>
 				</div>
 			</Toolbar>
 			<CalendarContainer>
-				<DailyCalendar height={3000} events={{
-					"ABC": {
-						id: "ABC",
-						start: new Date(Date.now()),
-						end: addHours(new Date(Date.now()), 1),
-						title: "Hello World Title 1",
-						description: slateNodeFromStr("This would be a description of the event.")
-					}
-				}}/>
+				{
+					calendarType === 'daily' && <DailyCalendar height={3000} events={{
+						"ABC": {
+							id: "ABC",
+							start: new Date(Date.now()),
+							end: addHours(new Date(Date.now()), 1),
+							title: "Hello World Title 1",
+							description: slateNodeFromStr("This would be a description of the event.")
+						}
+					}}/>
+				}
+				{
+					calendarType === 'weekly' && <WeeklyCalendar/>
+				}
+				{
+					calendarType === 'monthly' && <MonthlyCalendar/>
+				}
 			</CalendarContainer>
 		</div>
 	</CalendarPageContainer>;

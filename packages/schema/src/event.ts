@@ -10,6 +10,7 @@ export interface EventRecord {
 	startDate: Date;
 	endDate: Date;
 	location: string | null;
+	calendarId: number;
 }
 
 export type EventRecordInsertRequiredFields = Pick<EventRecord, 'uuid' | 'name' | 'startDate' | 'endDate'>;
@@ -29,4 +30,6 @@ export interface EventQueryFunctions {
 	updateById: (eventRecord: EventRecord) => Promise<EventRecord>;
 	updateByUUID: (eventRecord: EventRecord) => Promise<EventRecord>;
 	delete: (id: number) => Promise<void>;
+
+	getTimeRange: (startDate: Date, endDate: Date, calendarUUIDs?: string[]) => Promise<EventRecord[]>;
 }

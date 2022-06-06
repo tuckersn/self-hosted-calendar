@@ -59,6 +59,12 @@ const TableHead = styled.thead`
 `;
 
 
+const Details = styled.p`
+	font-size: 20px;
+	margin-bottom: 8px;	
+`;
+
+
 
 export function UserAdminPage() {
 
@@ -140,15 +146,14 @@ export function UserAdminPage() {
 				"Details": {
 					label: "Details",
 					content: <div>
-						<h2>Details</h2>
 						<Loading state={details} element={<div>
-							<p>Total accounts: {details?.accountCount}</p>
+							<Details>Total accounts: {details?.accountCount}</Details>
 							
-							<p>Total admins: {details?.adminCount}</p>
+							<Details>Total admins: {details?.adminCount}</Details>
 							
-							<p>Active accounts: {details?.activeCount}</p>
+							<Details>Active accounts: {details?.activeCount}</Details>
 							
-							<p>Service accounts: {details?.serviceCount}</p>
+							<Details>Service accounts: {details?.serviceCount}</Details>
 						</div>}/>
 					</div>
 				},
