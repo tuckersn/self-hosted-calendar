@@ -52,3 +52,14 @@ node ./packages/dist/main.js
 
 # Notable todos
 - Implement refresh/access tokens instead of daily localStorage tokens
+- Add weekly and monthly calendars
+- Add a date selector on the calendar page
+- Add Postgres tables for enum values for manual queries
+- Look into a GraphQL API
+- Validate token in App and set user to logged out if their token is invalid
+- Redo task experiment, the squares don't work
+- Implement Task API
+- Implement Task Board API
+- Implement Calendar API
+- Add query builder
+- Add query options to queries for things like restricting the query to particular task boards, calendars, or users

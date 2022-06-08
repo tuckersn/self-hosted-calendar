@@ -5,6 +5,7 @@ export interface DateRange {
 	end: Date;
 }
 
+
 export enum DayOfWeek {
 	SUNDAY = 0,
 	MONDAY = 1,
@@ -88,3 +89,4 @@ export function getMonthRangeOfDate(date: Date): DateRange {
 		end: endOfDate(subDays(new Date(date.getFullYear(), date.getMonth() + 1), 1))
 	}
 }
+
