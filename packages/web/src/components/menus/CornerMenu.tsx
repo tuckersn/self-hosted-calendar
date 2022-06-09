@@ -125,21 +125,21 @@ export function CornerMenu({
 			</Listing>
 		</Link>
 		<ListingSpacer/>
-		<Link to={"/board"}>
-			<Listing>
-				Boards
-			</Listing>
-		</Link>
-		<ListingSpacer/>
 		<Link to={"/calendar"}>
 			<Listing>
-				Calendar
+				Calendars
 			</Listing>
 		</Link>
 		<ListingSpacer/>
-		<Link to={"/todo"}>
+		<Link to={"/task-board"}>
 			<Listing>
-				Todos
+				Task Boards
+			</Listing>
+		</Link>
+		<ListingSpacer/>
+		<Link to={"/tasks/overview"}>
+			<Listing>
+				Tasks
 			</Listing>
 		</Link>
 		{
@@ -176,8 +176,38 @@ export function CornerMenu({
 							</Link>
 						</SubListing>
 						<SubListing>
-							<Link to={"/admin/database"}>
+							<Link to={"/admin/calendars"}>
+								L Calendar
+							</Link>
+						</SubListing>
+						<SubListing>
+							<Link to={"/admin/events"}>
+								L Events
+							</Link>
+						</SubListing>
+						<SubListing>
+							<Link to={"/admin/task-boards"}>
+								L Task Boards
+							</Link>
+						</SubListing>
+						<SubListing>
+							<Link to={"/admin/tasks"}>
+								L Tasks
+							</Link>
+						</SubListing>
+						<SubListing>
+							<Link to={"/admin/webhooks"}>
+								L Webhooks
+							</Link>
+						</SubListing>
+						<SubListing>
+							<Link to={"/admin/databases"}>
 								L Database
+							</Link>
+						</SubListing>
+						<SubListing>
+							<Link to={"/admin/settings"}>
+								L Settings
 							</Link>
 						</SubListing>
 					</React.Fragment>
