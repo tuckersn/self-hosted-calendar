@@ -2,71 +2,71 @@ import { ReadonlyDeep } from "type-fest";
 
 import { RestEndpoint } from "./wrappers/rest-endpoint";
 
-export enum TodoItemType {
+export enum TaskType {
 	ShortTerm = 0,
 	LongTerm = 1,
 	StickyNote = 2
 }
 
-export function todoItemTypeToString(type: TodoItemType): string {
+export function taskTypeToString(type: TaskType): string {
 	switch (type) {
-		case TodoItemType.ShortTerm:
+		case TaskType.ShortTerm:
 			return "Short Term";
-		case TodoItemType.LongTerm:
+		case TaskType.LongTerm:
 			return "Long Term";
-		case TodoItemType.StickyNote:
+		case TaskType.StickyNote:
 			return "Sticky Note";
 		default:
 			throw new Error("Invalid TodoItemType");
 	}
 }
 
-export function todoItemTypeFromString(type: string): TodoItemType {
+export function taskTypeFromString(type: string): TaskType {
 	switch (type) {
 		case "Short Term":
-			return TodoItemType.ShortTerm;
+			return TaskType.ShortTerm;
 		case "Long Term":
-			return TodoItemType.LongTerm;
+			return TaskType.LongTerm;
 		case "Sticky Note":
-			return TodoItemType.StickyNote;
+			return TaskType.StickyNote;
 		default:
 			throw new Error("Invalid TodoItemType");
 	}
 }
 
-export enum TodoItemStatus {
+export enum TaskStatus {
 	Active = 0,
 	Completed = 1,
 	Inactive = 2
 }
 
-export function TodoItemStatusToString(status: TodoItemStatus): string {
+export function taskStatusToString(status: TaskStatus): string {
 	switch (status) {
-		case TodoItemStatus.Active:
+		case TaskStatus.Active:
 			return "Active";
-		case TodoItemStatus.Completed:
+		case TaskStatus.Completed:
 			return "Completed";
-		case TodoItemStatus.Inactive:
+		case TaskStatus.Inactive:
 			return "Inactive";
 		default:
 			throw new Error("Invalid TodoItemStatus");
 	}
 }
 
-export function TodoItemStatusFromString(status: string): TodoItemStatus {
+export function taskStatusFromString(status: string): TaskStatus {
 	switch (status) {
 		case "Active":
-			return TodoItemStatus.Active;
+			return TaskStatus.Active;
 		case "Completed":
-			return TodoItemStatus.Completed;
+			return TaskStatus.Completed;
 		case "Inactive":
-			return TodoItemStatus.Inactive;
+			return TaskStatus.Inactive;
 		default:
 			throw new Error("Invalid TodoItemStatus");
 	}
 }
 
-export interface TodoItemRecord {
+export interface TaskRecord {
 	/**
 	 * Auto generated incremental id
 	 */
@@ -76,8 +76,8 @@ export interface TodoItemRecord {
 	 */
 	uuid: string;
 	title: string;
-	itemType: TodoItemType;
-	status: TodoItemStatus;
+	itemType: TaskType;
+	status: TaskStatus;
 	/**
 	 * When should this item be completed by?
 	 * This will be used by notifications and reminders.
@@ -97,38 +97,40 @@ export interface TodoItemRecord {
 	created: Date;
 }
 
-export type TodoItemRecordInsertRequiredFields = Pick<TodoItemRecord, 'title'>;
-export type TodoItemRecordInsertOptionalFields = Pick<TodoItemRecord, 'itemType' | 'due' | 'updated' | 'completed' | 'status'>;
-export type TodoItemRecordInsertFields = TodoItemRecordInsertRequiredFields & Partial<TodoItemRecordInsertOptionalFields>;
+export type ClientTaskRecord = Pick<TaskRecord, 'uuid' | 'created' | 'completed' | 'itemType' | 'status' | 'updated' | 'title' | 'due'>
 
-export const DEFAULT_TODO_ITEM_RECORD_FIELDS: TodoItemRecordInsertOptionalFields = {
-	itemType: TodoItemType.ShortTerm,
-	status: TodoItemStatus.Active,
+export type TaskRecordInsertRequiredFields = Pick<TaskRecord, 'title'>;
+export type TaskRecordInsertOptionalFields = Pick<TaskRecord, 'itemType' | 'due' | 'updated' | 'completed' | 'status'>;
+export type TaskRecordInsertFields = TaskRecordInsertRequiredFields & Partial<TaskRecordInsertOptionalFields>;
+
+export const DEFAULT_TASK_RECORD_FIELDS: TaskRecordInsertOptionalFields = {
+	itemType: TaskType.ShortTerm,
+	status: TaskStatus.Active,
 	due: null,
 	updated: null,
 	completed: null
 };
 
-export interface TodoItemQueryFunctions {
+export interface TaskQueryFunctions {
 	// Standard queries
-	getById: (id: number) => Promise<TodoItemRecord | null>;
-	getByUUID: (uuid: string) => Promise<TodoItemRecord | null>;
-	insert: (record: TodoItemRecordInsertFields) => Promise<TodoItemRecord>;
-	update: (record: TodoItemRecord) => Promise<TodoItemRecord>;
+	getById: (id: number) => Promise<TaskRecord | null>;
+	getByUUID: (uuid: string) => Promise<TaskRecord | null>;
+	insert: (record: TaskRecordInsertFields) => Promise<TaskRecord>;
+	update: (record: TaskRecord) => Promise<TaskRecord>;
 	deleteById: (id: number) => Promise<void>;
 	deleteByUUID: (uuid: string) => Promise<void>;
 	
 	// Specialized queries
-	getUpcoming: () => Promise<TodoItemRecord[]>;
-	getRecentCreated: () => Promise<TodoItemRecord[]>;
-	getRecentCompleted: () => Promise<TodoItemRecord[]>;
-	getRecentInactive: () => Promise<TodoItemRecord[]>;	
+	getUpcoming: () => Promise<TaskRecord[]>;
+	getRecentCreated: () => Promise<TaskRecord[]>;
+	getRecentCompleted: () => Promise<TaskRecord[]>;
+	getRecentInactive: () => Promise<TaskRecord[]>;	
 }
 
 
-export module TodoRestApi {
+export module TaskRestApi {
 
-	export type TodoItemFilterParams = {
+	export type TaskFilterParams = {
 		id: string;
 		uuid: string;
 		status: string;
@@ -147,31 +149,31 @@ export module TodoRestApi {
 	/**
 	 * [GET] /todo
 	 */
-	export type GetTodoItem = RestEndpoint<TodoItemFilterParams, undefined, TodoItemRecord[]>;
+	export type GetTask = RestEndpoint<TaskFilterParams, undefined, TaskRecord[]>;
 
 	/**
 	 * [POST] /todo
 	 */
-	export type CreateTodoItem = RestEndpoint<{}, {
+	export type CreateTask = RestEndpoint<{}, {
 		title: string;
 		itemType: string;
 		dueDate: string;
 		status: string;
-	}, TodoItemRecord>;
+	}, TaskRecord>;
 
 	/**
 	 * [PUT] /todo/:id
 	 */
-	export type UpdateTodoItem = RestEndpoint<TodoItemFilterParams, {
+	export type UpdateTask = RestEndpoint<TaskFilterParams, {
 		title?: string;
 		itemType?: string;
 		dueDate?: string;
 		status?: string;
-	}, TodoItemRecord>;
+	}, TaskRecord>;
 	
 	/**
 	 * [DELETE] /todo/:id
 	 */
-	export type DeleteTodoItem = RestEndpoint<TodoItemFilterParams, undefined, TodoItemRecord>;
+	export type DeleteTask = RestEndpoint<TaskFilterParams, undefined, TaskRecord>;
 
 }

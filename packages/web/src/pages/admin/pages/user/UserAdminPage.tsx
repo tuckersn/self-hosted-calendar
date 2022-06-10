@@ -10,6 +10,7 @@ import { COLORS, STYLE_VALUES } from "../../../../common/style";
 import { UserRestApi } from "@internal/schema/dist";
 import { Loading } from "../../../../components/style/LoadingState";
 import { apiRequest } from "../../../../common/api/api-request";
+import { Button } from "../../../../components/inputs/Button";
 
 const Container = styled.div`
 	display: flex;
@@ -83,14 +84,17 @@ export function UserAdminPage() {
 	const data = React.useMemo(
 		() => [
 			{
+				action: "id_here_1",
 				col1: 'Hello',
 				col2: 'World',
 			},
 			{
+				action: "id_here_2",
 				col1: 'react-table',
 				col2: 'rocks',
 			},
 			{
+				action: "id_here_3",
 				col1: 'whatever',
 				col2: 'you want',
 			},
@@ -100,12 +104,19 @@ export function UserAdminPage() {
 
 	const columns = React.useMemo<[{
 		Header: string,
+		accessor: 'action'
+	},{
+		Header: string,
 		accessor: 'col1'
 	}, {
 		Header: string,
 		accessor: 'col2'
 	}]>(
 		() => [
+			{
+				Header: '',
+				accessor: 'action', // accessor is the "key" in the data
+			},
 			{
 				Header: 'Column 1',
 				accessor: 'col1', // accessor is the "key" in the data
@@ -167,13 +178,23 @@ export function UserAdminPage() {
 									// Apply the header row props
 									<tr {...headerGroup.getHeaderGroupProps()}>
 										{// Loop over the headers in each row
-										headerGroup.headers.map(column => (
-											// Apply the header cell props
-											<th {...column.getHeaderProps()}>
-												{// Render the header
-												column.render('Header')}
-											</th>
-										))}
+											headerGroup.headers.map(column => {
+												if(column.id === 'action') {
+													// Apply the header cell props
+													return <th style={{
+														width: "50px"
+													}} {...column.getHeaderProps()}>
+														
+													</th>;
+												} else {
+													// Apply the header cell props
+													return <th {...column.getHeaderProps()}>
+														{// Render the header
+														column.render('Header')}
+													</th>
+												}
+											})
+										}
 									</tr>
 							))}
 							</TableHead>
@@ -188,13 +209,19 @@ export function UserAdminPage() {
 										<tr {...row.getRowProps()}>
 											{// Loop over the rows cells
 											row.cells.map(cell => {
-												// Apply the cell props
-												return (
-												<td {...cell.getCellProps()}>
+												
+												if(cell.column.id === 'action') {
+													return <td {...cell.getCellProps()}>
+														<Button>
+															Action
+														</Button>
+													</td>;
+												}
+
+												return <td {...cell.getCellProps()}>
 													{// Render the cell contents
 													cell.render('Cell')}
-												</td>
-												)
+												</td>;
 											})}
 										</tr>
 									)

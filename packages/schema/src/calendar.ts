@@ -16,6 +16,7 @@ export enum CalendarType {
 
 export interface CalendarRecord {
 	id: number;
+	uuid: string;
 	name: string;
 	description: string;
 	color: string | null;
@@ -34,5 +35,12 @@ export const DEFAULT_CALENDAR_RECORD_FIELDS: CalendarRecordInsertOptionalFields 
 
 
 export interface CalendarQueryFunctions {
+	// Standard Queries
+	getById: (id: number) => Promise<CalendarRecord | null>;
+	getByUUID: (uuid: string) => Promise<CalendarRecord | null>;
+	insert: (calendarRecord: CalendarRecordInsertFields) => Promise<CalendarRecord>;
+	updateById: (calendarRecord: CalendarRecord) => Promise<CalendarRecord>;
+	updateByUUID: (calendarRecord: CalendarRecord) => Promise<CalendarRecord>;
+	delete: (id: number) => Promise<void>;
 
 }
