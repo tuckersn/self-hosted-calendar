@@ -36,7 +36,7 @@ export function eventQueryFunctions(connection: Sequelize): EventQueryFunctions 
 			startDate: record.start_date,
 			endDate: record.end_date,
 			location: record.location
-		};
+		} as EventRecord;
 	};
 
 	const getById = async (id: number) => {
@@ -61,7 +61,7 @@ export function eventQueryFunctions(connection: Sequelize): EventQueryFunctions 
 			startDate: record.start_date,
 			endDate: record.end_date,
 			location: record.location
-		};
+		} as EventRecord;
 	};
 	
 	return {
@@ -99,7 +99,7 @@ export function eventQueryFunctions(connection: Sequelize): EventQueryFunctions 
 				startDate: result.start_date,
 				endDate: result.end_date,
 				location: result.location
-			};
+			} as EventRecord;
 		},		
 		updateByUUID: async (eventRecord: EventRecord) => {
 			const { id, uuid, name, description, startDate, endDate, location } = eventRecord;
@@ -130,7 +130,7 @@ export function eventQueryFunctions(connection: Sequelize): EventQueryFunctions 
 				startDate: result.start_date,
 				endDate: result.end_date,
 				location: result.location
-			};
+			} as EventRecord;
 		},
 		insert: async (eventRecord: EventRecordInsertFields) => {
 			const result = (await connection!.query(`
@@ -158,7 +158,31 @@ export function eventQueryFunctions(connection: Sequelize): EventQueryFunctions 
 				startDate: result.start_date,
 				endDate: result.end_date,
 				location: result.location
-			};
+			} as EventRecord;
+		},
+		getTimeRange: async (startDate: Date, endDate: Date) => {
+			const result = (await connection!.query(`
+				SELECT id, uuid, event_name, description, start_date, end_date, location
+				FROM event
+				WHERE start_date >= :startDate AND end_date <= :endDate
+			`, {
+				replacements: {
+					startDate,
+					endDate
+				}
+			})) as unknown as PostgresEventRecord[];
+
+			return result.map((record: PostgresEventRecord) => {
+				return {
+					id: record.id,
+					uuid: record.uuid,
+					name: record.event_name,
+					description: record.description,
+					startDate: record.start_date,
+					endDate: record.end_date,
+					location: record.location
+				} as EventRecord;
+			});
 		}
 	}
 }
