@@ -6,7 +6,7 @@ import {
 	TaskBoardMembershipQueryFunctions,
 	EventQueryFunctions,
 	EventAttendeeQueryFunctions,
-	TodoItemQueryFunctions,
+	TaskQueryFunctions,
 	UserRecordInsertFields,
 	UserRecord,
 	UserLoginRecordInsertFields,
@@ -16,8 +16,10 @@ import {
 	EventRecord,
 	TaskBoardMembershipRecordInsertFields,
 	EventAttendeeRecordInsertFields,
-	TodoItemRecord,
-	TodoItemRecordInsertFields
+	TaskRecord,
+	TaskRecordInsertFields,
+	CalendarRecordInsertFields,
+	CalendarRecord
 } from "@internal/schema/dist/index";
 
 import { Promisable, ReadonlyDeep } from "type-fest";
@@ -27,7 +29,7 @@ import { Sequelize, QueryTypes } from "sequelize";
 import { userQueryFunctions } from "./user";
 import { eventQueryFunctions } from "./event";
 import { userApiKeyQueryFunctions } from "./userApikey";
-
+import { taskQueryFunctions } from "./task";
 
 export async function PostgresDatabase(): Promise<Database> {
 	if(process.env.PG_HOST === undefined) {
@@ -154,38 +156,26 @@ export async function PostgresDatabase(): Promise<Database> {
 				throw new Error("Method not implemented.");
 			},
 		},
-		todoItem: {
+		task: taskQueryFunctions(connection),
+		calendar: {
 			getById: async (id: number) => {
+				throw new Error("Method not implemented.");
+			},
+			delete: async (id: number) => {
+				throw new Error("Method not implemented.");
+			},
+			insert: async (calendarRecord: CalendarRecordInsertFields) => {
 				throw new Error("Method not implemented.");
 			},
 			getByUUID: async (uuid: string) => {
 				throw new Error("Method not implemented.");
 			},
-			insert: async (todoItemRecord: TodoItemRecordInsertFields) => {
+			updateById: async (calendarRecord: CalendarRecord) => {
 				throw new Error("Method not implemented.");
 			},
-			update: async (todoItemRecord: TodoItemRecord) => {
+			updateByUUID: async (calendarRecord: CalendarRecord) => {
 				throw new Error("Method not implemented.");
-			},
-			deleteById: async (id: number) => {
-				throw new Error("Method not implemented.");
-			},
-			deleteByUUID: async (uuid: string) => {
-				throw new Error("Method not implemented.");
-			},
-			getRecentCompleted: async () => {
-				throw new Error("Method not implemented.");
-			},
-			getRecentCreated: async () => {
-				throw new Error("Method not implemented.");
-			},
-			getRecentInactive: async () => {
-				throw new Error("Method not implemented.");
-			},
-			getUpcoming: async () => {
-				throw new Error("Method not implemented.");
-			},
-
+			}
 		}
 	}
 }

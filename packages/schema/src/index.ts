@@ -8,7 +8,7 @@ export * from "./event-attendee";
 export * from "./event";
 export * from "./task-board";
 export * from "./task-board-membership";
-export * from "./task-item";
+export * from "./task";
 export * from "./jwt";
 
 export { RestEndpoint, RestEndpointFunction, ResLocals, MiddlewareFunction, RouteFunction } from "./wrappers/rest-endpoint";

@@ -1,5 +1,7 @@
-import { TaskType, TaskStatus, TaskQueryFunctions, TaskRecord } from "@internal/schema/dist";
-import { QueryTypes, Sequelize } from "sequelize";
+import { TaskType, TaskStatus, TaskQueryFunctions, TaskRecord, TaskRecordInsertFields } from "@internal/schema/dist";
+import { result } from "lodash";
+import { nanoid } from "nanoid";
+import { QueryTypes, Sequelize, UUID } from "sequelize";
 
 export interface PostgresTaskRecord {
 	id: number;
@@ -107,28 +109,39 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 						type: QueryTypes.DELETE
 					});
 				},
-			insert: async (taskRecord: TaskRecord) => {
-				const { id } = (await connection!.query(`
+			insert: async (record: TaskRecordInsertFields) => {
+				const result = (await connection!.query(`
 					INSERT INTO task (uuid, item_type, status, due, updated, completed, created)
-					VALUES (:uuid, :item_type, :status, :due, :updated, :completed, :created)
-					RETURNING id`, {
+					VALUES (:uuid, :item_type, :status, :due, :updated, :completed, NOW())
+					RETURNING id, uuid, itemType, status, due, updated, completed, created`, {
 						replacements: {
-							uuid: taskRecord.uuid,
-							item_type: taskRecord.itemType,
-							status: taskRecord.status,
-							due: taskRecord.due,
-							updated: taskRecord.updated,
-							completed: taskRecord.completed,
-							created: taskRecord.created
+							uuid: nanoid(),
+							item_type: record.itemType,
+							status: record.status,
+							due: record.due,
+							updated: record.updated,
+							completed: record.completed
 						},
 						type: QueryTypes.INSERT
-					})).pop() as { id: number };
+					})).pop() as unknown as PostgresTaskRecord;
+
+				return {
+					id: result.id,
+					uuid: result.uuid,
+					itemType: result.item_type,
+					status: result.status,
+					due: result.due,
+					updated: result.updated,
+					completed: result.completed,
+					created: result.created
+				} as TaskRecord;
 			},
 			update: async (taskRecord: TaskRecord) => {
 				(await connection!.query(`
 					UPDATE task
 					SET uuid = :uuid, item_type = :item_type, status = :status, due = :due, updated = :updated, completed = :completed, created = :created
-					WHERE id = :id`, {
+					WHERE id = :id
+					RETURNING id, uuid, itemType, status, due, updated, completed, created`, {
 						replacements: {
 							uuid: taskRecord.uuid,
 							item_type: taskRecord.itemType,
@@ -140,7 +153,19 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 							id: taskRecord.id
 							}, 
 							type: QueryTypes.UPDATE
-							})).pop() as { id: number };
+							})).pop() as unknown as PostgresTaskRecord;
+
+				return {
+					id: taskRecord.id,
+					uuid: taskRecord.uuid,
+					itemType: taskRecord.itemType,
+					status: taskRecord.status,
+					due: taskRecord.due,
+					updated: taskRecord.updated,
+					completed: taskRecord.completed,
+					created: taskRecord.created
+				} as TaskRecord;
+					
 			},
 			getRecentCompleted: async () => {
 				const records = ((await connection!.query(`
@@ -229,7 +254,19 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 							created: record.created
 						} as TaskRecord;
 					});
-				return records;
+
+				return records.map((r) => {
+					return {
+						id: r.id,
+						uuid: r.uuid,
+						itemType: r.itemType,
+						status: r.status,
+						due: r.due,
+						updated: r.updated,
+						completed: r.completed,
+						created: r.created
+					} as TaskRecord;
+				});
 			},
 			getUpcoming: async () => {
 				const records = ((await connection!.query(`
