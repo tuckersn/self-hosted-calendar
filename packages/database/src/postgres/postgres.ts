@@ -170,10 +170,7 @@ export async function PostgresDatabase(): Promise<Database> {
 			getByUUID: async (uuid: string) => {
 				throw new Error("Method not implemented.");
 			},
-			updateById: async (calendarRecord: CalendarRecord) => {
-				throw new Error("Method not implemented.");
-			},
-			updateByUUID: async (calendarRecord: CalendarRecord) => {
+			update: async (calendarRecord: CalendarRecord) => {
 				throw new Error("Method not implemented.");
 			}
 		}

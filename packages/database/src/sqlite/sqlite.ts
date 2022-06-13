@@ -1,4 +1,9 @@
-import { UserQueryFunctions, UserLoginQueryFunctions, EventQueryFunctions, EventAttendeeQueryFunctions, TodoItemQueryFunctions, UserRecordInsertFields, UserRecord, UserLoginRecordInsertFields, EventRecordInsertFields, EventRecord, EventAttendeeRecordInsertFields, TodoItemRecordInsertFields, TodoItemRecord, UserApiKeyRecordInsertFields, UserApiKeyRecord, TaskBoardRecordInsertFields, TaskBoardRecord, TaskBoardMembershipRecordInsertFields } from "@internal/schema/dist/index";
+import {
+	UserQueryFunctions,
+	UserLoginQueryFunctions, EventQueryFunctions, EventAttendeeQueryFunctions,
+	UserRecordInsertFields, UserRecord, UserLoginRecordInsertFields,
+	EventRecordInsertFields, EventRecord, EventAttendeeRecordInsertFields,
+	UserApiKeyRecordInsertFields, UserApiKeyRecord, TaskBoardRecordInsertFields, TaskBoardRecord, TaskBoardMembershipRecordInsertFields, TaskRecord, TaskRecordInsertFields, CalendarRecordInsertFields, CalendarRecord } from "@internal/schema/dist/index";
 import { Promisable, ReadonlyDeep } from "type-fest";
 import { Database } from "../database";
 
@@ -139,6 +144,9 @@ export async function SqliteDatabase(): Promise<Database> {
 			},
 			delete: async (id: number) => {
 				throw new Error("Method not implemented.");
+			},
+			getTimeRange: async (start: Date, end: Date) => {
+				throw new Error("Method not implemented.");
 			}
 		},
 		eventAttendee: {
@@ -164,17 +172,17 @@ export async function SqliteDatabase(): Promise<Database> {
 				throw new Error("Method not implemented.");
 			},
 		},
-		todoItem: {
+		task: {
 			getById: async (id: number) => {
 				throw new Error("Method not implemented.");
 			},
 			getByUUID: async (uuid: string) => {
 				throw new Error("Method not implemented.");
 			},
-			insert: async (todoItemRecord: TodoItemRecordInsertFields) => {
+			insert: async (todoItemRecord: TaskRecordInsertFields) => {
 				throw new Error("Method not implemented.");
 			},
-			update: async (todoItemRecord: TodoItemRecord) => {
+			update: async (todoItemRecord: TaskRecord) => {
 				throw new Error("Method not implemented.");
 			},
 			deleteById: async (id: number) => {
@@ -195,7 +203,26 @@ export async function SqliteDatabase(): Promise<Database> {
 			getUpcoming: async () => {
 				throw new Error("Method not implemented.");
 			},
-	
+			getRecentUpdated: async () => {
+				throw new Error("Method not implemented.");
+			}
+		},
+		calendar: {
+			getById: async (id: number) => {
+				throw new Error("Method not implemented.");
+			},
+			getByUUID: async (uuid: string) => {
+				throw new Error("Method not implemented.");
+			},
+			insert: async (calendarRecord: CalendarRecordInsertFields) => {
+				throw new Error("Method not implemented.");
+			},
+			update: async (calendarRecord: CalendarRecord) => {
+				throw new Error("Method not implemented.");
+			},
+			delete: async (id: number) => {
+				throw new Error("Method not implemented.");
+			}
 		}
 	}
-};
+}

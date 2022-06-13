@@ -39,8 +39,7 @@ export interface CalendarQueryFunctions {
 	getById: (id: number) => Promise<CalendarRecord | null>;
 	getByUUID: (uuid: string) => Promise<CalendarRecord | null>;
 	insert: (calendarRecord: CalendarRecordInsertFields) => Promise<CalendarRecord>;
-	updateById: (calendarRecord: CalendarRecord) => Promise<CalendarRecord>;
-	updateByUUID: (calendarRecord: CalendarRecord) => Promise<CalendarRecord>;
+	update: (calendarRecord: CalendarRecord) => Promise<CalendarRecord>;
 	delete: (id: number) => Promise<void>;
 
 }

@@ -124,6 +124,7 @@ export interface TaskQueryFunctions {
 	getUpcoming: () => Promise<TaskRecord[]>;
 	getRecentCreated: () => Promise<TaskRecord[]>;
 	getRecentCompleted: () => Promise<TaskRecord[]>;
+	getRecentUpdated: () => Promise<TaskRecord[]>;	
 	getRecentInactive: () => Promise<TaskRecord[]>;	
 }
 

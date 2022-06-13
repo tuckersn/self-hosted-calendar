@@ -1,4 +1,4 @@
-export const HEX_REGEX = /#[A-F][A-F][A-F]([A-F][A-F][A-F]|)$/im;
+export const HEX_REGEX = /#[0-9A-F][0-9A-F][0-9A-F]([0-9A-F][0-9A-F][0-9A-F]|)$/im;
 
 /**
  * Returns true if the string is a valid hex color.
