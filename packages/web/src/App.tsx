@@ -208,9 +208,12 @@ function App() {
 							<Button small style={{
 								borderRadius: `${STYLE_VALUES.borderRadius}px 0px 0px ${newMenuOpen ? 0 : STYLE_VALUES.borderRadius}px`,
 							}}>
-								<MdAdd onClick={() => {
-									setNewMenuOpen(!newMenuOpen);
-								}} size={18}/>
+								<Button onClick={() => {
+									return setNewMenuOpen(!newMenuOpen);
+								}} >
+									<MdAdd size={18}/>
+								</Button>
+								
 								<FloatingContainer offsetX={36} offsetY={21}>
 									<NewMenu active={newMenuOpen} setActive={setNewMenuOpen}/>
 								</FloatingContainer>

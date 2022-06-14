@@ -76,7 +76,7 @@ export interface TaskRecord {
 	 */
 	uuid: string;
 	title: string;
-	itemType: TaskType;
+	taskType: TaskType;
 	status: TaskStatus;
 	/**
 	 * When should this item be completed by?
@@ -97,14 +97,14 @@ export interface TaskRecord {
 	created: Date;
 }
 
-export type ClientTaskRecord = Pick<TaskRecord, 'uuid' | 'created' | 'completed' | 'itemType' | 'status' | 'updated' | 'title' | 'due'>
+export type ClientTaskRecord = Pick<TaskRecord, 'uuid' | 'created' | 'completed' | 'taskType' | 'status' | 'updated' | 'title' | 'due'>
 
 export type TaskRecordInsertRequiredFields = Pick<TaskRecord, 'title'>;
-export type TaskRecordInsertOptionalFields = Pick<TaskRecord, 'itemType' | 'due' | 'updated' | 'completed' | 'status'>;
+export type TaskRecordInsertOptionalFields = Pick<TaskRecord, 'taskType' | 'due' | 'updated' | 'completed' | 'status'>;
 export type TaskRecordInsertFields = TaskRecordInsertRequiredFields & Partial<TaskRecordInsertOptionalFields>;
 
 export const DEFAULT_TASK_RECORD_FIELDS: TaskRecordInsertOptionalFields = {
-	itemType: TaskType.ShortTerm,
+	taskType: TaskType.ShortTerm,
 	status: TaskStatus.Active,
 	due: null,
 	updated: null,

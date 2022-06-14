@@ -36,7 +36,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 			updated: record.updated,
 			completed: record.completed,
 			created: record.created,
-			itemType: record.item_type,
+			taskType: record.item_type,
 			status: record.status
 		} as TaskRecord;
 	}
@@ -58,7 +58,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 		return {
 			id: record.id,
 			uuid: record.uuid,
-			itemType: record.item_type,
+			taskType: record.item_type,
 			status: record.status,
 			due: record.due,
 			updated: record.updated,
@@ -76,7 +76,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 			return {
 				id: record.id,
 				uuid: record.uuid,
-				itemType: record.item_type,
+				taskType: record.item_type,
 				status: record.status,
 				due: record.due,
 				updated: record.updated,
@@ -116,7 +116,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 					RETURNING id, uuid, itemType, status, due, updated, completed, created`, {
 						replacements: {
 							uuid: nanoid(),
-							item_type: record.itemType,
+							item_type: record.taskType,
 							status: record.status,
 							due: record.due,
 							updated: record.updated,
@@ -128,7 +128,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 				return {
 					id: result.id,
 					uuid: result.uuid,
-					itemType: result.item_type,
+					taskType: result.item_type,
 					status: result.status,
 					due: result.due,
 					updated: result.updated,
@@ -144,7 +144,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 					RETURNING id, uuid, itemType, status, due, updated, completed, created`, {
 						replacements: {
 							uuid: taskRecord.uuid,
-							item_type: taskRecord.itemType,
+							item_type: taskRecord.taskType,
 							status: taskRecord.status,
 							due: taskRecord.due,
 							updated: taskRecord.updated,
@@ -158,7 +158,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 				return {
 					id: taskRecord.id,
 					uuid: taskRecord.uuid,
-					itemType: taskRecord.itemType,
+					taskType: taskRecord.taskType,
 					status: taskRecord.status,
 					due: taskRecord.due,
 					updated: taskRecord.updated,
@@ -179,7 +179,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 						return {
 							id: record.id,
 							uuid: record.uuid,
-							itemType: record.item_type,
+							taskType: record.item_type,
 							status: record.status,
 							due: record.due,
 							updated: record.updated,
@@ -201,7 +201,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 						return {
 							id: record.id,
 							uuid: record.uuid,
-							itemType: record.item_type,
+							taskType: record.item_type,
 							status: record.status,
 							due: record.due,
 							updated: record.updated,
@@ -224,7 +224,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 						return {
 							id: record.id,
 							uuid: record.uuid,
-							itemType: record.item_type,
+							taskType: record.item_type,
 							status: record.status,
 							due: record.due,
 							updated: record.updated,
@@ -246,7 +246,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 						return {
 							id: record.id,
 							uuid: record.uuid,
-							itemType: record.item_type,
+							taskType: record.item_type,
 							status: record.status,
 							due: record.due,
 							updated: record.updated,
@@ -259,7 +259,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 					return {
 						id: r.id,
 						uuid: r.uuid,
-						itemType: r.itemType,
+						taskType: r.taskType,
 						status: r.status,
 						due: r.due,
 						updated: r.updated,
@@ -280,7 +280,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 						return {
 							id: record.id,
 							uuid: record.uuid,
-							itemType: record.item_type,
+							taskType: record.item_type,
 							status: record.status,
 							due: record.due,
 							updated: record.updated,

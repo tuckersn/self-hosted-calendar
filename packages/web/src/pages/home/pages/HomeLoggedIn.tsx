@@ -5,13 +5,13 @@ import { Toggle } from "../../../components/inputs/Toggle";
 import { ArticleLayout } from "../../../components/layouts/ArticleLayout";
 import { useUser } from "../../../common/hooks/useUser";
 import { DailyCalendar } from "../../../components/calendars/DailyCalendar";
-import { TodoNote, TodoNoteProps } from "../../../components/todos/TodoNote";
 import { ScrollContainer } from "../../../components/style/ScrollContainer";
 import { useTitle } from "../../../common/hooks/useTitle";
 import { useEffect } from "react";
 import { NotificationBox, NotificationBoxProps } from "../../../components/NotificationBox";
 import { addHours, setHours, setMinutes } from "date-fns";
 import { slateNodeFromStr } from "@internal/schema/dist/serialization";
+import { ClientTaskRecord, TaskStatus, TaskType } from "@internal/schema/dist";
 
 const PADDING = "1vh";
 
@@ -82,45 +82,15 @@ export function HomeLoggedIn() {
 
 	
 	
-	const todoItems: TodoNoteProps[] = [{
+	const tasks: ClientTaskRecord[] = [{
 		title: "hello world title",
-		description: "hello world description of todo item here",
-		color: "blue"
-	},
-	{
-		title: "hello world title",
-		description: "hello world description of todo item here",
-		color: "red"
-	},
-	{
-		title: "hello world title",
-		description: "hello world description of todo item here",
-		color: "green"
-	},
-	{
-		title: "hello world title",
-		description: "hello world description of todo item here",
-		color: "white"
-	},
-	{
-		title: "hello world title",
-		description: "hello world description of todo item here",
-		color: "black"
-	},
-	{
-		title: "hello world title",
-		description: "hello world description of todo item here",
-		color: "orange"
-	},
-	{
-		title: "hello world title",
-		description: "hello world description of todo item here",
-		color: "yellow"
-	},
-	{
-		title: "hello world title",
-		description: "hello world description of todo item here",
-		color: "purple"
+		completed: new Date(),
+		created: new Date(),
+		updated: new Date(),
+		due: new Date(),
+		status: TaskStatus.Active,
+		taskType: TaskType.LongTerm,
+		uuid: "ABC"
 	}];
 
 	const testNotifications: NotificationBoxProps[] = [{
@@ -136,6 +106,7 @@ export function HomeLoggedIn() {
 		content: "another hello world item",
 		time: new Date()
 	}];
+
 
 	useEffect(() => {
 		setTitle("Home");
@@ -291,8 +262,8 @@ export function HomeLoggedIn() {
 				<ScrollContainer>
 					<TodoBoxContainer>
 						{
-							todoItems.map((e, i) => {
-								return <TodoNote key={e.title + i} title={e.title} description={e.description} color={e.color}/>;
+							tasks.map((e, i) => {
+								return <div key={e.title + i}/>;
 							})
 						}
 					</TodoBoxContainer>
