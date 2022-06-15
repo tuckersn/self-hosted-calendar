@@ -1,4 +1,5 @@
 import { ReadonlyDeep } from "type-fest";
+import { SlateNode } from "./serialization";
 
 import { RestEndpoint } from "./wrappers/rest-endpoint";
 
@@ -76,6 +77,7 @@ export interface TaskRecord {
 	 */
 	uuid: string;
 	title: string;
+	description: SlateNode;
 	taskType: TaskType;
 	status: TaskStatus;
 	/**
@@ -97,7 +99,7 @@ export interface TaskRecord {
 	created: Date;
 }
 
-export type ClientTaskRecord = Pick<TaskRecord, 'uuid' | 'created' | 'completed' | 'taskType' | 'status' | 'updated' | 'title' | 'due'>
+export type ClientTaskRecord = Pick<TaskRecord, 'uuid' | 'created' | 'completed' | 'taskType' | 'status' | 'updated' | 'title' | 'due' | 'description'>
 
 export type TaskRecordInsertRequiredFields = Pick<TaskRecord, 'title'>;
 export type TaskRecordInsertOptionalFields = Pick<TaskRecord, 'taskType' | 'due' | 'updated' | 'completed' | 'status'>;

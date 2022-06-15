@@ -12,6 +12,7 @@ import { NotificationBox, NotificationBoxProps } from "../../../components/Notif
 import { addHours, setHours, setMinutes } from "date-fns";
 import { slateNodeFromStr } from "@internal/schema/dist/serialization";
 import { ClientTaskRecord, TaskStatus, TaskType } from "@internal/schema/dist";
+import { ListOfTasks } from "../../../components/tasks/ListOfTasks";
 
 const PADDING = "1vh";
 
@@ -90,7 +91,8 @@ export function HomeLoggedIn() {
 		due: new Date(),
 		status: TaskStatus.Active,
 		taskType: TaskType.LongTerm,
-		uuid: "ABC"
+		uuid: "ABC",
+		description: slateNodeFromStr("TEST")
 	}];
 
 	const testNotifications: NotificationBoxProps[] = [{
@@ -258,15 +260,14 @@ export function HomeLoggedIn() {
 				}}/>
 			</HalfPane>
 			<HalfPane style={{
+				height: "100%",
+				width: "100%"
 			}}>
-				<ScrollContainer>
-					<TodoBoxContainer>
-						{
-							tasks.map((e, i) => {
-								return <div key={e.title + i}/>;
-							})
-						}
-					</TodoBoxContainer>
+				<ScrollContainer style={{
+					height: "100%",
+					width: "100%"
+				}}>
+					<ListOfTasks minColumns={2} tasks={tasks}/>
 				</ScrollContainer>
 				{/* <Toggle FalseComponent={() => <div>
 					FALSE

@@ -1,4 +1,5 @@
 import { TaskType, TaskStatus, TaskQueryFunctions, TaskRecord, TaskRecordInsertFields } from "@internal/schema/dist";
+import { SlateNode, slateNodeFromStr } from "@internal/schema/dist/serialization";
 import { result } from "lodash";
 import { nanoid } from "nanoid";
 import { QueryTypes, Sequelize, UUID } from "sequelize";
@@ -8,6 +9,7 @@ export interface PostgresTaskRecord {
 	uuid: string;
 	item_type: TaskType;
 	status: TaskStatus;
+	description: string;
 	due: Date | null;
 	updated: Date | null;
 	completed: Date | null;
@@ -17,7 +19,7 @@ export interface PostgresTaskRecord {
 export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 	const getByUUID = async (uuid: string) => {
 		const record = (await connection!.query(`
-			SELECT id, uuid, item_type, status, due, updated, completed, created
+			SELECT id, uuid, description, item_type, status, due, updated, completed, created
 			FROM task
 			WHERE uuid = :uuid`, {
 				replacements: {
@@ -33,6 +35,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 			id: record.id,
 			uuid: record.uuid,
 			due: record.due,
+			description: slateNodeFromStr(record.description),
 			updated: record.updated,
 			completed: record.completed,
 			created: record.created,
@@ -43,7 +46,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 
 	const getById = async (id: number) => {
 		const record = (await connection!.query(`
-			SELECT id, uuid, item_type, status, due, updated, completed, created
+			SELECT id, uuid, description, item_type, status, due, updated, completed, created
 			FROM task
 			WHERE id = :id`, {
 				replacements: {
@@ -58,6 +61,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 		return {
 			id: record.id,
 			uuid: record.uuid,
+			description: slateNodeFromStr(record.description),
 			taskType: record.item_type,
 			status: record.status,
 			due: record.due,
@@ -69,13 +73,14 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 
 	const getAll = async () => {
 		const records = ((await connection!.query(`
-			SELECT id, uuid, item_type, status, due, updated, completed, created
+			SELECT id, uuid, description, item_type, status, due, updated, completed, created
 			FROM task`, {
 				type: QueryTypes.SELECT
 		})) as PostgresTaskRecord[]).map((record: PostgresTaskRecord) => {
 			return {
 				id: record.id,
 				uuid: record.uuid,
+				description: slateNodeFromStr(record.description),
 				taskType: record.item_type,
 				status: record.status,
 				due: record.due,
@@ -113,7 +118,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 				const result = (await connection!.query(`
 					INSERT INTO task (uuid, item_type, status, due, updated, completed, created)
 					VALUES (:uuid, :item_type, :status, :due, :updated, :completed, NOW())
-					RETURNING id, uuid, itemType, status, due, updated, completed, created`, {
+					RETURNING id, description, uuid, itemType, status, due, updated, completed, created`, {
 						replacements: {
 							uuid: nanoid(),
 							item_type: record.taskType,
@@ -141,7 +146,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 					UPDATE task
 					SET uuid = :uuid, item_type = :item_type, status = :status, due = :due, updated = :updated, completed = :completed, created = :created
 					WHERE id = :id
-					RETURNING id, uuid, itemType, status, due, updated, completed, created`, {
+					RETURNING id, description uuid, itemType, status, due, updated, completed, created`, {
 						replacements: {
 							uuid: taskRecord.uuid,
 							item_type: taskRecord.taskType,
@@ -150,10 +155,11 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 							updated: taskRecord.updated,
 							completed: taskRecord.completed,
 							created: taskRecord.created,
-							id: taskRecord.id
-							}, 
+							id: taskRecord.id,
+							description: taskRecord.description,
+						}, 
 							type: QueryTypes.UPDATE
-							})).pop() as unknown as PostgresTaskRecord;
+						})).pop() as unknown as PostgresTaskRecord;
 
 				return {
 					id: taskRecord.id,
@@ -169,7 +175,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 			},
 			getRecentCompleted: async () => {
 				const records = ((await connection!.query(`
-					SELECT id, uuid, item_type, status, due, updated, completed, created
+					SELECT id, description, uuid, item_type, status, due, updated, completed, created
 					FROM task
 					WHERE completed = true
 					ORDER BY updated DESC
@@ -179,6 +185,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 						return {
 							id: record.id,
 							uuid: record.uuid,
+							description: slateNodeFromStr(record.description),
 							taskType: record.item_type,
 							status: record.status,
 							due: record.due,
@@ -191,7 +198,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 			},
 			getRecentCreated: async () => {
 				const records = ((await connection!.query(`
-					SELECT id, uuid, item_type, status, due, updated, completed, created
+					SELECT id, description, uuid, item_type, status, due, updated, completed, created
 					FROM task
 					WHERE created = true
 					ORDER BY updated DESC
@@ -201,6 +208,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 						return {
 							id: record.id,
 							uuid: record.uuid,
+							description: slateNodeFromStr(record.description),
 							taskType: record.item_type,
 							status: record.status,
 							due: record.due,
@@ -214,7 +222,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 			},
 			getRecentInactive: async () => {
 				const records = ((await connection!.query(`
-					SELECT id, uuid, item_type, status, due, updated, completed, created
+					SELECT id, description, uuid, item_type, status, due, updated, completed, created
 					FROM task
 					WHERE completed = false AND created = false
 					ORDER BY updated DESC
@@ -224,6 +232,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 						return {
 							id: record.id,
 							uuid: record.uuid,
+							description: slateNodeFromStr(record.description),
 							taskType: record.item_type,
 							status: record.status,
 							due: record.due,
@@ -236,7 +245,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 			},
 			getRecentUpdated: async () => {
 				const records = ((await connection!.query(`
-					SELECT id, uuid, item_type, status, due, updated, completed, created
+					SELECT id, description, uuid, item_type, status, due, updated, completed, created
 					FROM task
 					WHERE updated = true
 					ORDER BY updated DESC
@@ -246,6 +255,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 						return {
 							id: record.id,
 							uuid: record.uuid,
+							description: slateNodeFromStr(record.description),
 							taskType: record.item_type,
 							status: record.status,
 							due: record.due,
@@ -260,6 +270,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 						id: r.id,
 						uuid: r.uuid,
 						taskType: r.taskType,
+						description: r.description,
 						status: r.status,
 						due: r.due,
 						updated: r.updated,
@@ -270,7 +281,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 			},
 			getUpcoming: async () => {
 				const records = ((await connection!.query(`
-					SELECT id, uuid, item_type, status, due, updated, completed, created
+					SELECT id, description, uuid, item_type, status, due, updated, completed, created
 					FROM task
 					WHERE due > NOW()
 					ORDER BY due ASC
@@ -280,6 +291,7 @@ export function taskQueryFunctions(connection: Sequelize): TaskQueryFunctions {
 						return {
 							id: record.id,
 							uuid: record.uuid,
+							description: slateNodeFromStr(record.description),
 							taskType: record.item_type,
 							status: record.status,
 							due: record.due,
