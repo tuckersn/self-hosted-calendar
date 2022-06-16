@@ -15,6 +15,9 @@ import { userRouter } from "./routers/user";
 import { loginRouter } from "./routers/login";
 import { apiKeyRouter } from "./routers/api-keys";
 import { verifyRequiredEnvsAreDefined } from "./env";
+import { taskRouter } from "./routers/task";
+import { taskBoardRouter } from "./routers/taskBoard";
+import { calendarRouter } from "./routers/calendar";
 
 
 
@@ -47,9 +50,12 @@ async function main() {
 	const api = Router();
 	api.use(express.json());
 
-	api.use("/event", eventRouter);
 	api.use("/user", userRouter);
 	api.use("/api-key", apiKeyRouter);
+	api.use("/calendar", calendarRouter);
+	api.use("/event", eventRouter);
+	api.use("/task", taskRouter);
+	api.use("/taskBoard", taskBoardRouter);
 
 	app.use("/api", api);
 	app.listen(process.env.BACKEND_PORT!, () => {
