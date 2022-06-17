@@ -30,6 +30,7 @@ import { userQueryFunctions } from "./user";
 import { eventQueryFunctions } from "./event";
 import { userApiKeyQueryFunctions } from "./userApikey";
 import { taskQueryFunctions } from "./task";
+import { calendarQueryFunctions } from "./calendar";
 
 export async function PostgresDatabase(): Promise<Database> {
 	if(process.env.PG_HOST === undefined) {
@@ -157,23 +158,7 @@ export async function PostgresDatabase(): Promise<Database> {
 			},
 		},
 		task: taskQueryFunctions(connection),
-		calendar: {
-			getById: async (id: number) => {
-				throw new Error("Method not implemented.");
-			},
-			delete: async (id: number) => {
-				throw new Error("Method not implemented.");
-			},
-			insert: async (calendarRecord: CalendarRecordInsertFields) => {
-				throw new Error("Method not implemented.");
-			},
-			getByUUID: async (uuid: string) => {
-				throw new Error("Method not implemented.");
-			},
-			update: async (calendarRecord: CalendarRecord) => {
-				throw new Error("Method not implemented.");
-			}
-		}
+		calendar: calendarQueryFunctions(connection),
 	}
 }
 
