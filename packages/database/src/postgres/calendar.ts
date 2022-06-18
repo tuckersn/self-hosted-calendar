@@ -6,7 +6,7 @@ import { CalendarQueryFunctions, CalendarRecord, CalendarRecordInsertFields, Cal
 export interface PostgresCalendarRecord {
 	id: number;
 	uuid: string;
-	name: string;
+	calendarName: string;
 	description: string;
 	color: string | null;
 	calendarType: CalendarType
@@ -26,7 +26,7 @@ export function calendarQueryFunctions(connection: Sequelize): CalendarQueryFunc
 		},
 		getById: async (id: number) => {
 			const record = (await connection!.query(`
-				SELECT id, uuid, name, description, color, calendar_type
+				SELECT id, uuid, calendarName, description, color, calendar_type
 				FROM calendar
 				WHERE id = :id`, {
 					replacements: {
@@ -40,7 +40,7 @@ export function calendarQueryFunctions(connection: Sequelize): CalendarQueryFunc
 			return {
 				id: record.id,
 				uuid: record.uuid,
-				name: record.name,
+				name: record.calendarName,
 				description: record.description,
 				color: record.color,
 				calendarType: record.calendarType
@@ -48,7 +48,7 @@ export function calendarQueryFunctions(connection: Sequelize): CalendarQueryFunc
 		},
 		getByUUID: async (uuid: string) => {
 			const record = (await connection!.query(`
-				SELECT id, uuid, name, description, color, calendar_type
+				SELECT id, uuid, calendarName, description, color, calendar_type
 				FROM calendar
 				WHERE uuid = :uuid`, {
 					replacements: {
@@ -62,7 +62,7 @@ export function calendarQueryFunctions(connection: Sequelize): CalendarQueryFunc
 			return {
 				id: record.id,
 				uuid: record.uuid,
-				name: record.name,
+				name: record.calendarName,
 				description: record.description,
 				color: record.color,
 				calendarType: record.calendarType
@@ -70,9 +70,9 @@ export function calendarQueryFunctions(connection: Sequelize): CalendarQueryFunc
 		},
 		insert: async (calendarRecord: CalendarRecordInsertFields) => {
 			const record = (await connection!.query(`
-				INSERT INTO calendar (uuid, name, description, color, calendar_type)
+				INSERT INTO calendar (uuid, calendarName, description, color, calendar_type)
 				VALUES (:uuid, :name, :description, :color, :calendarType)
-				RETURNING id, uuid, name, description, color, calendar_type`, {
+				RETURNING id, uuid, calendarName, description, color, calendar_type`, {
 					replacements: {
 						name: calendarRecord.name,
 						description: calendarRecord.description,
@@ -87,7 +87,7 @@ export function calendarQueryFunctions(connection: Sequelize): CalendarQueryFunc
 			return {
 				id: record.id,
 				uuid: record.uuid,
-				name: record.name,
+				name: record.calendarName,
 				description: record.description,
 				color: record.color,
 				calendarType: record.calendarType
@@ -96,7 +96,7 @@ export function calendarQueryFunctions(connection: Sequelize): CalendarQueryFunc
 		update: async (calendarRecord: CalendarRecord) => {
 			const record = (await connection!.query(`
 				UPDATE calendar
-				SET name = :name, description = :description, color = :color, calendar_type = :calendarType
+				SET calendarName = :name, description = :description, color = :color, calendar_type = :calendarType
 				WHERE id = :id
 				RETURNING id, uuid, name, description, color, calendar_type`, {
 					replacements: {
@@ -114,7 +114,7 @@ export function calendarQueryFunctions(connection: Sequelize): CalendarQueryFunc
 			return {
 				id: record.id,
 				uuid: record.uuid,
-				name: record.name,
+				name: record.calendarName,
 				description: record.description,
 				color: record.color,
 				calendarType: record.calendarType
