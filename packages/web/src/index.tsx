@@ -85,6 +85,10 @@ root.render(
 
 								<Route path="calendar" element={<CalendarPage/>}/>
 
+								<Route path="event">
+									<Route path="overview"/>
+								</Route>
+
 								<Route path="board" element={<BoardPage/>}>
 									{/* List of user's boards */}
 									<Route index element={<div/>}/>
@@ -92,6 +96,12 @@ root.render(
 									<Route path=":boardId" element={<div/>}/>
 									{/* Board creation form */}
 									<Route path="new" element={<div/>}/>
+								</Route>
+
+								<Route path="tasks">
+									<Route path="overview" element={<div>
+										Tasks overview
+									</div>}/>
 								</Route>
 
 								<Route path="admin" element={<AdminPage/>}>

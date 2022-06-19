@@ -131,7 +131,7 @@ export function CornerMenu({
 			</Listing>
 		</Link>
 		<ListingSpacer/>
-		<Link to={"/task-board"}>
+		<Link to={"/board"}>
 			<Listing>
 				Task Boards
 			</Listing>
