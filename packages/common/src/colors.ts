@@ -1,13 +1,9 @@
-export const HEX_REGEX = /#[0-9A-F][0-9A-F][0-9A-F]([0-9A-F][0-9A-F][0-9A-F]|)$/im;
+export const HEX_REGEX = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/im;
 
 /**
  * Returns true if the string is a valid hex color.
- * EX: #FFF or #FFFFFF
+ * Example: #000 to #FFF and #000000 to #FFFFFF
  */
 export function verifyColorIsHex(colorString: string): boolean {
-	if(!(colorString.length === 7 || colorString.length === 4)) {
-		return false;
-	}
-
-	return HEX_REGEX.test(colorString);
+    return HEX_REGEX.test(colorString);
 }
