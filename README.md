@@ -9,43 +9,36 @@ Following technologies used in this project:
 - PNPM & PNPM workspaces
 
 
-# Commands
+# Setup Guide
+This application is still early in development, the setup process will get easier with time.
 
-## Build
-```
+### 1. Tool installation
+npm install -g pnpm typescript
+
+### 2. Install dependencies
+pnpm install
+
+### 3. Install Postgres
+You'll need to setup your own Postgres instance, later there will be a docker compose or more detailed tutorial.
+
+Run the query in sql/postgres/create_database.sql
+
+### 4. Copy .env.template file to a file called .env
+Then you will need to fill out all the info in in the file such as the Postgres credentials, JWT secret, and importantly the ADMIN_OVERRIDE_KEY at the bottom.
+
+### 5. Build the project
 pnpm turbo run build
-```
 
-## Creating a new package (/scripts/new-package.js)
-```bash
-pnpm new
-```
-then when prompted enter your package name
-```
-New package name (excluding @internal prefix): my-package-name
-```
+### 6. Start the API server and web UI
+In a new terminal run 'node ./packages/server/dist/main.js' to star the API.
+In another terminal navigate to ./packages/web and run 'pnpm start'.
 
-## Installing a workspace package into another workspace package
-```
-cd ./<instalee_package_dir>
-pnpm add --workspace <target_package>
-```
 
-## Generate dependency graph
-```
-pnpm graph
-```
+### 7. Use the API_OVERRIDE_KEY to create a user
+Call the API route 'POST /user/admin/' with the authorization header of 'OVERRIDE yourOverrideKey' 
 
-## Debugging
-### **Web**
-```
-cd ./packages/web
-pnpm start
-```
-### **Server**
-```
-node ./packages/dist/main.js
-```
+### 8. Good luck testing!
+A window in your web browser will open shortly.
 
 
 
