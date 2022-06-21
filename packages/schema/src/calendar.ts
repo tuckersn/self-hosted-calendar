@@ -24,6 +24,14 @@ export interface CalendarRecord {
 
 }
 
+export interface ClientCalendarRecord {
+	uuid: string;
+	name: string;
+	description: string;
+	color: string | null;
+	calendarType: CalendarType;
+}
+
 export type CalendarRecordInsertRequiredFields = Pick<CalendarRecord, 'name' | 'calendarType'>;
 export type CalendarRecordInsertOptionalFields = Pick<CalendarRecord, 'color' | 'description'>;
 export type CalendarRecordInsertFields = CalendarRecordInsertRequiredFields & Partial<CalendarRecordInsertOptionalFields>;

@@ -35,10 +35,12 @@ In another terminal navigate to ./packages/web and run 'pnpm start'.
 
 
 ### 7. Use the API_OVERRIDE_KEY to create a user
-Call the API route 'POST /user/admin/' with the authorization header of 'OVERRIDE yourOverrideKey' 
+Call the API route 'POST /user/admin/' with the authorization header of 'OVERRIDE yourOverrideKey'.
+
+This will allow you to login, I'd advise making your user an admin and removing the API_OVERRIDE_KEY from the .env file.
 
 ### 8. Good luck testing!
-A window in your web browser will open shortly.
+The application is close to usable, and the experience will improve with time.
 
 
 

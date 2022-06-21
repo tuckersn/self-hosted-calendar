@@ -1,5 +1,6 @@
 import { Database } from "@internal/database/dist";
 import { Router } from "express";
+import { nanoid } from "nanoid";
 import { authenticationMiddleware } from "../middleware";
 import { generalErrorHandlingMiddleware } from "../middleware/exceptionWrappers";
 import { slateSanitize } from "../utils";
@@ -27,14 +28,14 @@ eventRouter.post("/", generalErrorHandlingMiddleware(async (req, res) => {
 		startDate: body.startDate,
 		endDate: body.endDate,
 		location: body.location,
-		uuid: body.uuid
+		uuid: nanoid()
 	});
 
 	res.status(200).json(result);
 }));
 
 // Update a new event
-eventRouter.post("/:uiid", generalErrorHandlingMiddleware(async (req, res) => {
+eventRouter.put("/:uiid", generalErrorHandlingMiddleware(async (req, res) => {
 	const { body } = req;
 
 	// console.log(body.description);
@@ -74,11 +75,3 @@ eventRouter.delete("/:id", generalErrorHandlingMiddleware(async (req, res) => {
 	res.status(200).send();
 }));
 
-
-// Update an event by id
-eventRouter.put("/:id", generalErrorHandlingMiddleware(async (req, res) => {
-	const { id } = req.params;
-	const { body } = req;
-
-	res.status(200).send();
-}));
