@@ -2,7 +2,8 @@
 	"info": {
 		"_postman_id": "3515dedd-683a-4538-a9ea-18b9bca0fc86",
 		"name": "Calendar Web Services",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4250704"
 	},
 	"item": [
 		{
@@ -13,7 +14,86 @@
 					"item": [
 						{
 							"name": "Admin",
-							"item": []
+							"item": [
+								{
+									"name": "User stats overview",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "{{AUTHORIZATION_HEADER}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{BASE_URL}}/api/user/admin/overview",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"api",
+												"user",
+												"admin",
+												"overview"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get detailed user info by UUID",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{BASE_URL}}/api/user/admin/:user_uuid",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"api",
+												"user",
+												"admin",
+												":user_uuid"
+											],
+											"variable": [
+												{
+													"key": "user_uuid",
+													"value": null
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Forcibly delete user",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{BASE_URL}}/api/user/admin/:user_uuid",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"api",
+												"user",
+												"admin",
+												":user_uuid"
+											],
+											"variable": [
+												{
+													"key": "user_uuid",
+													"value": null
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
 						},
 						{
 							"name": "Get your own user info",
@@ -48,6 +128,117 @@
 						{
 							"name": "Admin",
 							"item": []
+						},
+						{
+							"name": "Get event by UUID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/api/event/:uuid",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"event",
+										":uuid"
+									],
+									"variable": [
+										{
+											"key": "uuid",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete event by UUID",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/api/event/:uuid",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"event",
+										":uuid"
+									],
+									"variable": [
+										{
+											"key": "uuid",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create new event",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Name\",\r\n    \"description\": \"Description of the event\",\r\n    \"startDate\": \"5/20/22\",\r\n    \"endDate\": \"6/21/22\",\r\n    \"location\": \"Location the event occurs\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/event",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"event"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update event by UUID",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"newName\": \"Name\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/event/:uuid",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"event",
+										":uuid"
+									],
+									"variable": [
+										{
+											"key": "uuid",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
@@ -93,8 +284,163 @@
 									"response": []
 								}
 							]
+						},
+						{
+							"name": "Create API key for yourself",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AUTHORIZATION_HEADER}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"ROOT\",\r\n    \"active\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/api-key/createKey",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"api-key",
+										"createKey"
+									]
+								}
+							},
+							"response": []
 						}
 					]
+				},
+				{
+					"name": "Calendars",
+					"item": []
+				},
+				{
+					"name": "Task Boards",
+					"item": []
+				},
+				{
+					"name": "Tasks",
+					"item": [
+						{
+							"name": "Admin",
+							"item": []
+						}
+					]
+				},
+				{
+					"name": "Get calendar by UUID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/calendar/:uuid",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"calendar",
+								":uuid"
+							],
+							"variable": [
+								{
+									"key": "uuid",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete calendar by UUID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/calendar/:uuid",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"calendar",
+								":uuid"
+							],
+							"variable": [
+								{
+									"key": "uuid",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a calendar",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"My Calendar\",\r\n    \"description\": \"Description of my calendar.\",\r\n    \"color\": \"#F00\",\r\n    \"calendarType\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/calendar",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"calendar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a calendar by UUID",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"My new calendar name\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/calendar",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"calendar"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -104,14 +450,78 @@
 				{
 					"name": "Password authentication",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [
 							{
 								"key": "Auth",
 								"value": "",
 								"type": "text"
 							}
-						]
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/login/register",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"login",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check if regristration is open",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/login/register",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"login",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User registration",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"displayName\": \"Name\",\r\n    \"username\": \"username\",\r\n    \"password\": \"password123\",\r\n    \"email\": \"nobody@mail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/login/register",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"login",
+								"register"
+							]
+						}
 					},
 					"response": []
 				}
