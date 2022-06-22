@@ -11,8 +11,8 @@ export enum DayOfWeek {
 }
 
 // Placeholder consts, to be updated from UI by user selection of start/end.
-const START_OF_WEEK = 0
-const END_OF_WEEK = 6
+const START_OF_WEEK = DayOfWeek.SUNDAY
+const END_OF_WEEK = DayOfWeek.SATURDAY
 
 export function getHoursAndMinutes(date: Date): number {
 	return date.getHours() + date.getMinutes() / 60
