@@ -1,3 +1,5 @@
+import { QueryContext } from "../queries";
+
 export interface CalendarMembershipRecord {
 	id: number;
 	userId: number;
@@ -17,8 +19,8 @@ export const DEFAULT_CALENDAR_MEMBERSHIP_RECORD_FIELDS: CalendarMembershipRecord
 }
 
 export interface CalendarMembershipQueryFunctions {
-	getById: (id: number) => Promise<CalendarMembershipRecord | null>;
-	getByUserId: (userId: number) => Promise<CalendarMembershipRecord[]>;
-	insert: (BoardMembershipRecord: CalendarMembershipRecordInsertFields) => Promise<CalendarMembershipRecord>;
-	delete: (id: number) => Promise<void>;
+	getById: (id: number, context: QueryContext) => Promise<CalendarMembershipRecord | null>;
+	getByUserId: (userId: number, context: QueryContext) => Promise<CalendarMembershipRecord[]>;
+	insert: (BoardMembershipRecord: CalendarMembershipRecordInsertFields, context: QueryContext) => Promise<CalendarMembershipRecord>;
+	delete: (id: number, context: QueryContext) => Promise<void>;
 }

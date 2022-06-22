@@ -1,8 +1,8 @@
 import { DocumentNode } from "graphql";
 
-import { RestEndpoint } from "./wrappers/rest-endpoint";
+import { RestEndpoint } from "../wrappers/rest-endpoint";
 import { ReadonlyDeep } from 'type-fest';
-import { IError } from "./wrappers/error";
+import { IError } from "../wrappers/error";
 
 export enum UserType {
 	/**
