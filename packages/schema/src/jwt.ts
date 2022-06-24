@@ -1,4 +1,4 @@
-import { UserType } from "./user";
+import { UserType } from "./entities/user";
 
 export interface JWT {
 	/** USER UUID */

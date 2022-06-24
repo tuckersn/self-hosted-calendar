@@ -134,3 +134,13 @@ export const authenticationMiddleware: MiddlewareFunction = async (req, res, nex
 		return;
 	}
 }
+
+export const failNonUsers: MiddlewareFunction = async (req, res, next) => {
+	if(res.locals.user === undefined || res.locals.user === null) {
+		res.status(500).json({
+			error: "No user found, are you authenticated?"
+		});
+	} else {
+		next();
+	}
+}

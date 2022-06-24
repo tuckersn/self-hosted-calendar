@@ -1,3 +1,6 @@
+import { QueryContext } from "../queries";
+import { CalendarMembershipRecord } from "./calendar-membership";
+
 export enum CalendarType {
 	/**
 	 * Cannot delete this calendar.
@@ -44,10 +47,11 @@ export const DEFAULT_CALENDAR_RECORD_FIELDS: CalendarRecordInsertOptionalFields 
 
 export interface CalendarQueryFunctions {
 	// Standard Queries
-	getById: (id: number) => Promise<CalendarRecord | null>;
-	getByUUID: (uuid: string) => Promise<CalendarRecord | null>;
-	insert: (calendarRecord: CalendarRecordInsertFields) => Promise<CalendarRecord>;
-	update: (calendarRecord: CalendarRecord) => Promise<CalendarRecord>;
-	delete: (id: number) => Promise<void>;
-
+	getById: (id: number, context: QueryContext) => Promise<CalendarRecord | null>;
+	getByUUID: (uuid: string, context: QueryContext) => Promise<CalendarRecord | null>;
+	insert: (calendarRecord: CalendarRecordInsertFields, context: QueryContext) => Promise<CalendarRecord>;
+	update: (calendarRecord: CalendarRecord, context: QueryContext) => Promise<CalendarRecord>;
+	deleteByUUID: (uuid: string, context: QueryContext) => Promise<void>;
+	// Specialized Queries
+	getListByUserUUID: (uuid: string, context: QueryContext) => Promise<(CalendarRecord & Pick<CalendarMembershipRecord, "isAdmin" | "isWriter" | "joined">)[]>;
 }

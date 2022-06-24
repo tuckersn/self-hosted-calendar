@@ -1,7 +1,7 @@
 import { ReadonlyDeep } from "type-fest";
 import { UserRecord } from "./user";
 
-import { RestEndpoint } from "./wrappers/rest-endpoint";
+import { RestEndpoint } from "../wrappers/rest-endpoint";
 
 
 export interface UserApiKeyRecord {

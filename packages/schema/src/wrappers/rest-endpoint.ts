@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { Promisable } from "type-fest";
 import { JWT } from "../jwt";
-import { UserRecord } from "../user";
-import { UserApiKeyRecord } from "../user-api-key";
+import { UserRecord } from "../entities/user";
+import { UserApiKeyRecord } from "../entities/user-api-key";
 
 /**
  * This is information usually provided

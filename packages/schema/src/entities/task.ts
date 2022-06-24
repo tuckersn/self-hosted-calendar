@@ -1,7 +1,7 @@
 import { ReadonlyDeep } from "type-fest";
-import { SlateNode } from "./serialization";
+import { SlateNode } from "../serialization";
 
-import { RestEndpoint } from "./wrappers/rest-endpoint";
+import { RestEndpoint } from "../wrappers/rest-endpoint";
 
 export enum TaskType {
 	ShortTerm = 0,

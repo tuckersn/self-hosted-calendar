@@ -2,6 +2,7 @@ import { Sequelize, QueryTypes, Error as SequelizeError, UniqueConstraintError }
 
 import { CalendarQueryFunctions, CalendarRecord, CalendarRecordInsertFields, CalendarType } from "@internal/schema/dist";
 
+import { PostgresCalendarMemberRecord } from "./calendarMember";
 
 export interface PostgresCalendarRecord {
 	id: number;
@@ -15,12 +16,12 @@ export interface PostgresCalendarRecord {
 export function calendarQueryFunctions(connection: Sequelize): CalendarQueryFunctions {
 
 	return {
-		delete: async (id: number) => {
+		deleteByUUID: async (uuid: string) => {
 			await connection.query(`
 				DELETE FROM calendar
-				WHERE id = :id`, {
+				WHERE uuid = :uuid`, {
 					replacements: {
-						id
+						uuid
 					}
 				})
 		},
@@ -119,6 +120,37 @@ export function calendarQueryFunctions(connection: Sequelize): CalendarQueryFunc
 				color: record.color,
 				calendarType: record.calendarType
 			}
+		},
+		getListByUserUUID: async (userUUID: string) => {
+
+			const records = (await connection!.query(`
+				SELECT C.id, C.uuid, C.calendarName, C.description, C.color, C.calendar_type, CM.is_
+				FROM calendar as C
+				LEFT OUTER JOIN calendar_member as CM
+				ON C.id = CM.calendarId
+				LEFT OUTER JOIN user_ as U
+				ON CM.userId = U.id
+				WHERE U.uuid = :userUUID
+			`, {
+				replacements: {
+					userUUID
+				}
+			})) as (PostgresCalendarRecord & Pick<PostgresCalendarMemberRecord, 'is_admin' | 'is_writer' | 'joined'>)[];
+
+			return records.map((record) => {
+				return {
+					id: record.id,
+					calendarType: record.calendarType,
+					description: record.description,
+					color: record.color,
+					isAdmin: record.is_admin,
+					isWriter: record.is_writer,
+					joined: record.joined,
+					name: record.calendarName,
+					uuid: record.uuid
+				};
+			});
+
 		}
 	}
 }

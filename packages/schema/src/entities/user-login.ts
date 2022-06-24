@@ -1,6 +1,6 @@
 import { ReadonlyDeep } from "type-fest";
 
-import { RestEndpoint } from "./wrappers/rest-endpoint";
+import { RestEndpoint } from "../wrappers/rest-endpoint";
 
 export enum UserLoginMethod {
 	UNKNOWN = 0,

@@ -1,5 +1,5 @@
 import { ReadonlyDeep } from "type-fest";
-import { SlateNode, slateNodeFromStr } from "./serialization";
+import { SlateNode, slateNodeFromStr } from "../serialization";
 
 
 export interface EventRecord {
