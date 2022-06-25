@@ -1,9 +1,12 @@
+import { ClientCalendarRecord } from "@internal/schema/dist";
 import { slateNodeFromStr } from "@internal/schema/dist/serialization";
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { addHours } from "date-fns";
 import React from "react";
+import { useEffect } from "react";
 import { MdAdd, MdArrowBack } from "react-icons/md";
 import styled from "styled-components";
+import { apiRequest } from "../../common/api/api-request";
 import { COLORS, STYLE_VALUES } from "../../common/style";
 import { DailyCalendar } from "../../components/calendars/DailyCalendar";
 import { MonthlyCalendar } from "../../components/calendars/MonthlyCalendar";
@@ -56,6 +59,13 @@ export function CalendarPage() {
 
 	const [sideBarPercentage, setSideBarPercentage] = React.useState(20);
 	const [calendarType, setCalendarType] = React.useState<CalendarType>('daily');
+	const [calendars, setCalendars] = React.useState<ClientCalendarRecord[] | null>(null);
+
+	useEffect(() => {
+		apiRequest("GET", "/api/calendar").then(async (value) => {
+			console.log("API REQ:", await value.json());
+		});
+	}, []);
 
 	return <CalendarPageContainer>
 		<Sidebar style={{

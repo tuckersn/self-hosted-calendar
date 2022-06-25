@@ -124,12 +124,12 @@ export function calendarQueryFunctions(connection: Sequelize): CalendarQueryFunc
 		getListByUserUUID: async (userUUID: string) => {
 
 			const records = (await connection!.query(`
-				SELECT C.id, C.uuid, C.calendarName, C.description, C.color, C.calendar_type, CM.is_
+				SELECT C.id, C.uuid, C.calendar_name, C.description, C.color, C.calendar_type, CM.is_admin, CM.calendar_id
 				FROM calendar as C
 				LEFT OUTER JOIN calendar_member as CM
-				ON C.id = CM.calendarId
+				ON C.id = CM.calendar_id
 				LEFT OUTER JOIN user_ as U
-				ON CM.userId = U.id
+				ON CM.user_id = U.id
 				WHERE U.uuid = :userUUID
 			`, {
 				replacements: {

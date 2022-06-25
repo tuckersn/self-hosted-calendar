@@ -103,20 +103,20 @@ export function EventEditPopup(props: EventEditPopupProps) {
 								label="Start Date"
 								inputFormat="MM/dd/yyyy"
 								value={event.start}
-								onChange={(e) => {
+								onChange={(e: any) => {
 									console.log("date changed:", e);
 								}}
-								renderInput={(params) => <TextField {...params} />}
+								renderInput={(params: any) => <TextField {...params} />}
 							/>
 
 							<DesktopDateTimePicker
 								label="End Date"
 								inputFormat="MM/dd/yyyy"
 								value={event.start}
-								onChange={(e) => {
+								onChange={(e: any) => {
 									console.log("date changed:", e);
 								}}
-								renderInput={(params) => <TextField {...params} />}
+								renderInput={(params: any) => <TextField {...params} />}
 							/>
 						</div>
 
