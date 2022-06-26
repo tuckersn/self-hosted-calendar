@@ -3,6 +3,7 @@ import { Sequelize, QueryTypes, Error as SequelizeError, UniqueConstraintError }
 import { CalendarQueryFunctions, CalendarRecord, CalendarRecordInsertFields, CalendarType } from "@internal/schema/dist";
 
 import { PostgresCalendarMemberRecord } from "./calendarMember";
+import { nanoid } from "nanoid";
 
 export interface PostgresCalendarRecord {
 	id: number;
@@ -69,12 +70,15 @@ export function calendarQueryFunctions(connection: Sequelize): CalendarQueryFunc
 				calendarType: record.calendarType
 			}
 		},
-		insert: async (calendarRecord: CalendarRecordInsertFields) => {
+		insert: async (calendarRecord, context) => {
+
+			
 			const record = (await connection!.query(`
 				INSERT INTO calendar (uuid, calendarName, description, color, calendar_type)
 				VALUES (:uuid, :name, :description, :color, :calendarType)
 				RETURNING id, uuid, calendarName, description, color, calendar_type`, {
 					replacements: {
+						uuid: nanoid(),
 						name: calendarRecord.name,
 						description: calendarRecord.description,
 						color: calendarRecord.color,

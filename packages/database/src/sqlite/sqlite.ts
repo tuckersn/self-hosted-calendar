@@ -226,6 +226,20 @@ export async function SqliteDatabase(): Promise<Database> {
 			getListByUserUUID: (uuid, context) => {
 				throw new Error("Method not implemented.");
 			}
+		},
+		calendarMember: {
+			delete: async () => {
+				throw new Error("Method not implemented.");
+			},
+			getById: async () => {
+				throw new Error("Method not implemented.");
+			},
+			getByUserId: async () => {
+				throw new Error("Method not implemented.");
+			},
+			insert: async () => {
+				throw new Error("Method not implemented.");
+			},
 		}
 	}
 }

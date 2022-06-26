@@ -1,7 +1,7 @@
 export interface QueryContext {
-	restrictTo?: {
-		userIds?: [],
-		userUUIDs?: []
-	},
+	/**
+	 * User UUID
+	 */
+	user?: string,
 	maxRows?: number
 }

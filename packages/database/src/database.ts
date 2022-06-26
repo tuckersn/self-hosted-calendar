@@ -1,6 +1,6 @@
 import { Promisable } from "type-fest";
 
-import { TaskBoardMembershipQueryFunctions, TaskBoardQueryFunctions, EventAttendeeQueryFunctions, EventQueryFunctions, TaskQueryFunctions, UserApiKeyQueryFunctions, UserLoginQueryFunctions, UserQueryFunctions, CalendarQueryFunctions } from "@internal/schema/dist/index";
+import { TaskBoardMembershipQueryFunctions, TaskBoardQueryFunctions, EventAttendeeQueryFunctions, EventQueryFunctions, TaskQueryFunctions, UserApiKeyQueryFunctions, UserLoginQueryFunctions, UserQueryFunctions, CalendarQueryFunctions, CalendarMembershipQueryFunctions } from "@internal/schema/dist/index";
 export interface Database {
 	/**
 	 * The name of the database.
@@ -10,6 +10,7 @@ export interface Database {
 	user: UserQueryFunctions;
 	userLogin: UserLoginQueryFunctions;
 	calendar: CalendarQueryFunctions;
+	calendarMember: CalendarMembershipQueryFunctions;
 	userApiKey: UserApiKeyQueryFunctions;
 	board: TaskBoardQueryFunctions;
 	boardMember: TaskBoardMembershipQueryFunctions;

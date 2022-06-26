@@ -19,7 +19,8 @@ import {
 	TaskRecord,
 	TaskRecordInsertFields,
 	CalendarRecordInsertFields,
-	CalendarRecord
+	CalendarRecord,
+	CalendarMembershipQueryFunctions
 } from "@internal/schema/dist/index";
 
 import { Promisable, ReadonlyDeep } from "type-fest";
@@ -31,6 +32,7 @@ import { eventQueryFunctions } from "./event";
 import { userApiKeyQueryFunctions } from "./userApikey";
 import { taskQueryFunctions } from "./task";
 import { calendarQueryFunctions } from "./calendar";
+import { calendarMemberQueryFunctions } from "./calendarMember";
 
 export async function PostgresDatabase(): Promise<Database> {
 	if(process.env.PG_HOST === undefined) {
@@ -159,6 +161,7 @@ export async function PostgresDatabase(): Promise<Database> {
 		},
 		task: taskQueryFunctions(connection),
 		calendar: calendarQueryFunctions(connection),
+		calendarMember: calendarMemberQueryFunctions(connection)
 	}
 }
 
