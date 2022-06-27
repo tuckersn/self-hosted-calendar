@@ -67,8 +67,13 @@ export function eventQueryFunctions(connection: Sequelize): EventQueryFunctions 
 	return {
 		getById,
 		getByUUID,
-		delete: async (id: number) => {
-			throw new Error("Method not implemented.");
+		delete: async (uuid: string) => {
+			const result = (await connection!.query(`
+				DELETE FROM event
+				WHERE uuid = :uuid
+			`));
+
+			return result as any;
 		},		
 		updateById: async (eventRecord: EventRecord) => {
 			const { id, uuid, name, description, startDate, endDate, location } = eventRecord;

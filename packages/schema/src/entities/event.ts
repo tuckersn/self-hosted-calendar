@@ -29,7 +29,7 @@ export interface EventQueryFunctions {
 	insert: (eventRecord: EventRecordInsertFields) => Promise<EventRecord>;
 	updateById: (eventRecord: EventRecord) => Promise<EventRecord>;
 	updateByUUID: (eventRecord: EventRecord) => Promise<EventRecord>;
-	delete: (id: number) => Promise<void>;
+	delete: (uuid: string) => Promise<void>;
 
 	getTimeRange: (startDate: Date, endDate: Date, calendarUUIDs?: string[]) => Promise<EventRecord[]>;
 }

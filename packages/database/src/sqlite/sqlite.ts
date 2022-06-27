@@ -142,7 +142,7 @@ export async function SqliteDatabase(): Promise<Database> {
 			updateByUUID: async (eventRecord: EventRecord) => {
 				throw new Error("Method not implemented.");
 			},
-			delete: async (id: number) => {
+			delete: async (uuid: string) => {
 				throw new Error("Method not implemented.");
 			},
 			getTimeRange: async (start: Date, end: Date) => {

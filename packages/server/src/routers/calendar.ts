@@ -35,21 +35,37 @@ calendarRouter.use(failNonUsers,
 
 calendarRouter.get("/:id", generalErrorHandlingMiddleware(async (req, res) => {
 	const { id } = req.params;
-	//TODO: add query context here
-	//TODO: validation
+
+	if(typeof id !== "string") {
+		return res.status(500).json({
+			error: "id was not provided."
+		});
+	}
+
 	const record = await Database.calendar.getByUUID(id, {});
-	res.status(200).json({});
+	res.status(200).json(record);
 }));
 
 calendarRouter.put("/:id", generalErrorHandlingMiddleware(async (req, res) => {
 	const { id } = req.params;
-	res.status(200).json({});
+
+	res.status(200).json({
+
+	});
 }));
 
 calendarRouter.delete("/:id", generalErrorHandlingMiddleware(async (req, res) => {
 	const { id } = req.params;
-	//TODO: add query context here
-	//TODO: validation
+
+	if(typeof id !== "string") {
+		return res.status(500).json({
+			error: "id was not provided."
+		});
+	}
+
 	const record = await Database.calendar.deleteByUUID(id, {});
-	res.status(200).json({});
+	res.status(200).json({
+		record,
+		success: true
+	});
 }));

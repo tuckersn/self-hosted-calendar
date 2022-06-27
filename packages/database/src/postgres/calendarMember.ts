@@ -1,5 +1,5 @@
-import { CalendarMembershipQueryFunctions } from "@internal/schema/dist"
-import { Sequelize } from "sequelize/types"
+import { CalendarMembershipQueryFunctions, CalendarMembershipRecord } from "@internal/schema/dist"
+import { QueryTypes, Sequelize } from "sequelize/types"
 
 
 export interface PostgresCalendarMemberRecord {
@@ -11,20 +11,64 @@ export interface PostgresCalendarMemberRecord {
 	is_writer: boolean
 }
 
-
+function postgresCalendarMemberRecordTransform(record: PostgresCalendarMemberRecord | undefined): CalendarMembershipRecord | null {
+	if(record === undefined) {
+		return null;
+	}
+	return {
+		id: record.id,
+		calendarId: record.calendar_id,
+		userId: record.user_id,
+		isAdmin: record.is_admin,
+		isWriter: record.is_writer,
+		joined: record.joined
+	}
+}
 
 
 export function calendarMemberQueryFunctions(connection: Sequelize): CalendarMembershipQueryFunctions {
 
 	return {
-		delete: async () => {
-			throw new Error("Method not implemented.");
+		delete: async (id: number) => {
+			await connection!.query(`
+				DELETE FROM calendar_member
+				WHERE id = :id
+			`, {
+				replacements: {
+					id
+				},
+				type: QueryTypes.DELETE
+			});
 		},
-		getById: async () => {
-			throw new Error("Method not implemented.");
+		getById: async (id: number) => {
+			const record = (await connection!.query(`
+				SELECT id, uuid, calendar_id, user_id, is_admin, is_writer, joined
+				FROM calendar_member
+				WHERE id = :id
+			`, {
+				replacements: {
+					id
+				},
+				type: QueryTypes.SELECT
+			})).pop() as (PostgresCalendarMemberRecord) | undefined;
+
+			return postgresCalendarMemberRecordTransform(record)!;
 		},
-		getByUserId: async () => {
-			throw new Error("Method not implemented.");
+		getByUserId: async (userId: number) => {
+			const record = (await connection!.query(`
+				SELECT id, uuid, calendar_id, user_id, is_admin, is_writer, joined
+				FROM calendar_member
+				WHERE user_id = :userId
+			`, {
+				replacements: {
+					userId: userId
+				},
+				type: QueryTypes.SELECT
+			})) as PostgresCalendarMemberRecord[];
+
+			return record.map((record) => {
+				return postgresCalendarMemberRecordTransform(record)!;
+			});
 		},
 		insert: async (calendarMemberRecord, context) => {
 			const record = (await connection!.query(`
@@ -36,20 +80,14 @@ export function calendarMemberQueryFunctions(connection: Sequelize): CalendarMem
 						isWriter: calendarMemberRecord.isWriter,
 						userId: calendarMemberRecord.userId,
 						calendarId: calendarMemberRecord.calendarId
-					}
+					},
+					type: QueryTypes.INSERT
 				})).pop() as (PostgresCalendarMemberRecord) | undefined;
 
 			if(record === undefined)
 				throw new Error("Failed to insert calendar record");
 
-			return {
-				id: record.id,
-				calendarId: record.calendar_id,
-				userId: record.user_id,
-				isAdmin: record.is_admin,
-				isWriter: record.is_writer,
-				joined: record.joined
-			}
+			return postgresCalendarMemberRecordTransform(record)!;
 		},
 	}
 };

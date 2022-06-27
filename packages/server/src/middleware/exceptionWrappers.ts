@@ -4,7 +4,7 @@ import { Promisable } from "type-fest";
 
 
 
-export function generalErrorHandlingMiddleware(cb: (req: express.Request, res: express.Response<any, ResLocals>) => Promisable<void>) {
+export function generalErrorHandlingMiddleware(cb: (req: express.Request, res: express.Response<any, ResLocals>) => Promisable<any>) {
 	return async (req: express.Request, res: express.Response<any, ResLocals>) => {
 		try {
 			await cb(req, res);

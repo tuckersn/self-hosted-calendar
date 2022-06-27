@@ -12,7 +12,13 @@ eventRouter.use(authenticationMiddleware);
 eventRouter.get("/:id", generalErrorHandlingMiddleware(async (req, res) => {
 	const { id } = req.params;
 
-	res.status(200).send();
+	if(typeof id !== "string") {
+		return res.status(500).json({
+			error: "id was not provided."
+		});
+	}
+	const record = await Database.event.getByUUID(id);
+	res.status(200).send(record);
 }));
 
 // Create a new event
@@ -72,6 +78,13 @@ eventRouter.put("/:uiid", generalErrorHandlingMiddleware(async (req, res) => {
 eventRouter.delete("/:id", generalErrorHandlingMiddleware(async (req, res) => {
 	const { id } = req.params;
 
+	if(typeof id !== "string") {
+		return res.status(500).json({
+			error: "id was not provided."
+		});
+	}
+
+	const record = Database.event.delete(id);
 	res.status(200).send();
 }));
 
