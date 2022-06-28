@@ -146,7 +146,7 @@ export interface UserQueryFunctions {
 
 	insert: (userRecord: UserRecordInsertFields) => Promise<UserRecord>;
 	updateById: (id: number, userRecord: Partial<UserRecord>) => Promise<UserRecord>;
-	delete: (id: number) => Promise<void>;
+	delete: (uuid: string) => Promise<void>;
 
 	// Queries for specific uses
 

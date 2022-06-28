@@ -23,6 +23,6 @@ export interface TaskBoardQueryFunctions {
 
 	insert: (boardRecord: TaskBoardRecordInsertFields) => Promise<TaskBoardRecord>;
 	update: (boardRecord: TaskBoardRecord) => Promise<TaskBoardRecord>;
-	delete: (id: number) => Promise<void>;
+	delete: (uuid: string) => Promise<void>;
 }
 

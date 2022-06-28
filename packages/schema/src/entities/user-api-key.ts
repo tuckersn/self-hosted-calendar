@@ -27,7 +27,7 @@ export interface UserApiKeyQueryFunctions {
 	getByKeyName: (keyName: string) => Promise<UserApiKeyRecord | null>;
 
 	insert: (UserApiKeyRecord: UserApiKeyRecordInsertFields) => Promise<UserApiKeyRecord>;
-	delete: (id: number) => Promise<void>;
+	delete: (uuid: string) => Promise<void>;
 	updateById: (id: number, UserApiKeyRecord: Partial<UserApiKeyRecord>) => Promise<UserApiKeyRecord>;
 }
 

@@ -54,7 +54,7 @@ export interface UserLoginQueryFunctions {
 	getByIp: (ip: string) => Promise<UserLoginRecord[]>;
 	getByUserId: (userId: number) => Promise<UserLoginRecord[]>;
 	insert: (UserLoginRecord: UserLoginRecordInsertFields) => Promise<UserLoginRecord>;
-	delete: (id: number) => Promise<void>;
+	delete: (uuid: string) => Promise<void>;
 
 	// Specialized Queries
 	getByUsername: (username: string) => Promise<UserLoginRecord | null>;
