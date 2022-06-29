@@ -2,7 +2,8 @@ import { Sequelize, QueryTypes, Error as SequelizeError, UniqueConstraintError }
 
 import { UserErrors, UserQueryFunctions, UserRecord, UserRecordInsertFields, UserType } from "@internal/schema/dist";
 import { UUID } from "@internal/common/dist";
-export interface PostgresUserRecord {
+
+interface PostgresUserRecord {
 	id: number;
 	uuid: string;
 	username: string;
@@ -15,7 +16,7 @@ export interface PostgresUserRecord {
 	enabled: boolean;
 }
 
-export function postgresRecordToStandardRecord(record: PostgresUserRecord): UserRecord {
+function postgresRecordToStandardRecord(record: PostgresUserRecord): UserRecord {
 	return {
 		id: record.id,
 		uuid: record.uuid,
@@ -188,12 +189,12 @@ export function userQueryFunctions(connection: Sequelize): UserQueryFunctions {
 				enabled: result.enabled
 			};
 		},
-		delete: async (id: number) => {
+		delete: async (uuid: string) => {
 			const result = (await connection!.query(`
 				DELETE FROM user_
-				WHERE id = :id`, {
+				WHERE uuid = :uuid`, {
 					replacements: {
-						id
+						uuid
 					},
 					type: QueryTypes.DELETE
 				}));

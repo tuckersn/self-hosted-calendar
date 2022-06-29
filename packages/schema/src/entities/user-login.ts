@@ -57,7 +57,7 @@ export interface UserLoginQueryFunctions {
 	delete: (uuid: string) => Promise<void>;
 
 	// Specialized Queries
-	getByUsername: (username: string) => Promise<UserLoginRecord | null>;
+	getByUsername: (username: string) => Promise<UserLoginRecord[]>;
 	getByEmail: (email: string) => Promise<UserLoginRecord | null>;
 }
 

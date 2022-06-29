@@ -1,8 +1,9 @@
 import { Sequelize } from "sequelize/types";
 import { Database as DatabaseInterface } from "./database";
-import { PostgresDatabase } from "./postgres/postgres";
+import { PostgresDatabase } from "./postgres";
 import { SqliteDatabase } from "./sqlite/sqlite";
 
+export * as SequelizeUtils from "./sequelizeUtils";
 
 const DATABASE_SETTING: 'sqlite' | 'postgres' = process.env.DATABASE as any;
 if(typeof DATABASE_SETTING !== 'string') {
