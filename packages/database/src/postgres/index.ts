@@ -90,7 +90,7 @@ export async function PostgresDatabase(): Promise<Database> {
 			insert: async (userLoginRecord: UserLoginRecordInsertFields) => {
 				throw new Error("Method not implemented.");
 			},
-			delete: async (id: number) => {
+			delete: async (uuid: string) => {
 				throw new Error("Method not implemented.");
 			}
 		},
@@ -105,7 +105,7 @@ export async function PostgresDatabase(): Promise<Database> {
 			update: async (boardRecord: TaskBoardRecord) => {
 				throw new Error("Method not implemented.");
 			},
-			delete: async (id: number) => {
+			delete: async (uuid: string) => {
 				throw new Error("Method not implemented.");
 			},
 		},

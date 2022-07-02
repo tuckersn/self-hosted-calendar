@@ -36,7 +36,7 @@ export async function SqliteDatabase(): Promise<Database> {
 			updateById: async (id: number, userRecord: Partial<UserRecord>) => {
 				throw new Error("Method not implemented.");
 			},
-			delete: async (id: number) => {
+			delete: async (uuid: string) => {
 				throw new Error("Method not implemented.");
 			},
 			getOverview: async () => {
@@ -62,7 +62,7 @@ export async function SqliteDatabase(): Promise<Database> {
 			insert: async (userLoginRecord: UserLoginRecordInsertFields) => {
 				throw new Error("Method not implemented.");
 			},
-			delete: async (id: number) => {
+			delete: async (uuid: string) => {
 				throw new Error("Method not implemented.");
 			}
 		},
@@ -79,7 +79,7 @@ export async function SqliteDatabase(): Promise<Database> {
 			insert: async (userApiKeyRecord: UserApiKeyRecordInsertFields) => {
 				throw new Error("Method not implemented.");
 			},
-			delete: async (id: number) => {
+			delete: async (uuid: string) => {
 				throw new Error("Method not implemented.");
 			},
 			updateById: async (id: number, userApiKeyRecord: Partial<UserApiKeyRecord>) => {
@@ -96,7 +96,7 @@ export async function SqliteDatabase(): Promise<Database> {
 			update: async (boardRecord: TaskBoardRecord) => {
 				throw new Error("Method not implemented.");
 			},
-			delete: async (id: number) => {
+			delete: async (uuid: string) => {
 				throw new Error("Method not implemented.");
 			},
 		},

@@ -90,12 +90,12 @@ export function userApiKeyQueryFunctions(connection: Sequelize): UserApiKeyQuery
 
 			return result;
 		},
-		delete: async (id: number) => {
+		delete: async (uuid: string) => {
 			const result = (await connection!.query(`
 				DELETE FROM user_api_key
-				WHERE id = :id`, {
+				WHERE uuid = :uuid`, {
 					replacements: {
-						id
+						uuid
 					},
 					type: QueryTypes.DELETE
 			}));

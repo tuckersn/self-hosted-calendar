@@ -152,6 +152,12 @@ function App() {
 
 	const [newMenuOpen, setNewMenuOpen] = React.useState(false);
 
+
+	
+	useEffect(() => {
+		console.log("APP");
+	}, []);
+
 	useEffect(() => {
 		console.log(`[NAVIGATED]: ${location.pathname}`);
 	}, [location.pathname]);

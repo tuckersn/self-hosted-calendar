@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom/client';
 import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { HomePage } from './pages/home/HomePage';
 import { LoginPage } from './pages/login/LoginPage';
 import { AccountInfoPage } from './pages/account/AccountInfoPage';
@@ -34,6 +34,7 @@ import { TaskBoardAdminPage } from './pages/admin/pages/task-boards/TaskBoardAdm
 import { EventAdminPage } from './pages/admin/pages/event/EventAdminPage';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { UserRoute } from './common/hooks';
 
 export const themeOptions = createTheme({
 	palette: {
@@ -64,6 +65,8 @@ const root = ReactDOM.createRoot(
 root.render(
 	(() => {
 		const appKey = nanoid();
+
+
 		return <Provider store={store}>
 			<ThemeProvider theme={themeOptions}>
 				<LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -71,7 +74,7 @@ root.render(
 						<Routes>
 							<Route path="/" element={<App key={appKey}/>}>
 								
-								{/* Dashboard */}
+								{/* Homepage */}
 								<Route index element={<HomePage/>}/>
 								
 								{/* Password & OAuth login */}
@@ -80,28 +83,34 @@ root.render(
 									<Route path="register" element={<LoginRegisterPage/>}/>
 								</Route>
 								
-								{/* User's account info */}
-								<Route path="me" element={<AccountInfoPage/>}/>
+								<Route element={<UserRoute/>}>
+									{/* User's account info */}
+									<Route path="me" element={<AccountInfoPage/>}/>
 
-								<Route path="calendar" element={<CalendarPage/>}/>
+									<Route path="calendar" element={<CalendarPage/>}/>
 
-								<Route path="event">
-									<Route path="overview"/>
-								</Route>
+									<Route path="event">
+										<Route path="overview"/>
+									</Route>
 
-								<Route path="board" element={<BoardPage/>}>
-									{/* List of user's boards */}
-									<Route index element={<div/>}/>
-									{/* Specific boards */}
-									<Route path=":boardId" element={<div/>}/>
-									{/* Board creation form */}
-									<Route path="new" element={<div/>}/>
-								</Route>
+									<Route path="board" element={<BoardPage/>}>
+										{/* List of user's boards */}
+										<Route index element={<div/>}/>
+										{/* Specific boards */}
+										<Route path=":boardId" element={<div/>}/>
+										{/* Board creation form */}
+										<Route path="new" element={<div/>}/>
+									</Route>
 
-								<Route path="tasks">
-									<Route path="overview" element={<div>
-										Tasks overview
-									</div>}/>
+									<Route path="tasks">
+										<Route path="overview" element={<div>
+											Tasks overview
+										</div>}/>
+									</Route>
+
+									<Route path="debug">
+										<Route path="samples" element={<UISamplesPage/>}/>
+									</Route>
 								</Route>
 
 								<Route path="admin" element={<AdminPage/>}>
@@ -116,12 +125,13 @@ root.render(
 									<Route path="settings" element={<SettingsAdminPage/>}/>
 								</Route>
 
-								<Route path="debug">
-									<Route path="samples" element={<UISamplesPage/>}/>
-								</Route>
 
-								<Route path="error" element={<ErrorPage/>}/>
-								<Route path="*" element={<ErrorPage errorCode={404} errorMessage={"Page not found."}/>}/>
+
+								
+								<Route path="error">
+									<Route path="404" element={<ErrorPage errorCode={404} errorMessage={"Page not found."}/>}/>
+								</Route>
+								<Route path="*" element={<Navigate to={"/error/404"}/>}/>
 					
 							</Route>
 						</Routes>

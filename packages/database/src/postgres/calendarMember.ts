@@ -1,5 +1,5 @@
 import { CalendarMembershipQueryFunctions, CalendarMembershipRecord } from "@internal/schema/dist"
-import { QueryTypes, Sequelize } from "sequelize/types"
+import { QueryTypes, Sequelize } from "sequelize"
 
 
 export interface PostgresCalendarMemberRecord {

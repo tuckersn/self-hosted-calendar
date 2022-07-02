@@ -1,5 +1,6 @@
 import { JWT, UserType } from "@internal/schema/dist";
 import { useEffect, useState } from "react";
+import { Navigate, Outlet } from "react-router-dom";
 import { useUser } from "./useUser";
 
 
@@ -38,4 +39,16 @@ export function isUserAdmin(user: JWT | null): boolean {
 	}, [user]);
 
 	return isAdmin;
+}
+
+
+export function AdminRoute() {
+	const admin = useIsAdmin();
+	
+	if(admin) {
+		alert("Only admins can view this page.");
+		return <Outlet/>;
+	}
+	
+	return <Navigate to={"/"}/>;
 }

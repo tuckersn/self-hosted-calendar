@@ -7,6 +7,8 @@ import { GiFishingHook } from "react-icons/gi";
 import { COLORS } from "../../common/style";
 import { Header, HeaderProps } from "../../components/layouts/Header";
 import { SidebarLayout } from "../../components/layouts/SidebarLayout";
+import { useIsAdmin } from "../../common/hooks";
+import { useEffect } from "react";
 
 const TitleBar = styled.div`
 	font-size: 24px;
@@ -64,6 +66,13 @@ export const adminPageCrumbs: HeaderProps['crumbs'] = [{
 export function AdminPage() {
 
 	const navigate = useNavigate();
+	const admin = useIsAdmin();
+
+	useEffect(() => {
+		if(!admin) {
+			navigate("/");
+		}
+	}, [admin, navigate]);
 
 	return <SidebarLayout sidebarContent={
 		<div>
