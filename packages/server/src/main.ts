@@ -18,6 +18,7 @@ import { verifyRequiredEnvsAreDefined } from "./env";
 import { taskRouter } from "./routers/task";
 import { taskBoardRouter } from "./routers/taskBoard";
 import { calendarRouter } from "./routers/calendar";
+import path from "path";
 
 
 
@@ -44,6 +45,11 @@ async function main() {
 	app.get("/ping", (req,res) => {
 		res.status(200).send("pong");
 	});
+
+	app.get("/", (req, res) => {
+		res.sendFile(path.join(__dirname, "../../web/build/index.html"));
+	});
+	app.use(express.static(path.join(__dirname, "../../web/build")));
 
 	app.use("/login", loginRouter);
 

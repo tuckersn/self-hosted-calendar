@@ -15,9 +15,6 @@ export const loginRouter: Router = Router();
 
 loginRouter.use(express.json());
 
-loginRouter.get("/", (req, res) => {
-	res.send("login");
-});
 
 loginRouter.post("/", generalErrorHandlingMiddleware(async (req: Request<any, any, {
 	username?: string,

@@ -26,6 +26,9 @@
 		"new": "node ./scripts/new-package.js",
 		"graph": "pnpm turbo run build --graph",
 		"graph-test": "pnpm turbo run test --graph",
-		"graph-format": "pnpm turbo run format --graph"
-	}
+		"graph-format": "pnpm turbo run format --graph",
+		"build": "bash ./scripts/deploy.bash",
+		"start": "bash ./scripts/start.bash"
+	},
+	"homepage": "./web"
 }

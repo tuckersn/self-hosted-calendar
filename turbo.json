@@ -17,6 +17,13 @@
 			"inputs": [
 				"src/**"
 			]
+		},
+		"@internal/web#deploy": {
+			"cache": true,
+			"dependsOn": [
+				"@internal/web#build",
+				"@internal/server#build"
+			]
 		}
 	}
 }

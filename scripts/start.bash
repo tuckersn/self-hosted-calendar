@@ -1,0 +1,1 @@
+node ./packages/server/dist/main.js
