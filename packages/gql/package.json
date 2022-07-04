@@ -1,5 +1,5 @@
 {
-	"name": "@internal/schema",
+	"name": "@internal/gql",
 	"version": "1.0.0",
 	"main": "index.js",
 	"license": "MIT",

@@ -1,8 +1,7 @@
 {
-  "name": "@internal/prettier-config",
-  "version": "1.0.0",
-  "main": "index.js",
-  "author": "Tucker Sneed",
-  "license": "MIT",
-  "private": true
+	"name": "@internal/prettier-config",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "MIT",
+	"private": true
 }

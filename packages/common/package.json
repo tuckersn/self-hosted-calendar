@@ -2,7 +2,6 @@
 	"name": "@internal/common",
 	"version": "1.0.0",
 	"main": "index.js",
-	"author": "Tucker Sneed",
 	"license": "MIT",
 	"private": true,
 	"scripts": {

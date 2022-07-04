@@ -4,6 +4,9 @@
 		"build": {
 			"cache": true,
 			"dependsOn": ["^build"],
+			"inputs": [
+				"src/**"
+			],
 			"outputs": [
 				"dist/**",
 				"build/**"
@@ -16,6 +19,16 @@
 			"cache": true,
 			"inputs": [
 				"src/**"
+			]
+		},
+		"@internal/schema#build": {
+			"cache": false,
+			"dependsOn": [
+				"@internal/common#build"
+			],
+			"outputs": [
+				"dist/**",
+				"build/**"
 			]
 		},
 		"@internal/web#deploy": {

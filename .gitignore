@@ -10,7 +10,7 @@ temp
 # turborepo
 .turbo
 graph-*
-
+graph.png
 
 # runtime
 logs/
