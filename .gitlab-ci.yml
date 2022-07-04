@@ -9,6 +9,7 @@ stages:
 test:
   stage: test
   script:
+    - pnpm install
     - pnpm turbo run test
 
 build:
@@ -24,7 +25,7 @@ stop:
   stage: stop
   script:
     - docker stop $CONTAINER_NAME
-    - docker start $CONTAINER_NAME
+    - docker remove $CONTAINER_NAME
   only:
     - main
 
