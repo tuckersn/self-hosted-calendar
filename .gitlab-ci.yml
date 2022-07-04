@@ -24,8 +24,18 @@ build:
 stop:
   stage: stop
   script:
-    - docker stop $CONTAINER_NAME
-    - docker remove $CONTAINER_NAME
+    - |-
+      if [ "$(docker ps -qa -f name=$CONTAINER_NAME)" ]; then
+        echo "Found container"
+        if [ "$(docker ps -aq -f status=running -f name=$CONTAINER_NAME)" ]; then
+            echo "Container is running, stopping now"
+            docker stop $CONTAINER_NAME
+        fi
+        echo "Removing container"
+        docker rm $CONTAINER_NAME
+      fi
+  only:
+    - main
   only:
     - main
 
