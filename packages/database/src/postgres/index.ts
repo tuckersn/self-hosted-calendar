@@ -29,7 +29,7 @@ import { Sequelize, QueryTypes } from "sequelize";
 
 import { userQueryFunctions } from "./user";
 import { eventQueryFunctions } from "./event";
-import { userApiKeyQueryFunctions } from "./userApikey";
+import { userApiKeyQueryFunctions } from "./userApiKey";
 import { taskQueryFunctions } from "./task";
 import { calendarQueryFunctions } from "./calendar";
 import { calendarMemberQueryFunctions } from "./calendarMember";
