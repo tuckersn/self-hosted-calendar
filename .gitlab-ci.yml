@@ -1,0 +1,36 @@
+stages:
+  - test
+  - build
+  - stop
+  - start
+
+
+
+test:
+  stage: test
+  script:
+    - pnpm turbo run test
+
+build:
+  stage: build
+  script:
+    - cp /etc/certs/root/root-ca.cert.pem ./root-ca.cert.pem
+    - cp $ENV_PATH ./.env
+    - docker build -t $CONTAINER_NAME .
+  only:
+    - main
+
+stop:
+  stage: stop
+  script:
+    - docker stop $CONTAINER_NAME
+    - docker start $CONTAINER_NAME
+  only:
+    - main
+
+start:
+  stage: start
+  script:
+    - docker run -p $PORT:$PORT --name $CONTAINER_NAME $DOCKER_FLAGS -d $CONTAINER_NAME
+  only:
+    - main
