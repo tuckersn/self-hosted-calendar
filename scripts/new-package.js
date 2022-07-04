@@ -46,7 +46,7 @@ rl.on("close", () => {
 		scripts: {
 			build: "tsc",
 			format: `prettier --write "src/**/*.ts`,
-			test: "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.test.ts"
+			test: "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.test.ts'"
 		}
 	}));
 
