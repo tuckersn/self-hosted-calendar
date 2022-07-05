@@ -23,6 +23,16 @@ import { Navigate, Outlet } from "react-router-dom";
 		dispatch(setUserReducer(user) as any);
 	}
 
+	// This gets called often.
+	useEffect(() => {
+		if(user !== null) {
+			const expiration = new Date(user.exp * 1000);
+			if(new Date() > expiration) {
+				setUser(null);
+			}
+		}
+	});
+
 	return [user, setUser];
 }
 
