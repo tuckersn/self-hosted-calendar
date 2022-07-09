@@ -272,7 +272,10 @@ importers:
       '@types/styled-components': 5.1.25
 
   packages/web-common:
-    specifiers: {}
+    specifiers:
+      '@internal/ts-config': workspace:^1.0.0
+    dependencies:
+      '@internal/ts-config': link:../../configs/ts-config
 
 packages:
 

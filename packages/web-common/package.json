@@ -7,5 +7,8 @@
 		"build": "tsc",
 		"format": "prettier --write \"src/**/*.ts"
 	},
-	"keywords": []
+	"keywords": [],
+	"dependencies": {
+		"@internal/ts-config": "workspace:^1.0.0"
+	}
 }
